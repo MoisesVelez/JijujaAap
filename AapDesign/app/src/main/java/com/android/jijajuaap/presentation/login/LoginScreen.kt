@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.jijajuaap.R
 import com.android.jijajuaap.presentation.initial.Colores
+import com.android.jijajuaap.presentationMvvm.MvvmPresentation
 import com.android.jijajuaap.ui.theme.White
 
 
