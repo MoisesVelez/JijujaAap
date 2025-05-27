@@ -17,6 +17,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+   // keytool -list -v -keystore /Users/velez/Desktop/AndroidAppMoiPath.jks -alias MoiDev
 
     buildTypes {
         release {
@@ -25,6 +26,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            applicationIdSuffix = ".debug"
         }
     }
     compileOptions {

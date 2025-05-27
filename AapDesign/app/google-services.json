@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "708656565955",
+    "project_id": "jijajuaap",
+    "storage_bucket": "jijajuaap.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708656565955:android:e7cdaccbb11342665d1c76",
+        "android_client_info": {
+          "package_name": "com.android.jijajuaap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArRBInOyAMU9FLSybJyanaUvpdNgKLR4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708656565955:android:9f14b1f9488bdebc5d1c76",
+        "android_client_info": {
+          "package_name": "com.android.jijajuaap.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArRBInOyAMU9FLSybJyanaUvpdNgKLR4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
