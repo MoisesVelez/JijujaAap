@@ -156,6 +156,12 @@ fun LoginScreen(LoginViewModel: MvvmPresentation) {
             }
 
         }
+        Spacer(modifier = Modifier.size(15.dp))
+        Text("¿Olvidaste la contraseña?",
+            modifier = Modifier.clickable(onClick = {}),
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center)
         //--------------------------
         Spacer(modifier = Modifier.weight(1f))
     }

@@ -21,7 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -100,7 +100,7 @@ fun InitialScreen(navHostController: NavHostController){
         Button(onClick = {},
             modifier = Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 32.dp),
             colors = ButtonDefaults.buttonColors(containerColor = White),
-            //border = BorderStroke(2.dp, Color.Black)
+
         )
         {
             Box(
@@ -118,7 +118,37 @@ fun InitialScreen(navHostController: NavHostController){
                 )
 
                 Text(
-                    text = "Google",
+                    text = "Cuenta de Google",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+        }
+        Spacer(modifier =Modifier.height(15.dp))
+        Button(onClick = {},
+            modifier = Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 32.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = White),
+
+            )
+        {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.facebook),
+                    contentDescription = "Registrarse facebook",
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 16.dp)
+                        .size(35.dp)
+                )
+
+                Text(
+                    text = "Cuenta de Facebook",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
