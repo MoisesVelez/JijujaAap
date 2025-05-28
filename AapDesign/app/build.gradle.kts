@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
     id("com.google.gms.google-services")
 }
 
@@ -42,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
@@ -55,9 +58,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.firebase.analytics)
     implementation(libs.androidx.navigation.runtime.android)
-    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation (libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -66,22 +69,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0")
-    implementation ("androidx.compose.runtime:runtime-livedata:1.6.5")
-    implementation ("androidx.compose.material:material-icons-extended:1.6.5")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation (libs.androidx.lifecycle.livedata.ktx)
+    implementation (libs.androidx.lifecycle.viewmodel.savedstate)
+    implementation (libs.androidx.runtime.livedata)
+    implementation (libs.androidx.material.icons.extended)
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
 
 
 
 
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
+    implementation(platform(libs.firebase.bom))
 
-
-
-
-    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(libs.firebase.auth.ktx)
+    implementation (libs.firebase.database.ktx)
+    implementation(libs.firebase.analytics.ktx)
 
 }
