@@ -1,5 +1,6 @@
 package com.android.jijajuaap.presentation.SignUp
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,12 +20,13 @@ import androidx.compose.ui.unit.dp
 import com.android.jijajuaap.presentation.initial.Colores
 import com.android.jijajuaap.ui.theme.White
 
+
 @Composable
 fun SignUpScreen() {
     val colorEscogido = Colores()
     val focusManager = LocalFocusManager.current
 
-        Column(
+    Column(
             modifier = Modifier.fillMaxSize()
                 .background(Brush.verticalGradient(listOf(White, colorEscogido)))
                 .padding(15.dp).verticalScroll(rememberScrollState())
@@ -39,5 +41,6 @@ fun SignUpScreen() {
         )
         {
 
-        }
+
+    }
 }

@@ -1,5 +1,8 @@
 package com.android.jijajuaap.presentation.login
 
+import android.annotation.SuppressLint
+import android.util.Log
+import android.util.Patterns
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.foundation.Image
@@ -21,14 +24,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,19 +48,19 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
+import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.initial.Colores
-import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.android.jijajuaap.ui.theme.White
-import dagger.hilt.android.AndroidEntryPoint
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun LoginScreen(LoginViewModel: MvvmPresentation) {
+fun LoginScreen(LoginViewModel: MvvmPresentation, navHostController: NavHostController) {
     val colorEscogido = Colores()
-
-    val email by LoginViewModel.email.observeAsState(initial = "")
-    val contrasena by LoginViewModel.password.observeAsState(initial = "")
+    var comprobante: Boolean by remember { mutableStateOf(false) }
+    val isLoading by LoginViewModel.isLoading.collectAsState()
     var contrasenaVisible by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
@@ -76,11 +80,21 @@ fun LoginScreen(LoginViewModel: MvvmPresentation) {
     {
 //--------------------
         Spacer(modifier = Modifier.size(150.dp))
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 32.dp),
+                color = colorEscogido
+            )
+        }
+        Spacer(modifier = Modifier.size(15.dp))
 //-----------------------
         Text("Email o usuario", fontWeight = FontWeight.Bold,fontSize = 20.sp,color = Color.Black)
 //----------------------
-        TextField(value = email,
-            onValueChange = { LoginViewModel.onLoginChanged(email = it, password = contrasena)},
+        TextField(value = LoginViewModel.email,
+            onValueChange = { LoginViewModel.email = it},
             modifier = Modifier
                 .fillMaxWidth().padding(horizontal = 32.dp),
             singleLine = true,
@@ -96,11 +110,12 @@ fun LoginScreen(LoginViewModel: MvvmPresentation) {
                 focusedContainerColor = colorEscogido))
 
         Spacer(modifier = Modifier.size(15.dp))
+
 //-----------------------
         Text("Contraseña", fontWeight = FontWeight.Bold,fontSize = 20.sp,color = Color.Black)
 //--------------------
-        TextField(value = contrasena,
-            onValueChange = {LoginViewModel.onLoginChanged(email=email, password = it)},
+        TextField(value = LoginViewModel.password,
+            onValueChange = {LoginViewModel.password= it},
             modifier = Modifier
                 .fillMaxWidth().padding(horizontal = 32.dp),
             singleLine = true,
@@ -126,9 +141,33 @@ fun LoginScreen(LoginViewModel: MvvmPresentation) {
                 }
             })
         Spacer(modifier = Modifier.size(60.dp))
+
+        texto1(comprobante)
         //---------------------------------
+
         Button(
-            onClick = {},
+            onClick = {
+                val email = LoginViewModel.email.trim()
+                val password = LoginViewModel.password.trim()
+
+                if (email.isEmpty() || password.isEmpty()) {
+                    Log.e("LoginScreen", "Email or password is empty")
+
+                    return@Button
+                }
+
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Log.e("LoginScreen", "Email format is invalid")
+                    comprobante= true
+                    return@Button
+                }
+                LoginViewModel.login(email,password,
+                   onSuccess = {navHostController.navigate(Routes.Menu1.routes)},
+                    onError = {}
+                )
+
+               }
+                    ,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp).height(48.dp),
             colors = ButtonDefaults.buttonColors(containerColor = colorEscogido),
 
@@ -140,7 +179,7 @@ fun LoginScreen(LoginViewModel: MvvmPresentation) {
 
                 Image(
                     painter = painterResource(id = R.drawable.la_mejor_experiencia_del_cliente),
-                    contentDescription = "Registrarse",
+                    contentDescription = "Entrar",
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .padding(start = 16.dp)
@@ -166,5 +205,18 @@ fun LoginScreen(LoginViewModel: MvvmPresentation) {
         Spacer(modifier = Modifier.weight(1f))
     }
 
-
 }
+
+@Composable
+fun texto1(comprobante:Boolean){
+    if(comprobante){
+        Text(
+            text = "Email o contraseña incorrectos",
+            color = Color.Red,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+

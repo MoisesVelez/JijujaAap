@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.jijajuaap.SplashScreen
+import com.android.jijajuaap.menu.menuInitial
 import com.android.jijajuaap.presentation.SignUp.SignUpScreen
 import com.android.jijajuaap.presentation.initial.InitialScreen
 import com.android.jijajuaap.presentation.login.LoginScreen
@@ -27,10 +28,13 @@ fun NavigationWrapper() {
             InitialScreen(navHostController)
         }
         composable(Routes.Screen2.routes) {
-            LoginScreen(loginViewModel)
+            LoginScreen(loginViewModel,navHostController)
         }
         composable(Routes.Screen3.routes) {
             SignUpScreen()
+        }
+        composable(Routes.Menu1.routes) {
+            menuInitial()
         }
     }
 }
