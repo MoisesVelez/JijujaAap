@@ -12,4 +12,8 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth){
        return firebaseAuth.signInWithEmailAndPassword(email,password).await().user
     }
 
+    suspend fun register(email:String, password:String): FirebaseUser? {
+        return firebaseAuth.createUserWithEmailAndPassword(email,password).await().user
+    }
+
 }

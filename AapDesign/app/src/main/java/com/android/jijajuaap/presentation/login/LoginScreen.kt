@@ -91,7 +91,7 @@ fun LoginScreen(LoginViewModel: MvvmPresentation, navHostController: NavHostCont
         }
         Spacer(modifier = Modifier.size(15.dp))
 //-----------------------
-        Text("Email o usuario", fontWeight = FontWeight.Bold,fontSize = 20.sp,color = Color.Black)
+        Text("Correo electrónico", fontWeight = FontWeight.Bold,fontSize = 20.sp,color = Color.Black)
 //----------------------
         TextField(value = LoginViewModel.email,
             onValueChange = { LoginViewModel.email = it},
@@ -158,12 +158,12 @@ fun LoginScreen(LoginViewModel: MvvmPresentation, navHostController: NavHostCont
 
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Log.e("LoginScreen", "Email format is invalid")
-                    comprobante= true
+
                     return@Button
                 }
                 LoginViewModel.login(email,password,
                    onSuccess = {navHostController.navigate(Routes.Menu1.routes)},
-                    onError = {}
+                    onError = { comprobante= true}
                 )
 
                }
@@ -202,7 +202,7 @@ fun LoginScreen(LoginViewModel: MvvmPresentation, navHostController: NavHostCont
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center)
         //--------------------------
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1.75f))
     }
 
 }
@@ -211,7 +211,7 @@ fun LoginScreen(LoginViewModel: MvvmPresentation, navHostController: NavHostCont
 fun texto1(comprobante:Boolean){
     if(comprobante){
         Text(
-            text = "Email o contraseña incorrectos",
+            text = "Email o contraseña incorrecto",
             color = Color.Red,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
