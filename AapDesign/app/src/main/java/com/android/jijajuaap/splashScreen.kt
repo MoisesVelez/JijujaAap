@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.android.jijajuaap.menu.menuviewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.initial.Colores
 import com.android.jijajuaap.ui.theme.PurpleGrey40
@@ -29,12 +30,13 @@ import com.android.jijajuaap.ui.theme.White
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navHostController: NavHostController) {
+fun SplashScreen(navHostController: NavHostController,menuviewModel: menuviewModel) {
 
     LaunchedEffect(key1 = true) {
         delay(2200)
         navHostController.popBackStack()
-        navHostController.navigate(Routes.Screen1.routes)
+       val ruta = menuviewModel.checkDestinantion()
+        navHostController.navigate(ruta)
     }
     Splash()
 }

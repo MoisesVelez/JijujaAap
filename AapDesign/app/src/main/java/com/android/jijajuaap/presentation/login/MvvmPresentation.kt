@@ -51,4 +51,13 @@ class MvvmPresentation @Inject constructor(private val authService: AuthService)
             }
         }
     }
+
+    fun logOut(navigateToLogin:() -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {
+            authService.logOut()
+        }
+        navigateToLogin()
+        email = ""
+        password = ""
+    }
 }
