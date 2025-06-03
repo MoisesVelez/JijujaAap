@@ -1,6 +1,9 @@
 package com.android.jijajuaap.presentation.initial
 
-import androidx.compose.foundation.BorderStroke
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,14 +11,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,14 +45,47 @@ import com.android.jijajuaap.ui.theme.White
 import com.android.jijajuaap.ui.theme.azulJi
 import com.android.jijajuaap.ui.theme.rojoJa
 import com.android.jijajuaap.ui.theme.verdeJu
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 
 import kotlin.random.Random
 
 
 @Composable
-fun InitialScreen(navHostController: NavHostController){
+fun InitialScreen(navHostController: NavHostController,InitialViewModel: InitialViewModel) {
     val colorEscogido = Colores()
+    val context = LocalContext.current
+    val googleSignInClient = remember { InitialViewModel.authService.getGoogleClient() }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                val idToken = account?.idToken
+
+                if (idToken != null) {
+                    InitialViewModel.loginWithGoogle(
+                        idToken,
+                        onSuccess = {navHostController.navigate(Routes.Menu1.routes)},
+                        onError = {}
+                    )
+                } else {
+                    Log.e("Login", "ID Token is null")
+                }
+
+            } catch (e: ApiException) {
+                Log.e("Login", "Google sign in failed", e)
+            }
+        } else {
+            Log.w("Login", "Sign in canceled")
+        }
+    }
+
+
     Column(modifier = Modifier.fillMaxSize()
         .background(Brush.verticalGradient(listOf(White,colorEscogido)))
         .padding(15.dp).verticalScroll(rememberScrollState()),
@@ -97,7 +132,10 @@ fun InitialScreen(navHostController: NavHostController){
         }
         Spacer(modifier =Modifier.height(10.dp))
 
-        Button(onClick = {},
+        Button(onClick = {googleSignInClient.signOut().addOnCompleteListener {
+            val signInIntent = googleSignInClient.signInIntent
+            launcher.launch(signInIntent)}
+        },
             modifier = Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 32.dp),
             colors = ButtonDefaults.buttonColors(containerColor = White),
 

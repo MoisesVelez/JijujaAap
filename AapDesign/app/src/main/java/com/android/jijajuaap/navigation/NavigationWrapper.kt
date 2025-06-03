@@ -12,6 +12,7 @@ import com.android.jijajuaap.menu.menuviewModel
 import com.android.jijajuaap.presentation.SignUp.SignUpScreen
 import com.android.jijajuaap.presentation.SignUp.SignUpViewModel
 import com.android.jijajuaap.presentation.initial.InitialScreen
+import com.android.jijajuaap.presentation.initial.InitialViewModel
 import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 
@@ -23,13 +24,14 @@ fun NavigationWrapper() {
     val loginViewModel: MvvmPresentation = hiltViewModel()
     val signViewModel: SignUpViewModel = hiltViewModel()
     val menuViewModel: menuviewModel = hiltViewModel()
+    val initViewModel: InitialViewModel = hiltViewModel()
 
     NavHost(navController = navHostController, startDestination = Routes.SplashScreen.routes) {
         composable(Routes.SplashScreen.routes) {
             SplashScreen(navHostController,menuViewModel)
         }
         composable(Routes.Screen1.routes) {
-            InitialScreen(navHostController)
+            InitialScreen(navHostController,initViewModel)
         }
         composable(Routes.Screen2.routes) {
             LoginScreen(loginViewModel,navHostController)

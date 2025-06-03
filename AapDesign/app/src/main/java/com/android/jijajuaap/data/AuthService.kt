@@ -1,12 +1,24 @@
 package com.android.jijajuaap.data
 
 
+import android.annotation.SuppressLint
+import com.android.jijajuaap.R
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import android.content.Context
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.resumeWithException
 
-class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth){
+class AuthService @SuppressLint("RestrictedApi")
+@Inject constructor(private val firebaseAuth: FirebaseAuth, @ApplicationContext private val context: Context){
 
     suspend fun login(email:String,password:String): FirebaseUser? {
        return firebaseAuth.signInWithEmailAndPassword(email,password).await().user
@@ -26,4 +38,31 @@ class AuthService @Inject constructor(private val firebaseAuth: FirebaseAuth){
     fun logOut() {
         firebaseAuth.signOut()
     }
+
+    fun getGoogleClient(): GoogleSignInClient {
+        val gso = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(context, gso)
+    }
+
+   suspend fun loginWithGoogle(string: String): FirebaseUser? {
+        val credential = GoogleAuthProvider.getCredential(string,null)
+      return completedRegisterWithCredential(credential)
+
+    }
+
+
+
+    private suspend fun completedRegisterWithCredential(credential: AuthCredential): FirebaseUser? {
+        return firebaseAuth.signInWithCredential(credential).await().user
+    }
+
+
+
 }
+
+

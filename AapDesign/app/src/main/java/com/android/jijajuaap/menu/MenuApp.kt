@@ -1,28 +1,28 @@
 package com.android.jijajuaap.menu
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialogDefaults.containerColor
-import androidx.compose.material3.AlertDialogDefaults.shape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +44,7 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
     val colorEscogido = Colores()
     val fondo = Brush.verticalGradient(listOf(colorEscogido,Color.White ))
     Scaffold(
+        topBar = {topAppBar(colorEscogido)},
         modifier = Modifier.fillMaxSize().padding(bottom = 50.dp),
         bottomBar = {navigationBar(logingView,navHostController)},
 
@@ -65,11 +66,21 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun topAppBar(colorEscogido: Color) {
+    TopAppBar(title = {Image(
+        painter = painterResource(id = R.drawable.portada),
+        contentDescription = "Logo App",
+        modifier = Modifier.size(100.dp).padding(10.dp)
+            .clip(CircleShape)
+            .border(2.dp, color = Color.Black, CircleShape),
 
+    )},
+        modifier = Modifier.height(150.dp).border(2.dp, color = Color.Black,shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)),
+        colors =TopAppBarDefaults.topAppBarColors(Color.White) )
 
-
-
-
+}
 
 
 @Composable

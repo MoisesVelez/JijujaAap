@@ -20,6 +20,7 @@ materialIconsExtended = "1.7.8"
 navigationCompose = "2.9.0"
 navigationRuntimeAndroid = "2.9.0"
 compose-ui = "1.8.2"
+playServicesAuth = "21.3.0"
 runtimeLivedata = "1.8.2"
 
 
@@ -56,6 +57,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose-ui" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 
 [plugins]
