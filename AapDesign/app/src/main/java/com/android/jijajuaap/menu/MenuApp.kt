@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -41,7 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -77,15 +78,27 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
 @Composable
 fun topAppBar(colorEscogido: Color) {
     TopAppBar(title = {Image(
-        painter = painterResource(id = R.drawable.portada),
+        painter = painterResource(id = R.drawable.error_de_usuario),
         contentDescription = "Logo App",
-        modifier = Modifier.size(100.dp).padding(10.dp)
+        modifier = Modifier.size(75.dp).padding(5.dp)
             .clip(CircleShape)
-            .border(2.dp, color = colorEscogido, CircleShape),
+            .border(2.dp, color = colorEscogido, CircleShape)
+            .clickable(onClick = {})
+            .background(color = Color.White),
 
     )},
-        modifier = Modifier.height(150.dp)
-       , colors =TopAppBarDefaults.topAppBarColors(Color.White) )
+        modifier = Modifier.height(125.dp)
+       , colors =TopAppBarDefaults.topAppBarColors(Color.White)
+    , actions = {
+        Icon(
+            painter = painterResource(R.drawable.ajustamiento),
+            contentDescription = "Ajustes",
+            modifier = Modifier.size(60.dp)
+                .clickable(onClick = {}),
+            tint = Color.Black
+        )
+
+        })
 
 }
 
@@ -100,7 +113,7 @@ fun navigationBar(
     NavigationBar(containerColor = colorEscogido, modifier = Modifier.height(110.dp)
          ){
         NavigationBarItem(selected = true,
-            modifier = Modifier.padding(top = 30.dp),
+            modifier = Modifier,
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.DarkGray,
                 unselectedIconColor = Color.DarkGray,
@@ -109,11 +122,11 @@ fun navigationBar(
                 indicatorColor = Color.Transparent
             ),
             onClick = {navHostController.navigate(Routes.Menu1.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.hogar),modifier= Modifier.size(35.dp), contentDescription = "")}
+            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "")}
             ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = Color.Black) })
 
         NavigationBarItem(selected = true,
-            modifier = Modifier.padding(top = 30.dp),
+            modifier = Modifier,
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.DarkGray,
                 unselectedIconColor = Color.DarkGray,
@@ -122,11 +135,11 @@ fun navigationBar(
                 indicatorColor = Color.Transparent
             ),
             onClick = {},
-            icon = {Icon(painter = painterResource(R.drawable.herramienta_lapiz),modifier= Modifier.size(35.dp), contentDescription = "")}
+            icon = {Icon(painter = painterResource(R.drawable.lapiz),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "")}
             ,label = { Text("Partida privada", fontWeight = FontWeight.Bold, color = Color.Black) })
 
         NavigationBarItem(selected = true,
-            modifier = Modifier.padding(top = 30.dp),
+            modifier = Modifier,
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.DarkGray,
                 unselectedIconColor = Color.DarkGray,
@@ -138,16 +151,17 @@ fun navigationBar(
                 popUpTo(Routes.Screen1.routes)
                 { inclusive = true }
             }}},
-            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(35.dp), contentDescription = "")}
+            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "")}
             ,label = { Text("Social", fontWeight = FontWeight.Bold, color = Color.Black) }
         )
 
     }
 }
+
+
 @Composable
 fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Color) {
     val pagerState = rememberPagerState(pageCount = { 4 })
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
     Column(
         modifier = Modifier
@@ -162,24 +176,32 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
         ) { page ->
             when (page) {
                 0 -> SimpleCardPantallaCompleta(
-                    titulo = "Tarjeta",
+                    titulo = "Partida pública",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
-                    height = 500.dp
+                    height = 500.dp,
+                    painter = painterResource(
+                        R.drawable.ilustracion_sin_titulo_1)
                 )
                 1 -> SimpleCardPantallaCompleta(
-                    titulo = "Tarjet",
+                    titulo = "Competitivo",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
-                    height = 500.dp
+                    height = 500.dp,
+                    painter = painterResource(
+                        R.drawable.ilustracion_sin_titulo_3)
                 )
                 2 -> SimpleCardPantallaCompleta(
-                    titulo = "Tarje",
+                    titulo = "Creador",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
-                    height = 500.dp
+                    height = 500.dp,
+                    painter = painterResource(
+                        R.drawable.ilustracion_sin_titulo_6)
                 )
                 3 -> SimpleCardPantallaCompleta(
-                    titulo = "Tar",
+                    titulo = "Lore...",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
-                    height = 500.dp
+                    height = 500.dp,
+                    painter = painterResource(
+                        R.drawable.ilustracion_sin_titulo__3_)
                 )
             }
         }
@@ -190,7 +212,7 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
             pagerState = pagerState,
             totalPaginas = 4,
             modifier = Modifier
-                .padding(bottom = 24.dp)
+                .padding(bottom = 74.dp)
                 .fillMaxWidth()
             , colorEscogido = colorEscogido
         )
@@ -199,8 +221,9 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
 
 
 @Composable
-fun SimpleCardPantallaCompleta(titulo: String, contenido: String, height: Dp) {
+fun SimpleCardPantallaCompleta(titulo: String, contenido: String, height: Dp, painter: Painter) {
     Card(
+        shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(height)
@@ -216,12 +239,14 @@ fun SimpleCardPantallaCompleta(titulo: String, contenido: String, height: Dp) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = titulo, style = MaterialTheme.typography.titleLarge)
+            Text(text = titulo, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = contenido)
+            Text(text = contenido,color = Color.Black)
+            Image(painter = painter, contentDescription = "")
         }
     }
 }
+
 @Composable
 fun IndicadorBarraAnimada(
     pagerState: PagerState,
@@ -244,6 +269,7 @@ fun IndicadorBarraAnimada(
             .fillMaxWidth()
             .height(8.dp)
             .padding(horizontal = 32.dp)
+
     ) {
 
         Box(

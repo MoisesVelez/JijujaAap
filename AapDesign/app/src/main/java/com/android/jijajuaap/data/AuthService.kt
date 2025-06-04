@@ -2,6 +2,7 @@ package com.android.jijajuaap.data
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import com.android.jijajuaap.R
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -11,11 +12,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.resumeWithException
+
 
 class AuthService @SuppressLint("RestrictedApi")
 @Inject constructor(private val firebaseAuth: FirebaseAuth, @ApplicationContext private val context: Context){
@@ -61,8 +65,34 @@ class AuthService @SuppressLint("RestrictedApi")
         return firebaseAuth.signInWithCredential(credential).await().user
     }
 
+    suspend fun loginWithTwitter(activity: Activity): FirebaseUser? {
+        val provider = OAuthProvider.newBuilder("twitter.com").build()
+        return registerWithProvider(activity, provider)
+    }
+
+    private suspend fun registerWithProvider(
+        activity: Activity,
+        provider: OAuthProvider
+    ): FirebaseUser? = suspendCancellableCoroutine { continuation ->
+        val auth = FirebaseAuth.getInstance()
+        val pendingResult = auth.pendingAuthResult
+
+        if (pendingResult != null) {
+            pendingResult
+                .addOnSuccessListener { continuation.resume(it.user) }
+                .addOnFailureListener { continuation.resumeWithException(it) }
+        } else {
+            auth.startActivityForSignInWithProvider(activity, provider)
+                .addOnSuccessListener { continuation.resume(it.user) }
+                .addOnFailureListener { continuation.resumeWithException(it) }
+        }
+    }
+
+
 
 
 }
+
+
 
 

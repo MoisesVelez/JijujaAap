@@ -1,5 +1,6 @@
 package com.android.jijajuaap.presentation.initial
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -52,9 +53,11 @@ import com.google.android.gms.common.api.ApiException
 import kotlin.random.Random
 
 
+@SuppressLint("ContextCastToActivity")
 @Composable
 fun InitialScreen(navHostController: NavHostController,InitialViewModel: InitialViewModel) {
     val colorEscogido = Colores()
+    val contexto = LocalContext.current as? Activity
     val context = LocalContext.current
     val googleSignInClient = remember { InitialViewModel.authService.getGoogleClient() }
 
@@ -165,7 +168,14 @@ fun InitialScreen(navHostController: NavHostController,InitialViewModel: Initial
 
         }
         Spacer(modifier =Modifier.height(15.dp))
-        Button(onClick = {},
+        Button(onClick = {
+            if (contexto != null) {
+                InitialViewModel.TwitterLoginSelected(
+                    activity = contexto,
+                    onSuccess = {navHostController.navigate(Routes.Menu1.routes)},
+                    onError = {})
+            }
+        },
             modifier = Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 32.dp),
             colors = ButtonDefaults.buttonColors(containerColor = White),
 
@@ -177,8 +187,8 @@ fun InitialScreen(navHostController: NavHostController,InitialViewModel: Initial
             ) {
 
                 Image(
-                    painter = painterResource(id = R.drawable.facebook),
-                    contentDescription = "Registrarse facebook",
+                    painter = painterResource(id = R.drawable.gorjeo),
+                    contentDescription = "Registrarse twitter",
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .padding(start = 16.dp)
@@ -186,7 +196,7 @@ fun InitialScreen(navHostController: NavHostController,InitialViewModel: Initial
                 )
 
                 Text(
-                    text = "Cuenta de Facebook",
+                    text = "Cuenta de X",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center

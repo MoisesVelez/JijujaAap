@@ -8,5 +8,6 @@ data class User(
     val totalPoints: Int = 0,
     val totalQuiz :Int = 0,
     val betterPoint: Int = 0,
-    val registerDate: Long = System.currentTimeMillis()
+    val registerDate: Long = System.currentTimeMillis(),
+    val team: String
 )

@@ -1,5 +1,6 @@
 package com.android.jijajuaap.presentation.initial
 
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.data.AuthService
@@ -29,6 +30,28 @@ class InitialViewModel @Inject constructor(internal val authService: AuthService
             }
         }
     }
+
+    fun TwitterLoginSelected(
+        activity: Activity,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) {
+                    authService.loginWithTwitter(activity)
+                }
+                if (result != null) {
+                    onSuccess()
+                } else {
+                    onError(Exception("Twitter login returned null user"))
+                }
+            } catch (e: Exception) {
+                onError(e)
+            }
+        }
+    }
+
 
 
 
