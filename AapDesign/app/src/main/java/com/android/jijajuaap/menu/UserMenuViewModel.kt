@@ -1,10 +1,14 @@
 package com.android.jijajuaap.menu
 
+import android.annotation.SuppressLint
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.jijajuaap.R
 import com.android.jijajuaap.data.AuthService
 import com.android.jijajuaap.objects.User
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,11 +36,26 @@ class UserMenuViewModel @Inject constructor(
             try {
                 val userData = authService.getUserData(uid)
                 user = userData
+
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage ?: "Error al cargar usuario"
             } finally {
                 isLoading = false
             }
         }
+    }
+
+
+    @SuppressLint("DiscouragedApi")
+    @Composable
+    fun imagenUsuario(user: User?):Int{
+        val drawableName = user?.avatarId
+        val context = LocalContext.current
+        val avatarResId = if (!drawableName.isNullOrEmpty()) {
+            context.resources.getIdentifier(drawableName, "drawable", context.packageName)
+        } else {
+            R.drawable.error_de_usuario
+        }
+        return avatarResId
     }
 }

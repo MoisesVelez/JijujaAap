@@ -17,7 +17,7 @@ import com.android.jijajuaap.presentation.initial.InitialScreen
 import com.android.jijajuaap.presentation.initial.InitialViewModel
 import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.presentation.login.MvvmPresentation
-import com.google.firebase.firestore.FirebaseFirestore
+
 
 
 @Composable
@@ -44,7 +44,7 @@ fun NavigationWrapper() {
             SignUpScreen(signViewModel,navHostController,loginViewModel)
         }
         composable(Routes.Menu1.routes) {
-            menuInitial(loginViewModel,navHostController)
+            menuInitial(loginViewModel,navHostController,userViewModel)
         }
         composable(Routes.MenuUser.routes) {
             menu(userViewModel)

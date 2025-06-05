@@ -25,7 +25,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -54,11 +53,11 @@ import com.android.jijajuaap.presentation.initial.Colores
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 
 @Composable
-fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostController) {
+fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostController,menuUserMenuViewModel: UserMenuViewModel) {
     val colorEscogido = Colores()
     val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
     Scaffold(
-        topBar = { topAppBar(colorEscogido,navHostController) },
+        topBar = { topAppBar(colorEscogido,navHostController,menuUserMenuViewModel) },
         modifier = Modifier.fillMaxSize().padding(bottom = 50.dp),
         bottomBar = { navigationBar(logingView, navHostController, colorEscogido) },
 
@@ -76,9 +75,14 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topAppBar(colorEscogido: Color,navHostController: NavHostController) {
+fun topAppBar(
+    colorEscogido: Color,
+    navHostController: NavHostController,
+    menuUserMenuViewModel: UserMenuViewModel,) {
+    val usuario = menuUserMenuViewModel.user
+    val imagenUser = menuUserMenuViewModel.imagenUsuario(usuario)
     TopAppBar(title = {Image(
-        painter = painterResource(id = R.drawable.error_de_usuario),
+        painter = painterResource(id = imagenUser),
         contentDescription = "Logo App",
         modifier = Modifier.size(75.dp).padding(5.dp)
             .clip(CircleShape)
