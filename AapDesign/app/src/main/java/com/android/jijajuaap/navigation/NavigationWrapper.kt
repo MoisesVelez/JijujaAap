@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.jijajuaap.SplashScreen
+import com.android.jijajuaap.menu.UserMenuViewModel
+import com.android.jijajuaap.menu.menu
 import com.android.jijajuaap.menu.menuInitial
 import com.android.jijajuaap.menu.menuviewModel
 import com.android.jijajuaap.presentation.SignUp.SignUpScreen
@@ -15,7 +17,7 @@ import com.android.jijajuaap.presentation.initial.InitialScreen
 import com.android.jijajuaap.presentation.initial.InitialViewModel
 import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.presentation.login.MvvmPresentation
-
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 @Composable
@@ -25,6 +27,8 @@ fun NavigationWrapper() {
     val signViewModel: SignUpViewModel = hiltViewModel()
     val menuViewModel: menuviewModel = hiltViewModel()
     val initViewModel: InitialViewModel = hiltViewModel()
+    val userViewModel: UserMenuViewModel = hiltViewModel()
+
 
     NavHost(navController = navHostController, startDestination = Routes.SplashScreen.routes) {
         composable(Routes.SplashScreen.routes) {
@@ -37,10 +41,13 @@ fun NavigationWrapper() {
             LoginScreen(loginViewModel,navHostController)
         }
         composable(Routes.Screen3.routes) {
-            SignUpScreen(signViewModel,navHostController)
+            SignUpScreen(signViewModel,navHostController,loginViewModel)
         }
         composable(Routes.Menu1.routes) {
             menuInitial(loginViewModel,navHostController)
+        }
+        composable(Routes.MenuUser.routes) {
+            menu(userViewModel)
         }
     }
 }

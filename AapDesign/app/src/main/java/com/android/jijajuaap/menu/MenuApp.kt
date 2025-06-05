@@ -58,7 +58,7 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
     val colorEscogido = Colores()
     val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
     Scaffold(
-        topBar = { topAppBar(colorEscogido) },
+        topBar = { topAppBar(colorEscogido,navHostController) },
         modifier = Modifier.fillMaxSize().padding(bottom = 50.dp),
         bottomBar = { navigationBar(logingView, navHostController, colorEscogido) },
 
@@ -76,14 +76,14 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topAppBar(colorEscogido: Color) {
+fun topAppBar(colorEscogido: Color,navHostController: NavHostController) {
     TopAppBar(title = {Image(
         painter = painterResource(id = R.drawable.error_de_usuario),
         contentDescription = "Logo App",
         modifier = Modifier.size(75.dp).padding(5.dp)
             .clip(CircleShape)
             .border(2.dp, color = colorEscogido, CircleShape)
-            .clickable(onClick = {})
+            .clickable(onClick = {navHostController.navigate(Routes.MenuUser.routes)})
             .background(color = Color.White),
 
     )},

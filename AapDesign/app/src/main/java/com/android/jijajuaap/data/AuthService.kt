@@ -1,6 +1,6 @@
 package com.android.jijajuaap.data
 
-
+import kotlinx.coroutines.tasks.await
 import android.annotation.SuppressLint
 import android.app.Activity
 import com.android.jijajuaap.R
@@ -8,21 +8,35 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import android.content.Context
+import com.android.jijajuaap.objects.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 
 class AuthService @SuppressLint("RestrictedApi")
-@Inject constructor(private val firebaseAuth: FirebaseAuth, @ApplicationContext private val context: Context){
+@Inject constructor(private val firebaseAuth: FirebaseAuth, private val firestore: FirebaseFirestore,@ApplicationContext private val context: Context){
+
+
+
+    suspend fun saveUserInFirestore(user: FirebaseUser, name: String) {
+        val userData = User(
+            uid = user.uid,
+            email = user.email ?: "",
+            name = name
+        )
+        firestore.collection("users").document(user.uid).set(userData).await()
+    }
+
 
     suspend fun login(email:String,password:String): FirebaseUser? {
        return firebaseAuth.signInWithEmailAndPassword(email,password).await().user
@@ -61,9 +75,39 @@ class AuthService @SuppressLint("RestrictedApi")
 
 
 
-    private suspend fun completedRegisterWithCredential(credential: AuthCredential): FirebaseUser? {
-        return firebaseAuth.signInWithCredential(credential).await().user
-    }
+    suspend fun completedRegisterWithCredential(credential: AuthCredential): FirebaseUser? =
+        suspendCoroutine { cont ->
+            firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val user = firebaseAuth.currentUser
+                        if (user != null) {
+
+                            val userObject = User(
+                                uid = user.uid,
+                                name = user.displayName ?: "",
+                                email = user.email ?: ""
+                            )
+
+
+                            firestore.collection("users")
+                                .document(user.uid)
+                                .set(userObject)
+                                .addOnSuccessListener {
+                                    cont.resume(user)
+                                }
+                                .addOnFailureListener { e ->
+                                    cont.resumeWithException(e)
+                                }
+                        } else {
+                            cont.resume(null)
+                        }
+                    } else {
+                        cont.resume(null)
+                    }
+                }
+        }
+
 
     suspend fun loginWithTwitter(activity: Activity): FirebaseUser? {
         val provider = OAuthProvider.newBuilder("twitter.com").build()
@@ -87,6 +131,26 @@ class AuthService @SuppressLint("RestrictedApi")
                 .addOnFailureListener { continuation.resumeWithException(it) }
         }
     }
+
+
+
+    suspend fun getUserData(uid: String): User? = suspendCoroutine { cont ->
+        firestore.collection("users")
+            .document(uid)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    cont.resume(user)
+                } else {
+                    cont.resume(null)
+                }
+            }
+            .addOnFailureListener { e ->
+                cont.resumeWithException(e)
+            }
+    }
+
 
 
 

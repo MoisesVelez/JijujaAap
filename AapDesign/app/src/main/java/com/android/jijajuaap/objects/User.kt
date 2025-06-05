@@ -1,13 +1,12 @@
 package com.android.jijajuaap.objects
 
 data class User(
-    val uid: String = "",
-    val names: String = "",
-    val email: String = "",
+    val uid: String? = null,
+    val name: String? = null,
+    val email: String? = null,
     val avatarId: String? = null,
-    val totalPoints: Int = 0,
-    val totalQuiz :Int = 0,
-    val betterPoint: Int = 0,
-    val registerDate: Long = System.currentTimeMillis(),
-    val team: String
+    val totalPoints: Int? = null,
+    val totalQuiz :Int? = null,
+    val team: String?=null,
+    val rango: String?=null
 )

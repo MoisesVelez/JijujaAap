@@ -53,11 +53,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.navigation.Routes
+import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.android.jijajuaap.presentation.login.texto1
 
 
 @Composable
-fun SignUpScreen(signUpViewModel: SignUpViewModel,navHostController: NavHostController) {
+fun SignUpScreen(signUpViewModel: SignUpViewModel,navHostController: NavHostController,mvvmPresentation: MvvmPresentation) {
     val colorEscogido = Colores()
     var name by remember { mutableStateOf("") }
     var contrasenaVisible by remember { mutableStateOf(false) }
@@ -191,6 +192,9 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel,navHostController: NavHostCont
                         password = password,
                         onSuccess = {navHostController.navigate(Routes.Menu1.routes)},
                         onError = {comprobante=true})
+                    mvvmPresentation.register(name = name, email = email,password=password,
+                        onSuccess = {}, onError = {})
+
                 }
                 ,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp).height(48.dp),

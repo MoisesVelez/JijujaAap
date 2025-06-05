@@ -60,4 +60,39 @@ class MvvmPresentation @Inject constructor(private val authService: AuthService)
         email = ""
         password = ""
     }
+
+
+    fun register(
+        name: String,
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val user = withContext(Dispatchers.IO) {
+                    authService.register(email, password)
+                }
+                if (user != null) {
+                    withContext(Dispatchers.IO) {
+                        authService.saveUserInFirestore(user, name)
+                    }
+                    onSuccess()
+                } else {
+                    onError("No se pudo registrar el usuario.")
+                }
+            } catch (e: Exception) {
+                Log.e("ViewModel", "Error registering", e)
+                onError("Error al registrar: ${e.message}")
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
+
+
 }

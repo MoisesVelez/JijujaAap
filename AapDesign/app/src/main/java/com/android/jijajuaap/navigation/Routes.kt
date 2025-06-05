@@ -6,4 +6,5 @@ sealed class Routes(val routes:String) {
     object Screen2: Routes("login")
     object Screen3: Routes("sign")
     object Menu1:Routes("menu1")
+    object MenuUser:Routes("menuUsuario")
 }
