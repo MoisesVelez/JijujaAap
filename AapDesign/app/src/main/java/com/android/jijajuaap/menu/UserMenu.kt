@@ -84,15 +84,15 @@ fun menu(userMenuViewModel: UserMenuViewModel){
             Spacer(modifier = Modifier.height(16.dp))
 
 
-            Text(user?.name ?: "Sin nombre", style = MaterialTheme.typography.headlineSmall)
+            Text(user?.name ?: "Sin nombre", style = MaterialTheme.typography.headlineSmall, color = Color.Black)
             Text(user?.email ?: "", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            ProfileInfoRow(R.drawable.persona, label = "🏡 Pueblo: ", value = user?.team ?: "Sin patria")
-            ProfileInfoRow(R.drawable.persona,label = "🥇 Rango: ", value = user?.rango ?: "Iniciado")
-            ProfileInfoRow(R.drawable.persona,label = "⭐ Puntos totales: ", value = (user?.totalPoints ?: 0).toString())
-            ProfileInfoRow(R.drawable.persona,label = "📝 Quiz totales: ", value = (user?.totalQuiz ?: 0).toString())
+            ProfileInfoRow(R.drawable.pueblo, label = "    Pueblo: ", value = user?.team ?: "Sin patria")
+            ProfileInfoRow(R.drawable.puntuacion_mas_alta,label = "    Rango: ", value = user?.rango ?: "Iniciado")
+            ProfileInfoRow(R.drawable.evaluacion,label = "     Puntos totales: ", value = (user?.totalPoints ?: 0).toString())
+            ProfileInfoRow(R.drawable.quizas,label = "     Quiz totales: ", value = (user?.totalQuiz ?: 0).toString())
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -119,8 +119,8 @@ fun ProfileInfoRow(icono: Int, label: String, value: String?) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(painterResource(id = icono), contentDescription = "", modifier = Modifier.size(25.dp))
-                Text(label, style = MaterialTheme.typography.bodyMedium)
-                Text(value, fontWeight = FontWeight.Bold)
+                Text(label, style = MaterialTheme.typography.bodyMedium, color = Color.Black)
+                Text(value, fontWeight = FontWeight.Bold, color = Color.Black)
             }
         }
     }

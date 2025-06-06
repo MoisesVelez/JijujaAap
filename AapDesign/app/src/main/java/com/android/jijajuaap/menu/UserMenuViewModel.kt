@@ -1,16 +1,38 @@
 package com.android.jijajuaap.menu
 
 import android.annotation.SuppressLint
+import android.content.Context
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+
+import androidx.compose.foundation.layout.padding
+
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.R
 import com.android.jijajuaap.data.AuthService
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.ui.theme.azulJi
+import com.android.jijajuaap.ui.theme.rojoJa
+import com.android.jijajuaap.ui.theme.verdeJu
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +41,8 @@ import javax.inject.Inject
 class UserMenuViewModel @Inject constructor(
     private val authService: AuthService
 ) : ViewModel() {
+
+    var colorFinal: Color by mutableStateOf<Color>(Color.White)
 
     var user by mutableStateOf<User?>(null)
         private set
@@ -48,7 +72,7 @@ class UserMenuViewModel @Inject constructor(
 
     @SuppressLint("DiscouragedApi")
     @Composable
-    fun imagenUsuario(user: User?):Int{
+    fun imagenUsuario(user: User?): Int {
         val drawableName = user?.avatarId
         val context = LocalContext.current
         val avatarResId = if (!drawableName.isNullOrEmpty()) {
@@ -58,4 +82,79 @@ class UserMenuViewModel @Inject constructor(
         }
         return avatarResId
     }
+
+
+    fun hasUserChosenTeam(context: Context, userId: String): Boolean {
+        val prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        return prefs.getBoolean("hasChosenTeam_$userId", false)
+    }
+
+    fun setUserHasChosenTeam(context: Context, userId: String) {
+        val prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("hasChosenTeam_$userId", true).apply()
+    }
+
+
+    @Composable
+    fun MyCustomDialog(onDismiss: () -> Unit) {
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            title = {
+                Text(
+                    text = "Bienvenido al mundo de JIJAJU",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
+            text = {
+                Column {
+                    Text("Debes elegir un pueblo al que consagrar tu lealtad. Elige tu color:")
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    TeamOption("Rojines", "Rojin", Color.Red, onClick = {
+                        user?.team = "Rojin"
+                         colorFinal = rojoJa
+                        onDismiss()
+                    })
+
+                    TeamOption("Azulenses", "Azulense", Color.Blue, onClick = {
+                        user?.team = "Azulense"
+                        colorFinal = azulJi
+                        onDismiss()
+                    })
+
+                    TeamOption("Verdianos", "Verdiano", Color.Green, onClick = {
+                        user?.team = "Verdiano"
+                        colorFinal = verdeJu
+                        onDismiss()
+                    })
+                }
+            },
+            confirmButton = {}
+        )
+    }
+
+    @Composable
+    fun TeamOption(label: String, teamName: String, color: Color, onClick: () -> Unit) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
+            Text(
+                text = label,
+                color = Color.Black,
+                modifier = Modifier.weight(1f)
+            )
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(containerColor = color)
+            ) {
+                Text("Elegir", color = Color.White)
+            }
+        }
+    }
+
+
 }
+
+
+

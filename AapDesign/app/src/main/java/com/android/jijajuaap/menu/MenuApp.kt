@@ -1,5 +1,6 @@
 package com.android.jijajuaap.menu
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,13 +36,17 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -49,13 +54,49 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.navigation.Routes
+import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.presentation.initial.Colores
 import com.android.jijajuaap.presentation.login.MvvmPresentation
+import com.google.firebase.auth.FirebaseAuth
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostController,menuUserMenuViewModel: UserMenuViewModel) {
-    val colorEscogido = Colores()
+
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+
+    LaunchedEffect(currentUserUid) {
+        if (currentUserUid != null) {
+            menuUserMenuViewModel.loadUserData(currentUserUid)
+        }
+    }
+    UserProfileScreen(menuUserMenuViewModel)
+
+
+    val colorEscogido = menuUserMenuViewModel.colorFinal
     val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
+
+
+    val context = LocalContext.current
+
+    val showColorDialog = remember(currentUserUid) {
+        mutableStateOf(
+            currentUserUid != null && !menuUserMenuViewModel.hasUserChosenTeam(context, currentUserUid)
+        )
+    }
+
+    if (showColorDialog.value) {
+        menuUserMenuViewModel.MyCustomDialog(
+            onDismiss = {
+                if (currentUserUid != null) {
+                    menuUserMenuViewModel.setUserHasChosenTeam(context, currentUserUid)
+                }
+                showColorDialog.value = false
+            }
+        )
+    }
+
+
     Scaffold(
         topBar = { topAppBar(colorEscogido,navHostController,menuUserMenuViewModel) },
         modifier = Modifier.fillMaxSize().padding(bottom = 50.dp),
@@ -184,7 +225,7 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
-                        R.drawable.ilustracion_sin_titulo_1)
+                        R.drawable.publica)
                 )
                 1 -> SimpleCardPantallaCompleta(
                     titulo = "Competitivo",
