@@ -15,6 +15,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -92,7 +93,7 @@ class AuthService @SuppressLint("RestrictedApi")
 
                             firestore.collection("users")
                                 .document(user.uid)
-                                .set(userObject)
+                                .set(userObject, SetOptions.merge())
                                 .addOnSuccessListener {
                                     cont.resume(user)
                                 }
@@ -150,6 +151,14 @@ class AuthService @SuppressLint("RestrictedApi")
                 cont.resumeWithException(e)
             }
     }
+
+    suspend fun updateUserTeam(uid: String, team: String) {
+        val userRef = firestore.collection("users").document(uid)
+        val updateData = mapOf("team" to team)
+        userRef.set(updateData, SetOptions.merge()).await() // <- .await() es importante
+    }
+
+
 
 
 

@@ -72,8 +72,8 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
     }
     UserProfileScreen(menuUserMenuViewModel)
 
-
-    val colorEscogido = menuUserMenuViewModel.colorFinal
+    val user = menuUserMenuViewModel.user
+    val colorEscogido = menuUserMenuViewModel.cambioColor(user?.team)
     val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
 
 

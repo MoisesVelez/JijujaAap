@@ -9,6 +9,7 @@ import com.android.jijajuaap.data.AuthService
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,28 +29,42 @@ class SignUpViewModel @Inject constructor(private val authService: AuthService):
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
 
-    fun register(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit){
-
+    fun register(
+        name: String,
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onError: (Boolean) -> Unit
+    ) {
         viewModelScope.launch {
-            _isLoading.value=true
-            try{
-                val result:FirebaseUser? = withContext(Dispatchers.IO) {
-                    authService.register(email,password)
-            }
-                if (result != null) {
+            _isLoading.value = true
+            try {
+                val user = withContext(Dispatchers.IO) {
+                    authService.register(email, password)
+                }
+                if (user != null) {
+                    withContext(Dispatchers.IO) {
+                        authService.saveUserInFirestore(user, name)
+                    }
                     onSuccess()
                 } else {
-
+                    onError()
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 if (e is FirebaseAuthUserCollisionException) {
-                    onError("El correo electrónico ya está en uso.")
+                    onError()
+                } else {
+                    onError()
                 }
-
+            } finally {
+                _isLoading.value = false
             }
-            _isLoading.value=false
         }
+    }
+
+    private fun CoroutineScope.onError() {
 
     }
+
 
 }

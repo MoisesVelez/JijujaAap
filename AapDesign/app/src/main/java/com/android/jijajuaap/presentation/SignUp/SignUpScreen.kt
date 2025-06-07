@@ -188,12 +188,12 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel,navHostController: NavHostCont
                         comprobante2 = true
                     }
                     signUpViewModel.register(
+                        name = name,
                         email = email,
                         password = password,
                         onSuccess = {navHostController.navigate(Routes.Menu1.routes)},
                         onError = {comprobante=true})
-                    mvvmPresentation.register(name = name, email = email,password=password,
-                        onSuccess = {}, onError = {})
+
 
                 }
                 ,

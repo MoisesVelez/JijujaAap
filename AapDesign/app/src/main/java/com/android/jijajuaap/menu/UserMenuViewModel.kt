@@ -2,6 +2,8 @@ package com.android.jijajuaap.menu
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
+import androidx.compose.foundation.background
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +33,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.R
 import com.android.jijajuaap.data.AuthService
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.ui.theme.White
 import com.android.jijajuaap.ui.theme.azulJi
 import com.android.jijajuaap.ui.theme.rojoJa
 import com.android.jijajuaap.ui.theme.verdeJu
@@ -41,8 +45,9 @@ import javax.inject.Inject
 class UserMenuViewModel @Inject constructor(
     private val authService: AuthService
 ) : ViewModel() {
+    var colorEscogido: Color by mutableStateOf<Color>(White)
+    var colorFinal: Color by mutableStateOf<Color>(colorEscogido)
 
-    var colorFinal: Color by mutableStateOf<Color>(Color.White)
 
     var user by mutableStateOf<User?>(null)
         private set
@@ -81,6 +86,7 @@ class UserMenuViewModel @Inject constructor(
             R.drawable.error_de_usuario
         }
         return avatarResId
+
     }
 
 
@@ -105,26 +111,26 @@ class UserMenuViewModel @Inject constructor(
                     style = MaterialTheme.typography.titleLarge
                 )
             },
+            containerColor = White,
             text = {
                 Column {
-                    Text("Debes elegir un pueblo al que consagrar tu lealtad. Elige tu color:")
+                    Text("Debes elegir un pueblo al que consagrar tu lealtad. Elige tu color:", color = Color.Black)
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    TeamOption("Rojines", "Rojin", Color.Red, onClick = {
-                        user?.team = "Rojin"
-                         colorFinal = rojoJa
+                    TeamOption("Rojines", "Rojin", rojoJa, onClick = {
+                        updateTeam("Rojin")
+
                         onDismiss()
                     })
 
-                    TeamOption("Azulenses", "Azulense", Color.Blue, onClick = {
-                        user?.team = "Azulense"
-                        colorFinal = azulJi
+                    TeamOption("Azulenses", "Azulense", azulJi, onClick = {
+                        updateTeam("Azulense")
                         onDismiss()
                     })
 
-                    TeamOption("Verdianos", "Verdiano", Color.Green, onClick = {
-                        user?.team = "Verdiano"
-                        colorFinal = verdeJu
+                    TeamOption("Verdianos", "Verdiano", verdeJu, onClick = {
+                        updateTeam("Verdiano")
+
                         onDismiss()
                     })
                 }
@@ -148,10 +154,36 @@ class UserMenuViewModel @Inject constructor(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(containerColor = color)
             ) {
-                Text("Elegir", color = Color.White)
+                Text("Elegir", color = Color.Black)
             }
         }
     }
+
+    fun cambioColor(team:String?): Color{
+        val colorElegido = when(team){
+            "Rojin" -> rojoJa
+            "Azulense" -> azulJi
+            "Verdiano" -> verdeJu
+            else -> White
+        }
+        return colorElegido
+    }
+
+
+    fun updateTeam(team: String) {
+        viewModelScope.launch {
+            try {
+                user?.uid?.let { uid ->
+                    authService.updateUserTeam(uid, team)
+                    user = user?.copy(team = team)
+                    colorFinal = cambioColor(team)
+                }
+            } catch (e: Exception) {
+                Log.e("UserMenuViewModel", "Error al actualizar el equipo", e)
+            }
+        }
+    }
+
 
 
 }
