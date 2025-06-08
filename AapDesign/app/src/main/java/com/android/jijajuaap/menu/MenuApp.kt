@@ -96,6 +96,8 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
         )
     }
 
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black)){
+
 
     Scaffold(
         topBar = { topAppBar(colorEscogido,navHostController,menuUserMenuViewModel) },
@@ -107,6 +109,7 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
 
 
     }
+}
 }
 
 

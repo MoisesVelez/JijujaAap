@@ -49,6 +49,19 @@ class UserMenuViewModel @Inject constructor(
     var colorFinal: Color by mutableStateOf<Color>(colorEscogido)
 
 
+
+    @Composable
+    fun colorUsuario(color: Color): Color{
+        if(color == azulJi){
+            return Color.Blue
+        }else if(color==rojoJa){
+            return Color.Red
+        }else if(color==verdeJu){
+            return Color.Green
+        }
+        return White
+    }
+
     var user by mutableStateOf<User?>(null)
         private set
 

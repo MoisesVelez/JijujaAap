@@ -84,16 +84,22 @@ class AuthService @SuppressLint("RestrictedApi")
                         val user = firebaseAuth.currentUser
                         if (user != null) {
 
-                            val userObject = User(
-                                uid = user.uid,
-                                name = user.displayName ?: "",
-                                email = user.email ?: ""
+                            val updateData = mutableMapOf<String, Any>(
+                                "uid" to user.uid,
+                                "name" to (user.displayName ?: ""),
+                                "email" to (user.email ?: ""),
+                                "avatarId" to "error_de_usuario",
+                                "totalPoints" to 0,
+                                "totalQuiz" to 0,
+                                "team" to "Sin equipo",
+                                "rango" to "Novato"
                             )
+
 
 
                             firestore.collection("users")
                                 .document(user.uid)
-                                .set(userObject, SetOptions.merge())
+                                .set(updateData, SetOptions.merge())
                                 .addOnSuccessListener {
                                     cont.resume(user)
                                 }
@@ -155,7 +161,7 @@ class AuthService @SuppressLint("RestrictedApi")
     suspend fun updateUserTeam(uid: String, team: String) {
         val userRef = firestore.collection("users").document(uid)
         val updateData = mapOf("team" to team)
-        userRef.set(updateData, SetOptions.merge()).await() // <- .await() es importante
+        userRef.set(updateData, SetOptions.merge()).await()
     }
 
 

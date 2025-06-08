@@ -57,17 +57,14 @@ fun menu(userMenuViewModel: UserMenuViewModel){
     fun UserProfileScreen(viewModel: UserMenuViewModel) {
         var user = viewModel.user
         val drawableName = viewModel.imagenUsuario(user)
-
+        val colorEscogido = viewModel.cambioColor(user?.team)
+        val colorChosen = viewModel.colorUsuario(colorEscogido)
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFFE9F5EC), Color(0xFFD3E8D5))
-                    )
-                )
-                .padding(24.dp).padding(top = 60.dp)
+                .background(colorChosen)
+                .padding(24.dp).padding(top = 60.dp).padding(bottom = 50.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
