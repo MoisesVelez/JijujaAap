@@ -54,8 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.navigation.Routes
-import com.android.jijajuaap.objects.User
-import com.android.jijajuaap.presentation.initial.Colores
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.google.firebase.auth.FirebaseAuth
 
@@ -228,7 +226,7 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
-                        R.drawable.publica)
+                        R.drawable.ilustracionpublica)
                 )
                 1 -> SimpleCardPantallaCompleta(
                     titulo = "Competitivo",

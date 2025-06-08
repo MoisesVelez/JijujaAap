@@ -35,8 +35,11 @@ import com.android.jijajuaap.data.AuthService
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.ui.theme.White
 import com.android.jijajuaap.ui.theme.azulJi
+import com.android.jijajuaap.ui.theme.azulUser
 import com.android.jijajuaap.ui.theme.rojoJa
+import com.android.jijajuaap.ui.theme.rojoUser
 import com.android.jijajuaap.ui.theme.verdeJu
+import com.android.jijajuaap.ui.theme.verdeUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,11 +56,11 @@ class UserMenuViewModel @Inject constructor(
     @Composable
     fun colorUsuario(color: Color): Color{
         if(color == azulJi){
-            return Color.Blue
+            return azulUser
         }else if(color==rojoJa){
-            return Color.Red
+            return rojoUser
         }else if(color==verdeJu){
-            return Color.Green
+            return verdeUser
         }
         return White
     }

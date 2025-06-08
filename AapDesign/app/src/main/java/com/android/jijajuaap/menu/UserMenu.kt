@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.android.jijajuaap.R
+import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -75,14 +77,14 @@ fun menu(userMenuViewModel: UserMenuViewModel){
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
-                    .border(2.dp, Color(0xFF4CAF50), CircleShape)
+                    .border(2.dp, White, CircleShape)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
 
-            Text(user?.name ?: "Sin nombre", style = MaterialTheme.typography.headlineSmall, color = Color.Black)
-            Text(user?.email ?: "", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+            Text(user?.name ?: "Sin nombre", style = MaterialTheme.typography.headlineSmall, color = Color.Black, fontWeight = FontWeight.Bold)
+            Text(user?.email ?: "", style = MaterialTheme.typography.bodyMedium, color = Color.DarkGray, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -93,8 +95,8 @@ fun menu(userMenuViewModel: UserMenuViewModel){
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(onClick = { }) {
-                Text("Editar perfil")
+            Button(onClick = { }, colors = ButtonDefaults.buttonColors(White)) {
+                Text("Editar perfil", color =Color.Black, fontWeight = FontWeight.Bold)
             }
         }
     }
