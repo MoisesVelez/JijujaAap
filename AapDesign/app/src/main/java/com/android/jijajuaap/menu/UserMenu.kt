@@ -28,20 +28,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
+import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun menu(userMenuViewModel: UserMenuViewModel){
+fun menu(userMenuViewModel: UserMenuViewModel, navHostController: NavHostController){
 
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -50,13 +49,13 @@ fun menu(userMenuViewModel: UserMenuViewModel){
             userMenuViewModel.loadUserData(currentUserUid)
         }
     }
-    UserProfileScreen(userMenuViewModel)
+    UserProfileScreen(userMenuViewModel,navHostController)
 }
 
 
     @SuppressLint("DiscouragedApi")
     @Composable
-    fun UserProfileScreen(viewModel: UserMenuViewModel) {
+    fun UserProfileScreen(viewModel: UserMenuViewModel, navHostController: NavHostController) {
         var user = viewModel.user
         val drawableName = viewModel.imagenUsuario(user)
         val colorEscogido = viewModel.cambioColor(user?.team)
@@ -95,7 +94,7 @@ fun menu(userMenuViewModel: UserMenuViewModel){
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(onClick = { }, colors = ButtonDefaults.buttonColors(White)) {
+            Button(onClick = { cambioDireccion(user?.team.toString(),navHostController)}, colors = ButtonDefaults.buttonColors(White)) {
                 Text("Editar perfil", color =Color.Black, fontWeight = FontWeight.Bold)
             }
         }
@@ -108,7 +107,8 @@ fun ProfileInfoRow(icono: Int, label: String, value: String?) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
+                .padding(vertical = 4.dp)
+                ,
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -122,6 +122,19 @@ fun ProfileInfoRow(icono: Int, label: String, value: String?) {
                 Text(value, fontWeight = FontWeight.Bold, color = Color.Black)
             }
         }
+    }
+}
+
+fun cambioDireccion(team: String,navHostController: NavHostController){
+    if(team == "Rojin"){
+        navHostController.navigate(Routes.MenuImagen.routes)
+    }
+    if(team=="Verdiano"){
+        navHostController.navigate(Routes.MenuImagenVer.routes)
+    }
+    if(team=="Azulense"){
+        navHostController.navigate(Routes.MenuImagenAzu.routes)
+
     }
 }
 

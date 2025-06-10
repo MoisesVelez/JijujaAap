@@ -11,6 +11,9 @@ import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.menu.menu
 import com.android.jijajuaap.menu.menuInitial
 import com.android.jijajuaap.menu.menuviewModel
+import com.android.jijajuaap.menu.selecImagen
+import com.android.jijajuaap.menu.selecImagenAzu
+import com.android.jijajuaap.menu.selecImagenVer
 import com.android.jijajuaap.presentation.SignUp.SignUpScreen
 import com.android.jijajuaap.presentation.SignUp.SignUpViewModel
 import com.android.jijajuaap.presentation.initial.InitialScreen
@@ -47,8 +50,18 @@ fun NavigationWrapper() {
             menuInitial(loginViewModel,navHostController,userViewModel)
         }
         composable(Routes.MenuUser.routes) {
-            menu(userViewModel)
+            menu(userViewModel,navHostController)
         }
+        composable(Routes.MenuImagen.routes) {
+            selecImagen(userViewModel)
+        }
+        composable(Routes.MenuImagenVer.routes) {
+            selecImagenVer(userViewModel)
+        }
+        composable(Routes.MenuImagenAzu.routes) {
+            selecImagenAzu(userViewModel)
+        }
+
     }
 }
 

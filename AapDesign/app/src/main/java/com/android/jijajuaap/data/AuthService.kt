@@ -164,6 +164,13 @@ class AuthService @SuppressLint("RestrictedApi")
         userRef.set(updateData, SetOptions.merge()).await()
     }
 
+    suspend fun updateImagen(uid: String,avatarId:String){
+        val userRef = firestore.collection("users").document(uid)
+        val  updateImg = mapOf("avatarId" to avatarId)
+        userRef.set(updateImg, SetOptions.merge()).await()
+    }
+
+
 
 
 

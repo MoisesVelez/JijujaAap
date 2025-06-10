@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.R
@@ -117,43 +121,63 @@ class UserMenuViewModel @Inject constructor(
     }
 
 
-    @Composable
-    fun MyCustomDialog(onDismiss: () -> Unit) {
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
-            title = {
-                Text(
-                    text = "Bienvenido al mundo de JIJAJU",
-                    style = MaterialTheme.typography.titleLarge
+        @Composable
+        fun MyCustomDialog(onDismiss: () -> Unit) {
+            Dialog(
+                onDismissRequest = { },
+                properties = DialogProperties(
+                    dismissOnClickOutside = false,
+                    dismissOnBackPress = false
                 )
-            },
-            containerColor = White,
-            text = {
-                Column {
-                    Text("Debes elegir un pueblo al que consagrar tu lealtad. Elige tu color:", color = Color.Black)
-                    Spacer(modifier = Modifier.height(16.dp))
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = White,
+                    tonalElevation = 8.dp
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Bienvenido al mundo de JIJAJU",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color.Black
+                        )
 
-                    TeamOption("Rojines", "Rojin", rojoJa, onClick = {
-                        updateTeam("Rojin")
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                        onDismiss()
-                    })
+                        Text(
+                            "Debes elegir un pueblo al que consagrar tu lealtad. Elige tu color:",
+                            color = Color.Black
+                        )
 
-                    TeamOption("Azulenses", "Azulense", azulJi, onClick = {
-                        updateTeam("Azulense")
-                        onDismiss()
-                    })
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                    TeamOption("Verdianos", "Verdiano", verdeJu, onClick = {
-                        updateTeam("Verdiano")
+                        TeamOption("Rojines", "Rojin", rojoJa) {
+                            updateTeam("Rojin")
+                            onDismiss()
+                        }
 
-                        onDismiss()
-                    })
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        TeamOption("Azulenses", "Azulense", azulJi) {
+                            updateTeam("Azulense")
+                            onDismiss()
+                        }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        TeamOption("Verdianos", "Verdiano", verdeJu) {
+                            updateTeam("Verdiano")
+                            onDismiss()
+                        }
+                    }
                 }
-            },
-            confirmButton = {}
-        )
-    }
+            }
+        }
+
+
 
     @Composable
     fun TeamOption(label: String, teamName: String, color: Color, onClick: () -> Unit) {
@@ -199,6 +223,24 @@ class UserMenuViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateImg(avatarId:String){
+
+        viewModelScope.launch {
+            try {
+                user?.uid?.let { uid ->
+                    authService.updateImagen(uid,avatarId)
+                    user = user?.copy(avatarId = avatarId)
+
+                }
+            } catch (e: Exception) {
+                Log.e("UserMenuViewModel", "Error al actualizar la imagen", e)
+            }
+        }
+
+    }
+
+
 
 
 

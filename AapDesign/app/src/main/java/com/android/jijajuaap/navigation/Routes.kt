@@ -7,4 +7,7 @@ sealed class Routes(val routes:String) {
     object Screen3: Routes("sign")
     object Menu1:Routes("menu1")
     object MenuUser:Routes("menuUsuario")
+    object MenuImagen:Routes("menuImagen")
+    object MenuImagenVer:Routes("menuImagenVer")
+    object MenuImagenAzu:Routes("menuImagenAzu")
 }

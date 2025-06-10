@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,7 +49,7 @@ fun Splash(){
         verticalArrangement = Arrangement.Center) {
         Image(painter = painterResource(id = R.drawable.initialscreen),
             contentDescription = "SplashScreen",
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.size(200.dp).clip(RoundedCornerShape(16.dp))
                 .border(4.dp, Colores(),shape = RoundedCornerShape(16.dp)))
 
         Spacer(modifier = Modifier.size(25.dp))
