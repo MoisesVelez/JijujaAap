@@ -221,8 +221,8 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
         ) { page ->
             when (page) {
                 0 -> SimpleCardPantallaCompleta(
-                    titulo = "Partida pública",
-                    contenido = "Contenido de la tarjeta número ${page + 1}",
+                    titulo = "Campaña",
+                    contenido = "Completa los niveles y supera todos los desafios en las diferentes categorías.",
                     height = 500.dp,
                     painter = painterResource(
                         R.drawable.ilustracionpublica),
@@ -294,8 +294,8 @@ fun SimpleCardPantallaCompleta(
         ) {
             Text(text = titulo, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = contenido,color = Color.Black)
-            Image(painter = painter, contentDescription = "",contentScale = ContentScale.Crop,modifier = Modifier.fillMaxSize())
+            Text(text = contenido,color = Color.Black, modifier = Modifier.padding(30.dp))
+            Image(painter = painter, contentDescription = "",contentScale = ContentScale.Crop,modifier = Modifier.fillMaxWidth())
         }
     }
 }

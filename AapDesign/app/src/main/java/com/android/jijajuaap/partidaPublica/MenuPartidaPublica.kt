@@ -83,7 +83,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
                 cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy, "Cultura \npopular")
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy, "Naturaleza")
+                cardPublica(R.drawable.selva, "Naturaleza")
 
 
 
