@@ -10,4 +10,5 @@ sealed class Routes(val routes:String) {
     object MenuImagen:Routes("menuImagen")
     object MenuImagenVer:Routes("menuImagenVer")
     object MenuImagenAzu:Routes("menuImagenAzu")
+    object menuPartidaPublica:Routes("menuPartidaPublica")
 }

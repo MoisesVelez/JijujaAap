@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -101,7 +102,7 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
         bottomBar = { navigationBar(logingView, navHostController, colorEscogido) },
 
         ) { innerPadding ->
-        PantallaConPager(fondo,innerPadding,colorEscogido)
+        PantallaConPager(fondo,innerPadding,colorEscogido,navHostController)
 
 
     }
@@ -204,7 +205,7 @@ fun navigationBar(
 
 
 @Composable
-fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Color) {
+fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Color,navHostController: NavHostController) {
     val pagerState = rememberPagerState(pageCount = { 4 })
 
     Column(
@@ -224,28 +225,33 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
-                        R.drawable.ilustracionpublica)
+                        R.drawable.ilustracionpublica),
+                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
+
                 )
                 1 -> SimpleCardPantallaCompleta(
                     titulo = "Competitivo",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
-                        R.drawable.ilustracion_sin_titulo_3)
+                        R.drawable.ilustracion_sin_titulo_3),
+                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
                 )
                 2 -> SimpleCardPantallaCompleta(
                     titulo = "Creador",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
-                        R.drawable.ilustracion_sin_titulo_6)
+                        R.drawable.ilustracion_sin_titulo_6),
+                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
                 )
                 3 -> SimpleCardPantallaCompleta(
                     titulo = "Lore...",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
-                        R.drawable.ilustracion_sin_titulo__3_)
+                        R.drawable.ilustracion_sin_titulo__3_),
+                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
                 )
             }
         }
@@ -265,28 +271,31 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
 
 
 @Composable
-fun SimpleCardPantallaCompleta(titulo: String, contenido: String, height: Dp, painter: Painter) {
+fun SimpleCardPantallaCompleta(
+    titulo: String, contenido: String, height: Dp, painter: Painter,onClick: () -> Unit
+
+    ) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(height)
             .padding(30.dp)
-            .clickable(onClick = {}),
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(Color.White)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(top = 25.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = titulo, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = contenido,color = Color.Black)
-            Image(painter = painter, contentDescription = "")
+            Image(painter = painter, contentDescription = "",contentScale = ContentScale.Crop,modifier = Modifier.fillMaxSize())
         }
     }
 }
