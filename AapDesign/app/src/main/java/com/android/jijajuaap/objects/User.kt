@@ -5,8 +5,9 @@ data class User(
     var name: String? = null,
     val email: String? = null,
     val avatarId: String? = "error_de_usuario",
-    val totalPoints: Int? = null,
-    val totalQuiz :Int? = null,
+    val totalPoints: Int? = 0,
+    val totalQuiz :Int? = 0,
     var team: String?="Sin equipo",
-    val rango: String?=null
+    val rango: String?= "Iniciado",
+    val tema: String? = null
 )

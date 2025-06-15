@@ -8,7 +8,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import android.content.Context
+import android.util.Log
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.objects.test
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
@@ -172,12 +174,43 @@ class AuthService @SuppressLint("RestrictedApi")
 
 
 
+    suspend fun updateTema(uid: String,tema:String){
+        val userRef = firestore.collection("users").document(uid)
+        val  updateImg = mapOf("tema" to tema)
+        userRef.set(updateImg, SetOptions.merge()).await()
+    }
 
-
-
-
+    suspend fun getTestData(uid: String, collection: String): test? {
+        try {
+            val doc = firestore.collection(collection).document(uid).get().await()
+            if (doc.exists()) {
+                Log.d("Firestore", "Documento encontrado en colección '$collection' con id '$uid': ${doc.data}")
+                val testObj = doc.toObject(test::class.java)
+                Log.d("Firestore", "Objeto mapeado: $testObj")
+                return testObj
+            } else {
+                Log.w("Firestore", "Documento NO existe en colección '$collection' con id '$uid'")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener documento", e)
+            return null
+        }
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

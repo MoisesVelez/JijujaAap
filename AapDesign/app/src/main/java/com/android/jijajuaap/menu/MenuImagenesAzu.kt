@@ -88,10 +88,10 @@ fun selecImagenAzu(userViewModel: UserMenuViewModel) {
 
         Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
             Image(
-                painter = painterResource(R.drawable.ilustracion_sin_titulo_5),
+                painter = painterResource(R.drawable.emoticno6),
                 contentDescription = "Avatar",
                 modifier = Modifier
-                    .clickable(onClick = {userViewModel.updateImg("ilustracion_sin_titulo_5")
+                    .clickable(onClick = {userViewModel.updateImg("emoticno6")
                         })
                     .weight(1f)
                     .aspectRatio(1f)
@@ -102,8 +102,9 @@ fun selecImagenAzu(userViewModel: UserMenuViewModel) {
             )
 
             Image(
-                painter = painterResource(R.drawable.ilustracion_sin_titulo__3_),
+                painter = painterResource(R.drawable.emoticono),
                 contentDescription = "Avatar",  modifier = Modifier
+                    .clickable(onClick = {userViewModel.updateImg("emoticono")})
                     .weight(1f)
                     .aspectRatio(1f)
                     .padding(8.dp)
@@ -116,9 +117,10 @@ fun selecImagenAzu(userViewModel: UserMenuViewModel) {
 
         Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
             Image(
-                painter = painterResource(R.drawable.ilustracion_sin_titulo__3_),
+                painter = painterResource(R.drawable.emoticono2),
                 contentDescription = "Avatar",
                 modifier = Modifier
+                    .clickable(onClick = {userViewModel.updateImg("emoticono2")})
                     .weight(1f)
                     .aspectRatio(1f)
                     .padding(8.dp)
@@ -128,8 +130,9 @@ fun selecImagenAzu(userViewModel: UserMenuViewModel) {
             )
 
             Image(
-                painter = painterResource(R.drawable.ilustracion_sin_titulo__3_),
+                painter = painterResource(R.drawable.emoticono5),
                 contentDescription = "Avatar",  modifier = Modifier
+                    .clickable(onClick = {userViewModel.updateImg("emoticono5")})
                     .weight(1f)
                     .aspectRatio(1f)
                     .padding(8.dp)
@@ -142,9 +145,10 @@ fun selecImagenAzu(userViewModel: UserMenuViewModel) {
 
         Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
             Image(
-                painter = painterResource(R.drawable.ilustracion_sin_titulo__3_),
+                painter = painterResource(R.drawable.emoticono4),
                 contentDescription = "Avatar",
                 modifier = Modifier
+                    .clickable(onClick = {userViewModel.updateImg("emoticono4")})
                     .weight(1f)
                     .aspectRatio(1f)
                     .padding(8.dp)
@@ -154,8 +158,9 @@ fun selecImagenAzu(userViewModel: UserMenuViewModel) {
             )
 
             Image(
-                painter = painterResource(R.drawable.ilustracion_sin_titulo__3_),
+                painter = painterResource(R.drawable.emoticono3),
                 contentDescription = "Avatar",  modifier = Modifier
+                    .clickable(onClick = {userViewModel.updateImg("emoticono3")})
                     .weight(1f)
                     .aspectRatio(1f)
                     .padding(8.dp)

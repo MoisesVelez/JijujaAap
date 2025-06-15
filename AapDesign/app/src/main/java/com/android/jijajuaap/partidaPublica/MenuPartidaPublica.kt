@@ -27,13 +27,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.menu.navigationBar
 import com.android.jijajuaap.menu.topAppBar
+import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 
 
@@ -66,24 +66,44 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
                     )
             ) {
 
-                Text("CATEGORIAS", fontWeight = FontWeight.Bold, color = Color.Black)
+
                 Spacer(modifier = Modifier.height(16.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy,"Historia")
+                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy,"Historia",userViewModel,navHostController)
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy, "Literatura")
+                cardPublica(
+                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    "Literatura",
+                    userViewModel,
+                    navHostController
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy, "Filosofia")
+                cardPublica(
+                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    "Filosofia",
+                    userViewModel,
+                    navHostController
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy, "Deportes")
+                cardPublica(
+                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    "Deportes",
+                    userViewModel,
+                    navHostController
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy, "Cultura \npopular")
+                cardPublica(
+                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    "Cultura \npopular",
+                    userViewModel,
+                    navHostController
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.selva, "Naturaleza")
+                cardPublica(R.drawable.selva, "Naturaleza", userViewModel, navHostController)
 
 
 
@@ -94,12 +114,19 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 }
 
 @Composable
-fun cardPublica(image: Int, string: String){
+fun cardPublica(
+    image: Int,
+    string: String,
+    userMenuViewModel: UserMenuViewModel,
+    navHostController: NavHostController
+){
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .clickable(onClick = {}),
+            .clickable(onClick = {userMenuViewModel.updateTema(string)
+            navHostController.navigate(Routes.menuRoadMap.routes)}),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
