@@ -9,5 +9,11 @@ data class User(
     val totalQuiz :Int? = 0,
     var team: String?="Sin equipo",
     val rango: String?= "Iniciado",
-    val tema: String? = null
+    val tema: String? = null,
+    val puntosHistoria: Int=10,
+    val puntosLiteratura: Int=0,
+    val puntosFilosofia: Int=0,
+    val puntosDeportes: Int=0,
+    val puntosCPop: Int=0,
+    val puntosNaturaleza: Int=0
 )

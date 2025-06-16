@@ -3,6 +3,7 @@ package com.android.jijajuaap.partidaPublica
 
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -29,6 +30,9 @@ class gmaplayViewModel @Inject constructor(
 
 
 
+        var puntosFinal by mutableIntStateOf(0)
+            private set
+
         fun preguntas(user: User?) {
             viewModelScope.launch {
                 if (user?.tema.toString() == "Historia") {
@@ -38,7 +42,23 @@ class gmaplayViewModel @Inject constructor(
                 }
             }
         }
+
+
+
+    fun puntos(user: User?) {
+        val tema = user?.tema ?: return
+        puntosFinal = when (tema) {
+            "Historia" -> user.puntosHistoria
+            "Naturaleza" -> user.puntosNaturaleza
+            "Deportes" -> user.puntosDeportes
+            "Filosofia" -> user.puntosFilosofia
+            "CulturaPop" -> user.puntosCPop
+            "Literatura" -> user.puntosLiteratura
+            else -> 0
+        }
     }
+
+}
 
 
 
