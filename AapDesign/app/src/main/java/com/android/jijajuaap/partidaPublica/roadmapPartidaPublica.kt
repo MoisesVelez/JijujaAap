@@ -195,7 +195,7 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
                         .fillMaxHeight(progress)
                         .align(Alignment.BottomCenter)
                         .background(colorEscogido)
-                        
+
                 )
             }
         }
