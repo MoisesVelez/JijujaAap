@@ -72,7 +72,7 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
 
 
     Scaffold(
-        topBar = {barraTop(user,imag,navHostController,colorChosen,puntosH)  },
+        topBar = {barraTop(user,imag,navHostController,colorEscogido,puntosH)  },
         modifier = Modifier.fillMaxSize().padding(bottom = 10.dp).background(BLANCOeSP),
 
 
