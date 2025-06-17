@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,6 +38,8 @@ import androidx.navigation.NavHostController
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.ui.theme.BLANCOeSP
+import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -65,23 +68,24 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
     val puntosH = gmaplayViewModel.puntosFinal
     val pregunta = gmaplayViewModel.preguntasFinal
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
+    val colorChosen = userMenuViewModel.colorUsuario(colorEscogido)
 
 
     Scaffold(
-        topBar = {barraTop(user,imag,navHostController,colorEscogido,puntosH)  },
-        modifier = Modifier.fillMaxSize().padding(bottom = 50.dp),
+        topBar = {barraTop(user,imag,navHostController,colorChosen,puntosH)  },
+        modifier = Modifier.fillMaxSize().padding(bottom = 10.dp).background(BLANCOeSP),
 
 
         ) { innerPadding ->
 
-        Column(modifier = Modifier.padding(innerPadding).padding(20.dp).fillMaxSize()) {
+        Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(Color.White)) {
 
 
-            Text("${pregunta?.Pregunta}")
-            Text("${pregunta?.Respuesta}")
 
 
-            ProgressWithCardsSideBySide(puntosH,500,colorEscogido)
+
+
+            ProgressWithCardsSideBySide(puntosH,500,colorChosen,user)
 
         }
 
@@ -132,7 +136,7 @@ fun barraTop(
 
 
 @Composable
-fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color) {
+fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color, user: User?) {
     val safeScore = score ?: 0
     val progress = (safeScore.coerceIn(0, maxScore).toFloat() / maxScore.toFloat()).coerceIn(0f, 1f)
 
@@ -141,66 +145,114 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
 
         Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.SpaceEvenly
+                .weight(2f)
+                .fillMaxSize()
+                .padding(18.dp).background(BLANCOeSP,shape = RoundedCornerShape(5)),
+            verticalArrangement = Arrangement.SpaceEvenly, horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text("${user?.tema}", fontWeight = FontWeight.Bold, color = Color.Black)
             Card(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(4.dp),
+                    .clickable(onClick = {})
+                    .height(75.dp)
+                    .padding(6.dp)
+                    .fillMaxWidth()
+                    ,
                 elevation = CardDefaults.cardElevation(4.dp)
-            ){Text("hola")}
+                ,colors = CardDefaults.cardColors(Color.White)
+            ) { Text("hola") }
+
+           // Spacer(modifier = Modifier.weight(0.2f))
+            Box(contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .width(10.dp)
+                    .height(70.dp)
+                    .background(Color.LightGray, shape = RoundedCornerShape(50))
+                    .clip(RoundedCornerShape(8.dp))
+            ) {}
+
             Card(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(4.dp),
+                    .clickable(onClick = {})
+                    .height(75.dp)
+                    .padding(6.dp)
+                    .fillMaxWidth()
+                    .background(White),
                 elevation = CardDefaults.cardElevation(4.dp)
-            ){Text("hola")}
+                ,colors = CardDefaults.cardColors(Color.White)
+            ) { Text("hola") }
+
+           // Spacer(modifier = Modifier.weight(0.2f))
+            Box(contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .width(10.dp)
+                    .height(70.dp)
+                    .background(Color.LightGray, shape = RoundedCornerShape(50))
+                    .clip(RoundedCornerShape(8.dp))
+            ) {}
+
             Card(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(4.dp),
+                    .clickable(onClick = {})
+                    .height(75.dp)
+                    .padding(6.dp)
+                    .fillMaxWidth()
+                    .background(White),
                 elevation = CardDefaults.cardElevation(4.dp)
-            ){Text("hola")}
-            Card(
+                ,colors = CardDefaults.cardColors(Color.White)
+            ) { Text("hola") }
+
+            // Spacer(modifier = Modifier.weight(0.2f))
+            Box(contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(4.dp),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ){Text("hola")}
+                    .width(10.dp)
+                    .height(70.dp)
+                    .background(Color.LightGray, shape = RoundedCornerShape(50))
+                    .clip(RoundedCornerShape(8.dp))
+            ) {}
+
+                Card(
+                    modifier = Modifier
+                        .clickable(onClick = {})
+                        .height(75.dp)
+                        .padding(4.dp)
+                        .fillMaxWidth()
+                        .background(White),
+                    elevation = CardDefaults.cardElevation(4.dp)
+                    ,colors = CardDefaults.cardColors(Color.White)
+                ) { Text("hola") }
 
 
-        }
+            }
 
-
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
-        ) {
 
             Box(
                 modifier = Modifier
-                    .width(30.dp)
-                    .fillMaxHeight(0.8f)
-                    .background(Color.LightGray)
-                    .clip(RoundedCornerShape(8.dp))
+                    .weight(1f)
+                    .fillMaxHeight().padding(10.dp),
+                contentAlignment = Alignment.Center
             ) {
+
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(progress)
-                        .align(Alignment.BottomCenter)
-                        .background(colorEscogido)
+                        .width(30.dp)
+                        .fillMaxHeight(0.8f)
+                        .background(Color.LightGray, shape = RoundedCornerShape(50))
+                        .clip(RoundedCornerShape(8.dp))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(progress)
+                            .align(Alignment.BottomCenter)
+                            .background(colorEscogido)
 
-                )
+                    )
+                }
             }
         }
     }
-}
+
 
 
 
