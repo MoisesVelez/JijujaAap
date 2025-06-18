@@ -33,12 +33,12 @@ class gmaplayViewModel @Inject constructor(
         var puntosFinal by mutableIntStateOf(0)
             private set
 
-        fun preguntas(user: User?) {
+        fun preguntas(user: User?,string: String) {
             viewModelScope.launch {
                 if (user?.tema.toString() == "Historia") {
-                    preguntasFinal = authService.getTestData("01", "historia")
+                    preguntasFinal = authService.getTestData(string, "historia")
                 } else if (user?.tema == "Naturaleza") {
-                    preguntasFinal = authService.getTestData("1", "naturaleza")
+                    preguntasFinal = authService.getTestData(string, "naturaleza")
                 }
             }
         }

@@ -1,7 +1,8 @@
 package com.android.jijajuaap.objects
 
 data class test(
-    val uid: String? = null,
-    val Pregunta: String? = null,
-    val Respuesta: String? = null
+    val pregunta: String = "",
+    val opciones: List<String> = listOf(),
+    val correctAnswerIndex: Int = 0
+
 )

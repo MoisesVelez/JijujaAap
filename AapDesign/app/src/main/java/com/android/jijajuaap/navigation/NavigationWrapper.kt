@@ -14,6 +14,8 @@ import com.android.jijajuaap.menu.menuviewModel
 import com.android.jijajuaap.menu.selecImagen
 import com.android.jijajuaap.menu.selecImagenAzu
 import com.android.jijajuaap.menu.selecImagenVer
+import com.android.jijajuaap.partidaPublica.QuizScreen
+import com.android.jijajuaap.partidaPublica.QuizViewModel
 import com.android.jijajuaap.partidaPublica.gmaplayViewModel
 import com.android.jijajuaap.partidaPublica.gmaplayViewModel_Factory
 import com.android.jijajuaap.partidaPublica.menuPartidaPublica
@@ -36,6 +38,7 @@ fun NavigationWrapper() {
     val initViewModel: InitialViewModel = hiltViewModel()
     val userViewModel: UserMenuViewModel = hiltViewModel()
     val gameRoad: gmaplayViewModel = hiltViewModel()
+    val gameBasic: QuizViewModel = hiltViewModel()
 
 
     NavHost(navController = navHostController, startDestination = Routes.SplashScreen.routes) {
@@ -71,6 +74,9 @@ fun NavigationWrapper() {
         }
         composable(Routes.menuRoadMap.routes) {
             roadMap(userViewModel,gameRoad,navHostController)
+        }
+        composable(Routes.menuPartidaBasica.routes) {
+            QuizScreen(gameBasic,userViewModel)
         }
 
     }

@@ -68,7 +68,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 
 
                 Spacer(modifier = Modifier.height(16.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy,"Historia",userViewModel,navHostController)
+                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy,"historia",userViewModel,navHostController)
 
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
@@ -103,7 +103,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.selva, "Naturaleza", userViewModel, navHostController)
+                cardPublica(R.drawable.selva, "naturaleza", userViewModel, navHostController)
 
 
 

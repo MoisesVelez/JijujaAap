@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,12 +60,11 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
 
     LaunchedEffect(user?.tema) {
         user?.tema?.let {
-            gmaplayViewModel.preguntas(user)
+
             gmaplayViewModel.puntos(user)
         }
     }
     val puntosH = gmaplayViewModel.puntosFinal
-    val pregunta = gmaplayViewModel.preguntasFinal
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
     val colorChosen = userMenuViewModel.colorUsuario(colorEscogido)
 
@@ -80,12 +78,7 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
 
         Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(Color.White)) {
 
-
-
-
-
-
-            ProgressWithCardsSideBySide(puntosH,500,colorChosen,user)
+            ProgressWithCardsSideBySide(puntosH,500,colorChosen,user,navHostController)
 
         }
 
@@ -136,9 +129,16 @@ fun barraTop(
 
 
 @Composable
-fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color, user: User?) {
+fun ProgressWithCardsSideBySide(
+    score: Int?,
+    maxScore: Int,
+    colorEscogido: Color,
+    user: User?,
+    navHostController: NavHostController
+) {
     val safeScore = score ?: 0
     val progress = (safeScore.coerceIn(0, maxScore).toFloat() / maxScore.toFloat()).coerceIn(0f, 1f)
+
 
     Row(modifier = Modifier.fillMaxSize()) {
 
@@ -153,7 +153,7 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
             Text("${user?.tema}", fontWeight = FontWeight.Bold, color = Color.Black)
             Card(
                 modifier = Modifier
-                    .clickable(onClick = {})
+                    .clickable(onClick = {navHostController.navigate(Routes.menuPartidaBasica.routes)})
                     .height(75.dp)
                     .padding(6.dp)
                     .fillMaxWidth()
@@ -169,7 +169,17 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
                     .height(70.dp)
                     .background(Color.LightGray, shape = RoundedCornerShape(50))
                     .clip(RoundedCornerShape(8.dp))
-            ) {}
+            ) {Box(
+                modifier = if (score == 50) {
+                    Modifier
+                        .fillMaxSize()
+                        .align(Alignment.BottomCenter)
+                        .background(colorEscogido)
+                } else {
+                    Modifier
+                }
+            )
+            }
 
             Card(
                 modifier = Modifier
@@ -177,7 +187,8 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
                     .height(75.dp)
                     .padding(6.dp)
                     .fillMaxWidth()
-                    .background(White),
+                    .background(White)
+                    ,
                 elevation = CardDefaults.cardElevation(4.dp)
                 ,colors = CardDefaults.cardColors(Color.White)
             ) { Text("hola") }
@@ -189,7 +200,19 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
                     .height(70.dp)
                     .background(Color.LightGray, shape = RoundedCornerShape(50))
                     .clip(RoundedCornerShape(8.dp))
-            ) {}
+            ) {
+                Box(
+                    modifier = if (score == 150) {
+                        Modifier
+                            .fillMaxSize()
+                            .align(Alignment.BottomCenter)
+                            .background(colorEscogido)
+                    } else {
+                        Modifier
+                    }
+                )
+                }
+
 
             Card(
                 modifier = Modifier
@@ -209,7 +232,17 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
                     .height(70.dp)
                     .background(Color.LightGray, shape = RoundedCornerShape(50))
                     .clip(RoundedCornerShape(8.dp))
-            ) {}
+            ) {Box(
+                modifier = if (score == 350) {
+                    Modifier
+                        .fillMaxSize()
+                        .align(Alignment.BottomCenter)
+                        .background(colorEscogido)
+                } else {
+                    Modifier
+                }
+            )
+            }
 
                 Card(
                     modifier = Modifier
@@ -252,6 +285,7 @@ fun ProgressWithCardsSideBySide(score: Int?, maxScore: Int, colorEscogido: Color
             }
         }
     }
+
 
 
 
