@@ -1,11 +1,13 @@
 package com.android.jijajuaap.partidaPublica
 
+
 import androidx.lifecycle.ViewModel
 import com.android.jijajuaap.data.AuthService
 import com.android.jijajuaap.objects.test
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -29,18 +31,20 @@ class QuizViewModel  @Inject constructor(
         db.collection(tema.toString()).get().addOnSuccessListener { result ->
             _questions.value = result.documents.mapNotNull {
                 it.toObject(test::class.java)
-            }
+            }.shuffled()
         }
     }
 
     fun answerQuestion(selectedIndex: Int) {
         val question = questions.value[currentIndex.value]
         if (selectedIndex == question.correctAnswerIndex) {
-            _score.value += 10
+            _score.value += 5
         }
 
-        if (_currentIndex.value < questions.value.lastIndex) {
+        if (_currentIndex.value <= questions.value.lastIndex) {
             _currentIndex.value += 1
+        }else if(_currentIndex.value > questions.value.lastIndex){
+
         }
     }
 
@@ -48,4 +52,10 @@ class QuizViewModel  @Inject constructor(
         _currentIndex.value = 0
         _score.value = 0
     }
+
+
+
+
+
+
 }

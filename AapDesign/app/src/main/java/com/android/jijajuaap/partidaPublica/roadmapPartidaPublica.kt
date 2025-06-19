@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.menu.UserMenuViewModel
@@ -160,7 +161,14 @@ fun ProgressWithCardsSideBySide(
                     ,
                 elevation = CardDefaults.cardElevation(4.dp)
                 ,colors = CardDefaults.cardColors(Color.White)
-            ) { Text("hola") }
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Nivel: Aprendiz", color = Color.Black)
+                }
+            }
 
            // Spacer(modifier = Modifier.weight(0.2f))
             Box(contentAlignment = Alignment.Center,
@@ -181,17 +189,27 @@ fun ProgressWithCardsSideBySide(
             )
             }
 
-            Card(
-                modifier = Modifier
-                    .clickable(onClick = {})
-                    .height(75.dp)
-                    .padding(6.dp)
-                    .fillMaxWidth()
-                    .background(White)
-                    ,
-                elevation = CardDefaults.cardElevation(4.dp)
-                ,colors = CardDefaults.cardColors(Color.White)
-            ) { Text("hola") }
+            if (score != null) {
+                Card(
+                    modifier = Modifier
+                        .clickable(onClick = {}, enabled = score >= 50)
+                        .height(75.dp)
+                        .padding(6.dp)
+                        .fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = if(score >= 50){
+                        CardDefaults.cardColors(Color.White)
+                    } else {
+                        CardDefaults.cardColors(Color.LightGray)
+                    }
+                ) { Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Nivel: Intermedio (50pts)", color = Color.Black)
+                }
+                }
+            }
 
            // Spacer(modifier = Modifier.weight(0.2f))
             Box(contentAlignment = Alignment.Center,
@@ -214,16 +232,26 @@ fun ProgressWithCardsSideBySide(
                 }
 
 
-            Card(
-                modifier = Modifier
-                    .clickable(onClick = {})
-                    .height(75.dp)
-                    .padding(6.dp)
-                    .fillMaxWidth()
-                    .background(White),
-                elevation = CardDefaults.cardElevation(4.dp)
-                ,colors = CardDefaults.cardColors(Color.White)
-            ) { Text("hola") }
+            if (score != null) {
+                Card(
+                    modifier = Modifier
+                        .clickable(onClick = {}, enabled = score>=150)
+                        .height(75.dp)
+                        .padding(6.dp)
+                        .fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors =if(score >= 150){
+                        CardDefaults.cardColors(Color.White)
+                    } else {
+                        CardDefaults.cardColors(Color.LightGray)
+                    }
+                ) {Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Nivel: Avanzado (150pts)", color = Color.Black)
+                }}
+            }
 
             // Spacer(modifier = Modifier.weight(0.2f))
             Box(contentAlignment = Alignment.Center,
@@ -244,16 +272,26 @@ fun ProgressWithCardsSideBySide(
             )
             }
 
+            if (score != null) {
                 Card(
                     modifier = Modifier
-                        .clickable(onClick = {})
+                        .clickable(onClick = {}, enabled = score>=350)
                         .height(75.dp)
                         .padding(4.dp)
-                        .fillMaxWidth()
-                        .background(White),
-                    elevation = CardDefaults.cardElevation(4.dp)
-                    ,colors = CardDefaults.cardColors(Color.White)
-                ) { Text("hola") }
+                        .fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = if(score >= 350){
+                        CardDefaults.cardColors(Color.White)
+                    } else {
+                        CardDefaults.cardColors(Color.LightGray)
+                    }
+                ) {Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Nivel: Profesional (350pts)", color = Color.Black)
+                }}
+            }
 
 
             }

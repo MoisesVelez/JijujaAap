@@ -230,7 +230,7 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
 
                 )
                 1 -> SimpleCardPantallaCompleta(
-                    titulo = "Competitivo",
+                    titulo = "Comunidad",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
