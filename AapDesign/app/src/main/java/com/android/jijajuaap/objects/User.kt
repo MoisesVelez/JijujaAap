@@ -10,7 +10,7 @@ data class User(
     var team: String?="Sin equipo",
     val rango: String?= "Iniciado",
     val tema: String? = null,
-    val puntosHistoria: Int=10,
+    val puntosHistoria: Int=0,
     val puntosLiteratura: Int=0,
     val puntosFilosofia: Int=0,
     val puntosDeportes: Int=0,

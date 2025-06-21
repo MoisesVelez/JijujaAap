@@ -257,6 +257,25 @@ class UserMenuViewModel @Inject constructor(
     }
 
 
+    fun updatePuntos(tema:String,int: Int){
+
+        viewModelScope.launch {
+            try {
+                user?.uid?.let { uid ->
+                    authService.updatePuntos(uid,tema,int)
+                    //user = user?.copy(int.toString())
+
+                }
+            } catch (e: Exception) {
+                Log.e("UserMenuViewModel", "Error al actualizar la imagen", e)
+            }
+        }
+
+    }
+
+
+
+
 
 
 

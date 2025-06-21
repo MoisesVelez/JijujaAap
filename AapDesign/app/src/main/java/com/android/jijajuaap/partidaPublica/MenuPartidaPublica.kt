@@ -1,6 +1,7 @@
 package com.android.jijajuaap.partidaPublica
 
 
+import android.R.string
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -38,7 +40,7 @@ import com.android.jijajuaap.presentation.login.MvvmPresentation
 
 
 @Composable
-fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHostController,logingView:MvvmPresentation){
+fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHostController,logingView:MvvmPresentation,gmaplayViewModel: gmaplayViewModel){
 
     val usuario = userViewModel.user
     val colorEscogido = userViewModel.cambioColor(usuario?.team)
@@ -68,12 +70,12 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 
 
                 Spacer(modifier = Modifier.height(16.dp))
-                cardPublica(R.drawable.get_free_vectors__images__pictures___clips___vecteezy,"historia",userViewModel,navHostController)
+                cardPublica(R.drawable.historiapaint,"historia",userViewModel,navHostController)
 
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
                     R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
-                    "Literatura",
+                    "literatura",
                     userViewModel,
                     navHostController
                 )
@@ -81,7 +83,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
                     R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
-                    "Filosofia",
+                    "filosofia",
                     userViewModel,
                     navHostController
                 )
@@ -89,7 +91,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
                     R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
-                    "Deportes",
+                    "deportes",
                     userViewModel,
                     navHostController
                 )
@@ -97,7 +99,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
                     R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
-                    "Cultura \npopular",
+                    "culturaPopular",
                     userViewModel,
                     navHostController
                 )
@@ -145,7 +147,7 @@ fun cardPublica(
             Image(
                 painterResource(id = image),
                 contentDescription = "",
-                modifier = Modifier.fillMaxWidth().height(75.dp),
+                modifier = Modifier.fillMaxWidth().height(100.dp),
                 contentScale = ContentScale.Crop
             )
 

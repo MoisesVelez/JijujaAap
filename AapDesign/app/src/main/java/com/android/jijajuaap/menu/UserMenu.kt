@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,7 +36,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.navigation.Routes
+import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.ui.theme.White
+import com.android.jijajuaap.ui.theme.azulUser
+import com.android.jijajuaap.ui.theme.rojoUser
+import com.android.jijajuaap.ui.theme.verdeUser
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -97,6 +102,25 @@ fun menu(userMenuViewModel: UserMenuViewModel, navHostController: NavHostControl
             Button(onClick = { cambioDireccion(user?.team.toString(),navHostController)}, colors = ButtonDefaults.buttonColors(White)) {
                 Text("Editar perfil", color =Color.Black, fontWeight = FontWeight.Bold)
             }
+            Spacer(modifier = Modifier.height(32.dp))
+
+
+
+            Button(onClick = {viewModel.updateTeam("Rojin")}, colors = ButtonDefaults.buttonColors(
+                White
+            ),shape = RoundedCornerShape(12.dp)) {
+                Text("Cambiar origen a Rojo", color =Color.Black, fontWeight = FontWeight.Bold)
+            }
+            Button(onClick = {viewModel.updateTeam("Verdiano")}, colors = ButtonDefaults.buttonColors(
+                White
+            ),shape = RoundedCornerShape(12.dp)) {
+                Text("Cambiar origen a Verde", color =Color.Black, fontWeight = FontWeight.Bold)
+            }
+            Button(onClick = {viewModel.updateTeam("Azulense")}, colors = ButtonDefaults.buttonColors(
+                White
+            ),shape = RoundedCornerShape(12.dp)) {
+                Text("Cambiar origen a Azul", color =Color.Black, fontWeight = FontWeight.Bold)
+            }
         }
     }
 
@@ -137,5 +161,8 @@ fun cambioDireccion(team: String,navHostController: NavHostController){
 
     }
 }
+
+
+
 
 

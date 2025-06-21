@@ -32,14 +32,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.ui.theme.BLANCOeSP
-import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -60,15 +58,16 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
 
 
     LaunchedEffect(user?.tema) {
-        user?.tema?.let {
 
+            gmaplayViewModel.dificultad
             gmaplayViewModel.puntos(user)
-        }
+
+
     }
     val puntosH = gmaplayViewModel.puntosFinal
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
     val colorChosen = userMenuViewModel.colorUsuario(colorEscogido)
-
+    var dificultad = gmaplayViewModel.dificultad
 
     Scaffold(
         topBar = {barraTop(user,imag,navHostController,colorEscogido,puntosH)  },
@@ -79,7 +78,7 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
 
         Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(Color.White)) {
 
-            ProgressWithCardsSideBySide(puntosH,500,colorChosen,user,navHostController)
+            ProgressWithCardsSideBySide(puntosH,500,colorChosen,user,navHostController,gmaplayViewModel)
 
         }
 
@@ -135,8 +134,10 @@ fun ProgressWithCardsSideBySide(
     maxScore: Int,
     colorEscogido: Color,
     user: User?,
-    navHostController: NavHostController
-) {
+    navHostController: NavHostController,
+    gmaplayViewModel: gmaplayViewModel,
+
+    ) {
     val safeScore = score ?: 0
     val progress = (safeScore.coerceIn(0, maxScore).toFloat() / maxScore.toFloat()).coerceIn(0f, 1f)
 
@@ -154,7 +155,10 @@ fun ProgressWithCardsSideBySide(
             Text("${user?.tema}", fontWeight = FontWeight.Bold, color = Color.Black)
             Card(
                 modifier = Modifier
-                    .clickable(onClick = {navHostController.navigate(Routes.menuPartidaBasica.routes)})
+                    .clickable(onClick = {navHostController.navigate(Routes.menuPartidaBasica.routes)
+
+                        gmaplayViewModel.actualizarDificultad("Aprendiz")})
+
                     .height(75.dp)
                     .padding(6.dp)
                     .fillMaxWidth()
@@ -167,6 +171,7 @@ fun ProgressWithCardsSideBySide(
                     contentAlignment = Alignment.Center
                 ) {
                     Text("Nivel: Aprendiz", color = Color.Black)
+
                 }
             }
 
@@ -177,22 +182,27 @@ fun ProgressWithCardsSideBySide(
                     .height(70.dp)
                     .background(Color.LightGray, shape = RoundedCornerShape(50))
                     .clip(RoundedCornerShape(8.dp))
-            ) {Box(
-                modifier = if (score == 50) {
-                    Modifier
-                        .fillMaxSize()
-                        .align(Alignment.BottomCenter)
-                        .background(colorEscogido)
-                } else {
-                    Modifier
+            ) {
+                if (score != null) {
+                    Box(
+                        modifier = if (score >= 50) {
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.BottomCenter)
+                                .background(colorEscogido)
+                        } else {
+                            Modifier
+                        }
+                    )
                 }
-            )
             }
 
             if (score != null) {
                 Card(
                     modifier = Modifier
-                        .clickable(onClick = {}, enabled = score >= 50)
+                        .clickable(onClick = {navHostController.navigate(Routes.menuPartidaBasica.routes)
+                            gmaplayViewModel.actualizarDificultad("Intermedio")}, enabled = score >= 50
+                        )
                         .height(75.dp)
                         .padding(6.dp)
                         .fillMaxWidth(),
@@ -207,6 +217,7 @@ fun ProgressWithCardsSideBySide(
                     contentAlignment = Alignment.Center
                 ) {
                     Text("Nivel: Intermedio (50pts)", color = Color.Black)
+
                 }
                 }
             }
@@ -219,23 +230,25 @@ fun ProgressWithCardsSideBySide(
                     .background(Color.LightGray, shape = RoundedCornerShape(50))
                     .clip(RoundedCornerShape(8.dp))
             ) {
-                Box(
-                    modifier = if (score == 150) {
-                        Modifier
-                            .fillMaxSize()
-                            .align(Alignment.BottomCenter)
-                            .background(colorEscogido)
-                    } else {
-                        Modifier
-                    }
-                )
+                if (score != null) {
+                    Box(
+                        modifier = if (score >= 150) {
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.BottomCenter)
+                                .background(colorEscogido)
+                        } else {
+                            Modifier
+                        }
+                    )
+                }
                 }
 
 
             if (score != null) {
                 Card(
                     modifier = Modifier
-                        .clickable(onClick = {}, enabled = score>=150)
+                        .clickable(onClick = {gmaplayViewModel.actualizarDificultad("Avanzado")}, enabled = score>=150)
                         .height(75.dp)
                         .padding(6.dp)
                         .fillMaxWidth(),
@@ -250,6 +263,7 @@ fun ProgressWithCardsSideBySide(
                     contentAlignment = Alignment.Center
                 ) {
                     Text("Nivel: Avanzado (150pts)", color = Color.Black)
+
                 }}
             }
 
@@ -260,22 +274,25 @@ fun ProgressWithCardsSideBySide(
                     .height(70.dp)
                     .background(Color.LightGray, shape = RoundedCornerShape(50))
                     .clip(RoundedCornerShape(8.dp))
-            ) {Box(
-                modifier = if (score == 350) {
-                    Modifier
-                        .fillMaxSize()
-                        .align(Alignment.BottomCenter)
-                        .background(colorEscogido)
-                } else {
-                    Modifier
+            ) {
+                if (score != null) {
+                    Box(
+                        modifier = if (score >= 350) {
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.BottomCenter)
+                                .background(colorEscogido)
+                        } else {
+                            Modifier
+                        }
+                    )
                 }
-            )
             }
 
             if (score != null) {
                 Card(
                     modifier = Modifier
-                        .clickable(onClick = {}, enabled = score>=350)
+                        .clickable(onClick = {gmaplayViewModel.actualizarDificultad("Profesional")}, enabled = score>=350)
                         .height(75.dp)
                         .padding(4.dp)
                         .fillMaxWidth(),
@@ -290,6 +307,7 @@ fun ProgressWithCardsSideBySide(
                     contentAlignment = Alignment.Center
                 ) {
                     Text("Nivel: Profesional (350pts)", color = Color.Black)
+
                 }}
             }
 

@@ -17,7 +17,6 @@ import com.android.jijajuaap.menu.selecImagenVer
 import com.android.jijajuaap.partidaPublica.QuizScreen
 import com.android.jijajuaap.partidaPublica.QuizViewModel
 import com.android.jijajuaap.partidaPublica.gmaplayViewModel
-import com.android.jijajuaap.partidaPublica.gmaplayViewModel_Factory
 import com.android.jijajuaap.partidaPublica.menuPartidaPublica
 import com.android.jijajuaap.partidaPublica.roadMap
 import com.android.jijajuaap.presentation.SignUp.SignUpScreen
@@ -70,13 +69,13 @@ fun NavigationWrapper() {
             selecImagenAzu(userViewModel)
         }
         composable(Routes.menuPartidaPublica.routes) {
-            menuPartidaPublica(userViewModel,navHostController,loginViewModel)
+            menuPartidaPublica(userViewModel,navHostController,loginViewModel,gameRoad)
         }
         composable(Routes.menuRoadMap.routes) {
             roadMap(userViewModel,gameRoad,navHostController)
         }
         composable(Routes.menuPartidaBasica.routes) {
-            QuizScreen(gameBasic,userViewModel)
+            QuizScreen(gameBasic,userViewModel,navHostController,gameRoad)
         }
 
     }
