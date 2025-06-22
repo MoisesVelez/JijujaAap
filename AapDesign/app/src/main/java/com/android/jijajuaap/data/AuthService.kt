@@ -180,6 +180,13 @@ class AuthService @SuppressLint("RestrictedApi")
         userRef.set(updateImg, SetOptions.merge()).await()
     }
 
+
+    suspend fun updatePuntuacionTotal(uid: String,int: Int){
+        val userRef = firestore.collection("users").document(uid)
+        val  updatePoints = mapOf("totalPoints" to int)
+        userRef.set(updatePoints, SetOptions.merge()).await()
+    }
+
     suspend fun updatePuntos(uid: String,tema:String,int: Int){
         val userRef = firestore.collection("users").document(uid)
         val  updatePuntos = mapOf(tema to int)

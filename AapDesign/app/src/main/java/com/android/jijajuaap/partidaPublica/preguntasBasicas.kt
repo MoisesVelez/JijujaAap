@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.jijajuaap.objects.test
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -79,6 +80,8 @@ fun QuizScreen(
     var puntosH = gameRoad.puntosFinal
     var pulsado = gameRoad.pulsaciones
     var temaPuntos = gameRoad.temas(user)
+
+
     LaunchedEffect(user?.tema) {
         viewModel.resetQuiz()
         viewModel.loadQuestions(user?.tema)
@@ -94,9 +97,16 @@ fun QuizScreen(
                 .background(BLANCOeSP),
             verticalArrangement = Arrangement.spacedBy(20.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
         if(currentIndex == questions.size) {
-            var total = puntosH + score
-            userMenuViewModel.updatePuntos(temaPuntos,total)
+            val totalTema = puntosH + score
+            val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + score
+
+
+            LaunchedEffect(currentIndex) {
+                userMenuViewModel.updatePuntos(temaPuntos, totalTema)
+                userMenuViewModel.updatePuntosTotal(totalGeneral)
+            }
             Column(
                 modifier = Modifier.fillMaxSize().background(BLANCOeSP),
                 verticalArrangement = Arrangement.Center,
@@ -123,15 +133,16 @@ fun QuizScreen(
                             "$correctas/ ${questions.size}"
                         )
                         ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Puntuación: ", value = "+ $score")
-                        ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Puntuación total: ", value = "$total ")
+                        ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Puntuación total: ", value = "$totalTema ")
                         ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Dificultad: ", value = dificultad)
 
                     }
                 }
                 Spacer(modifier = Modifier.size(25.dp))
 
-                Button(onClick = {navHostController.popBackStack()
-                    pulsado==0
+                Button(onClick = {
+                    navHostController.popBackStack()
+                   // gameRoad.puntos(user)
                     navHostController.navigate(Routes.menuRoadMap.routes)
                     },
                     colors = ButtonDefaults.buttonColors(colorEscogido),

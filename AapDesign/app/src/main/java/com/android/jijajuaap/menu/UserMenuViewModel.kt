@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,6 +56,19 @@ class UserMenuViewModel @Inject constructor(
     var colorEscogido: Color by mutableStateOf<Color>(White)
     var colorFinal: Color by mutableStateOf<Color>(colorEscogido)
 
+
+
+
+
+    var puntosTotales: Int by mutableIntStateOf(0)
+    private var sumaHecha = false
+
+    fun sumarPuntosUnaVez(int: Int) {
+        if (!sumaHecha) {
+            puntosTotales += int
+            sumaHecha = true
+        }
+    }
 
 
     @Composable
@@ -93,6 +107,8 @@ class UserMenuViewModel @Inject constructor(
             }
         }
     }
+
+
 
 
     @SuppressLint("DiscouragedApi")
@@ -240,6 +256,23 @@ class UserMenuViewModel @Inject constructor(
 
     }
 
+    fun updatePuntosTotal(int: Int) {
+        viewModelScope.launch {
+            try {
+                user?.uid?.let { uid ->
+                    authService.updatePuntuacionTotal(uid,int)
+                    user = user?.copy(totalPoints = int)
+
+                }
+            } catch (e: Exception) {
+                Log.e("UserMenuViewModel", "Error al actualizar los puntos", e)
+            }
+        }
+    }
+
+
+
+
     fun updateTema(tema:String){
 
         viewModelScope.launch {
@@ -262,24 +295,30 @@ class UserMenuViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 user?.uid?.let { uid ->
-                    authService.updatePuntos(uid,tema,int)
-                    //user = user?.copy(int.toString())
-
+                    authService.updatePuntos(uid, tema, int)
+                    val newUser = authService.getUserData(uid)
+                    user = newUser
                 }
             } catch (e: Exception) {
-                Log.e("UserMenuViewModel", "Error al actualizar la imagen", e)
+                Log.e("UserMenuViewModel", "Error al actualizar puntos", e)
             }
         }
-
     }
 
 
-
-
-
-
-
+    fun loadUser(uid: String) {
+        viewModelScope.launch {
+            user = authService.getUserData(uid)
+        }
+    }
 }
+
+
+
+
+
+
+
 
 
 

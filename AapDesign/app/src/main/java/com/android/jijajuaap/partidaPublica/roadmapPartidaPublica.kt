@@ -51,11 +51,15 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
         }
     }
 
+
+
     val user = userMenuViewModel.user
     val imag = userMenuViewModel.imagenUsuario(user)
 
 
-
+   // LaunchedEffect(Unit) {
+ //       gmaplayViewModel.puntos(user)
+  //  }
 
     LaunchedEffect(user?.tema) {
 
