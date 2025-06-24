@@ -94,7 +94,7 @@ class AuthService @SuppressLint("RestrictedApi")
                                 "totalPoints" to 0,
                                 "totalQuiz" to 0,
                                 "team" to "Sin equipo",
-                                "rango" to "Novato"
+                                "rango" to "Iniciado"
                             )
 
 

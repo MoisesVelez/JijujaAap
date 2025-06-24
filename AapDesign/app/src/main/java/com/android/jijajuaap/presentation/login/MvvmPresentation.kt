@@ -1,7 +1,9 @@
 package com.android.jijajuaap.presentation.login
 
+import android.content.Context
 import android.util.Log
 import android.util.Log.e
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -10,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.data.AuthService
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -91,6 +94,22 @@ class MvvmPresentation @Inject constructor(private val authService: AuthService)
             }
         }
     }
+
+    fun resetPassword(email: String, context: Context) {
+        if (email.isNotEmpty()) {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "Revisa tu correo para restablecer la contraseña.", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(context, "No se pudo enviar el correo. Verifica el email.", Toast.LENGTH_LONG).show()
+                    }
+                }
+        } else {
+            Toast.makeText(context, "Por favor ingresa tu email primero.", Toast.LENGTH_LONG).show()
+        }
+    }
+
 
 
 

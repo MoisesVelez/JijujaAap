@@ -106,17 +106,20 @@ fun menu(userMenuViewModel: UserMenuViewModel, navHostController: NavHostControl
 
 
 
-            Button(onClick = {viewModel.updateTeam("Rojin")}, colors = ButtonDefaults.buttonColors(
+            Button(onClick = {viewModel.updateTeam("Rojin")
+                             viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
                 White
             ),shape = RoundedCornerShape(12.dp)) {
                 Text("Cambiar origen a Rojo", color =Color.Black, fontWeight = FontWeight.Bold)
             }
-            Button(onClick = {viewModel.updateTeam("Verdiano")}, colors = ButtonDefaults.buttonColors(
+            Button(onClick = {viewModel.updateTeam("Verdiano")
+                viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
                 White
             ),shape = RoundedCornerShape(12.dp)) {
                 Text("Cambiar origen a Verde", color =Color.Black, fontWeight = FontWeight.Bold)
             }
-            Button(onClick = {viewModel.updateTeam("Azulense")}, colors = ButtonDefaults.buttonColors(
+            Button(onClick = {viewModel.updateTeam("Azulense")
+                viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
                 White
             ),shape = RoundedCornerShape(12.dp)) {
                 Text("Cambiar origen a Azul", color =Color.Black, fontWeight = FontWeight.Bold)

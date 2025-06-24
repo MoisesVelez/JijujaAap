@@ -1,5 +1,6 @@
 package com.android.jijajuaap.partidaPublica
 
+import android.widget.HorizontalScrollView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +17,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
@@ -174,8 +179,16 @@ fun ProgressWithCardsSideBySide(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Nivel: Aprendiz", color = Color.Black)
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
 
+                    Image(painterResource(R.drawable.alumno),
+                        contentDescription = "basica", modifier = Modifier.size(45.dp))
+                        Spacer(modifier = Modifier.size(10.dp))
+                    Text("Aprendiz", color = Color.Black)
+                }
                 }
             }
 
@@ -208,7 +221,7 @@ fun ProgressWithCardsSideBySide(
                             gmaplayViewModel.actualizarDificultad("Intermedio")}, enabled = score >= 50
                         )
                         .height(75.dp)
-                        .padding(6.dp)
+                        .padding(4.dp)
                         .fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = if(score >= 50){
@@ -220,8 +233,19 @@ fun ProgressWithCardsSideBySide(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Nivel: Intermedio (50pts)", color = Color.Black)
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
+                        Image(
+                            painterResource(R.drawable.aprendizaje),
+                            contentDescription = "Intermedio", modifier = Modifier.size(45.dp)
+                        )
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text("Intermedio (50pts)", color = Color.Black)
+
+                    }
                 }
                 }
             }
@@ -254,7 +278,7 @@ fun ProgressWithCardsSideBySide(
                     modifier = Modifier
                         .clickable(onClick = {gmaplayViewModel.actualizarDificultad("Avanzado")}, enabled = score>=150)
                         .height(75.dp)
-                        .padding(6.dp)
+                        .padding(4.dp)
                         .fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors =if(score >= 150){
@@ -266,8 +290,18 @@ fun ProgressWithCardsSideBySide(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Nivel: Avanzado (150pts)", color = Color.Black)
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
+                        Image(
+                            painterResource(R.drawable.sistema_experto),
+                            contentDescription = "basica", modifier = Modifier.size(45.dp)
+                        )
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text("Avanzado (150pts)", color = Color.Black)
+                    }
                 }}
             }
 
@@ -308,10 +342,22 @@ fun ProgressWithCardsSideBySide(
                     }
                 ) {Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Nivel: Profesional (350pts)", color = Color.Black)
+                    contentAlignment = Alignment.Center,
 
+                ) {
+                    Row(
+                        modifier = Modifier.padding(10.dp).verticalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+
+                    ) {
+
+                        Image(
+                            painterResource(R.drawable.profesional),
+                            contentDescription = "basica", modifier = Modifier.size(45.dp)
+                        )
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text("Profesional (350pts)", color = Color.Black)
+                    }
                 }}
             }
 

@@ -1,5 +1,6 @@
 package com.android.jijajuaap.partidaPublica
 
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,6 +47,7 @@ import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
+import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
@@ -81,15 +83,38 @@ fun QuizScreen(
     var pulsado = gameRoad.pulsaciones
     var temaPuntos = gameRoad.temas(user)
 
-
+    val dificultad = gameRoad.dificultad
+    var eleccion by remember { mutableStateOf("") }
+    eleccion = eleccionTest(dificultad)
+    Log.e("eleccion",eleccion)
     LaunchedEffect(user?.tema) {
         viewModel.resetQuiz()
-        viewModel.loadQuestions(user?.tema)
+        viewModel.loadQuestions(user?.tema,eleccion)
 
     }
 
     val question: test? = questions.getOrNull(currentIndex)
-    val dificultad = gameRoad.dificultad
+
+
+    var puntuacion by remember { mutableIntStateOf(0) }
+
+    fun dificultadPuntos():Int{
+        if(dificultad.equals("Aprendiz")){
+            puntuacion = 3
+            return puntuacion
+        }else if(dificultad.equals("Intermedio")){
+            puntuacion = 4
+            return puntuacion
+        }else if(dificultad.equals("Avanzado")) {
+            puntuacion = 5
+            return puntuacion
+        }else if(dificultad.equals("Profesional")) {
+            puntuacion = 7
+            return puntuacion
+        }else {
+            return puntuacion
+        }
+    }
 
     Column(
             modifier = Modifier
@@ -195,9 +220,10 @@ fun QuizScreen(
                     verticalArrangement = Arrangement.Center
 
                 ) {
+                    dificultadPuntos()
                     question?.opciones?.forEachIndexed { index, option ->
                         Button(
-                            onClick = { comprobante = viewModel.answerQuestion(index)
+                            onClick = { comprobante = viewModel.answerQuestion(index,puntuacion)
                                       gameRoad.cantPulsado()},
                             modifier = Modifier.fillMaxWidth().padding(10.dp),
                             colors = ButtonDefaults.buttonColors(colorEscogido),
@@ -213,7 +239,7 @@ fun QuizScreen(
                 colorChosen,
                 currentIndex,
                 questions,
-                onTimeOut = { viewModel.answerQuestion(-1) })
+                onTimeOut = { viewModel.answerQuestion(-1,puntuacion) })
 
 
         }
@@ -283,4 +309,24 @@ fun ProfileInfoRow(icono: Int, label: String, value: String?) {
             }
         }
     }
+
 }
+
+@Composable
+fun eleccionTest(dificultad: String): String{
+
+        if(dificultad.equals("Aprendiz")){
+            return ""
+
+        }else if(dificultad.equals("Intermedio")){
+            return "Intermedio"
+        }else if(dificultad.equals("Avanzado")) {
+            return "Avanzado"
+        }else if(dificultad.equals("Profesional")) {
+            return "Profesional"
+        }else {
+            return ""
+        }
+
+}
+

@@ -167,43 +167,8 @@ fun InitialScreen(navHostController: NavHostController,InitialViewModel: Initial
             }
 
         }
-        Spacer(modifier =Modifier.height(15.dp))
-        Button(onClick = {
-            if (contexto != null) {
-                InitialViewModel.TwitterLoginSelected(
-                    activity = contexto,
-                    onSuccess = {navHostController.navigate(Routes.Menu1.routes)},
-                    onError = {})
-            }
-        },
-            modifier = Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 32.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = White),
 
-            )
-        {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
 
-                Image(
-                    painter = painterResource(id = R.drawable.gorjeo),
-                    contentDescription = "Registrarse twitter",
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 16.dp)
-                        .size(35.dp)
-                )
-
-                Text(
-                    text = "Cuenta de X",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
-
-        }
         Spacer(modifier =Modifier.height(15.dp))
         Text("Iniciar sesion", color = Color.Black ,fontWeight = FontWeight.Bold, modifier = Modifier.clickable(onClick = {navHostController.navigate(Routes.Screen2.routes)}))
 

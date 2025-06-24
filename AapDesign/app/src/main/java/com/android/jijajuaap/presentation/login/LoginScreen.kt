@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -63,6 +64,7 @@ fun LoginScreen(LoginViewModel: MvvmPresentation, navHostController: NavHostCont
     val isLoading by LoginViewModel.isLoading.collectAsState()
     var contrasenaVisible by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -196,8 +198,10 @@ fun LoginScreen(LoginViewModel: MvvmPresentation, navHostController: NavHostCont
 
         }
         Spacer(modifier = Modifier.size(15.dp))
-        Text("¿Olvidaste la contraseña?",
-            modifier = Modifier.clickable(onClick = {}),
+        Text("¿Olvidaste la contraseña? \n" +
+                "Escribe tu email arriba y púlsame",
+            modifier = Modifier.clickable(onClick = {
+                LoginViewModel.resetPassword(email =LoginViewModel.email.trim(),context)}),
             color = Color.Black,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center)
