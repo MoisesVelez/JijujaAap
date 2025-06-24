@@ -1,7 +1,11 @@
 package com.android.jijajuaap.partidaPublica
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -82,6 +87,7 @@ fun QuizScreen(
     var puntosH = gameRoad.puntosFinal
     var pulsado = gameRoad.pulsaciones
     var temaPuntos = gameRoad.temas(user)
+    val isLoading by viewModel.isLoading.collectAsState()
 
     val dificultad = gameRoad.dificultad
     var eleccion by remember { mutableStateOf("") }
@@ -122,61 +128,86 @@ fun QuizScreen(
                 .background(BLANCOeSP),
             verticalArrangement = Arrangement.spacedBy(20.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-        if(currentIndex == questions.size) {
-            val totalTema = puntosH + score
-            val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + score
-
+        val totalTema = puntosH + score
+        val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + score
+        if (currentIndex == questions.size) {
+            val visible = remember { mutableStateOf(false) }
 
             LaunchedEffect(currentIndex) {
                 userMenuViewModel.updatePuntos(temaPuntos, totalTema)
                 userMenuViewModel.updatePuntosTotal(totalGeneral)
+                delay(200)
+                visible.value = true
             }
-            Column(
-                modifier = Modifier.fillMaxSize().background(BLANCOeSP),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+
+            AnimatedVisibility(
+                visible = visible.value,
+                enter = fadeIn(animationSpec = tween(1000)) + slideInVertically(initialOffsetY = { fullHeight -> fullHeight }),
             ) {
-                    Text("Terminado Quiz de ${user?.tema}", fontSize = 25.sp,color = Color.Black, fontWeight = FontWeight.Bold)
-                Card(
+                Column(
                     modifier = Modifier
-                        .height(350.dp)
-                        .padding(20.dp)
-                        .fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(4.dp),
-                    colors = CardDefaults.cardColors(containerColor = colorEscogido)
+                        .fillMaxSize()
+                        .background(BLANCOeSP),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize().background(White).padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                    Text(
+                        "Terminado Quiz de ${user?.tema}",
+                        fontSize = 25.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
 
+                    Card(
+                        modifier = Modifier
+                            .height(350.dp)
+                            .padding(20.dp)
+                            .fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(4.dp),
+                        colors = CardDefaults.cardColors(containerColor = colorEscogido)
                     ) {
-
-
-                            ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Preguntas correctas: ", value =
-                            "$correctas/ ${questions.size}"
-                        )
-                        ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Puntuación: ", value = "+ $score")
-                        ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Puntuación total: ", value = "$totalTema ")
-                        ProfileInfoRow(R.drawable.puntuacion_mas_alta, label = "    Dificultad: ", value = dificultad)
-
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(White)
+                                .padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            ProfileInfoRow(R.drawable.rompecabezas, label = "    Preguntas correctas: ", value = "$correctas/${questions.size}")
+                            ProfileInfoRow(R.drawable.elevar_a_mismo_nivel, label = "    Puntuación: ", value = "+ $score")
+                            ProfileInfoRow(R.drawable.puntuacion_mas_alta__1_, label = "    Puntuación total: ", value = "$puntosH")
+                            ProfileInfoRow(R.drawable.nivel, label = "    Dificultad: ", value = dificultad)
+                        }
                     }
-                }
-                Spacer(modifier = Modifier.size(25.dp))
 
-                Button(onClick = {
-                    navHostController.popBackStack()
-                   // gameRoad.puntos(user)
-                    navHostController.navigate(Routes.menuRoadMap.routes)
-                    },
-                    colors = ButtonDefaults.buttonColors(colorEscogido),
-                    shape = RoundedCornerShape(12.dp)) {
-                    Text("Volver", color =Color.Black, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.size(25.dp))
+
+                    Button(
+                        onClick = {
+                            navHostController.popBackStack()
+                            navHostController.navigate(Routes.menuRoadMap.routes)
+                        },
+                        colors = ButtonDefaults.buttonColors(colorEscogido),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Volver", color = Color.Black, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }
-            Spacer(modifier = Modifier.size(30.dp))
+
+        Spacer(modifier = Modifier.size(30.dp))
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 32.dp),
+                color = colorEscogido
+            )
+        }
+        Spacer(modifier = Modifier.size(15.dp))
             Box(
                 modifier = Modifier,
                 contentAlignment = Alignment.Center
@@ -303,7 +334,7 @@ fun ProfileInfoRow(icono: Int, label: String, value: String?) {
                 modifier = Modifier.padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(painterResource(id = icono), contentDescription = "", modifier = Modifier.size(25.dp))
+                Image(painterResource(id = icono), contentDescription = "", modifier = Modifier.size(35.dp))
                 Text(label, style = MaterialTheme.typography.bodyMedium, color = Color.Black)
                 Text(value, fontWeight = FontWeight.Bold, color = Color.Black)
             }
