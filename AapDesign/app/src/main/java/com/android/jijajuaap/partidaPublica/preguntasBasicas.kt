@@ -99,6 +99,13 @@ fun QuizScreen(
 
     }
 
+    var colorLetras by remember { mutableStateOf(Color.Black) }
+    if(colorEscogido != Color.DarkGray){
+        colorLetras = Color.Black
+    }else{
+        colorLetras = Color.White
+    }
+
     val question: test? = questions.getOrNull(currentIndex)
 
 
@@ -191,7 +198,7 @@ fun QuizScreen(
                         colors = ButtonDefaults.buttonColors(colorEscogido),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Volver", color = Color.Black, fontWeight = FontWeight.Bold)
+                        Text("Volver", color = colorLetras, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -260,7 +267,7 @@ fun QuizScreen(
                             colors = ButtonDefaults.buttonColors(colorEscogido),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text(option, color = Color.Black, fontWeight = FontWeight.Bold)
+                            Text(option, color = colorLetras, fontWeight = FontWeight.Bold)
                         }
                     }
                 }

@@ -36,8 +36,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -139,7 +141,7 @@ fun topAppBar(
             painter = painterResource(R.drawable.ajustamiento),
             contentDescription = "Ajustes",
             modifier = Modifier.size(60.dp)
-                .clickable(onClick = {}),
+                .clickable(onClick = {navHostController.navigate(Routes.ajuste.routes)}),
             tint = Color.Black
         )
 
@@ -155,6 +157,13 @@ fun navigationBar(
     navHostController: NavHostController,
     colorEscogido: Color
 ) {
+    var colorLetras by remember { mutableStateOf(Color.Black) }
+    if(colorEscogido != Color.DarkGray){
+        colorLetras = Color.Black
+    }else{
+        colorLetras = Color.White
+    }
+
     NavigationBar(containerColor = colorEscogido, modifier = Modifier.height(110.dp)
          ){
         NavigationBarItem(selected = true,
@@ -167,8 +176,8 @@ fun navigationBar(
                 indicatorColor = Color.Transparent
             ),
             onClick = {navHostController.navigate(Routes.Menu1.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "")}
-            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = Color.Black) })
+            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
 
         NavigationBarItem(selected = true,
             modifier = Modifier,
@@ -180,8 +189,8 @@ fun navigationBar(
                 indicatorColor = Color.Transparent
             ),
             onClick = {},
-            icon = {Icon(painter = painterResource(R.drawable.lapiz),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "")}
-            ,label = { Text("Partida privada", fontWeight = FontWeight.Bold, color = Color.Black) })
+            icon = {Icon(painter = painterResource(R.drawable.lapiz),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Partida privada", fontWeight = FontWeight.Bold, color = colorLetras) })
 
         NavigationBarItem(selected = true,
             modifier = Modifier,
@@ -192,12 +201,9 @@ fun navigationBar(
                 unselectedTextColor = Color.DarkGray,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {menuviewModel.logOut {navHostController.navigate(Routes.Screen1.routes){
-                popUpTo(Routes.Screen1.routes)
-                { inclusive = true }
-            }}},
-            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "")}
-            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = Color.Black) }
+            onClick = {},
+            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = colorLetras) }
         )
 
     }

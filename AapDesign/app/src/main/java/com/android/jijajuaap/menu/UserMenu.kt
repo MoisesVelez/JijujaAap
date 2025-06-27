@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,6 +71,13 @@ fun menu(userMenuViewModel: UserMenuViewModel, navHostController: NavHostControl
         val colorEscogido = viewModel.cambioColor(user?.team)
         val colorChosen = viewModel.colorUsuario(colorEscogido)
 
+        var colorLetras by remember { mutableStateOf(Color.Black) }
+        if(colorEscogido != Color.DarkGray){
+            colorLetras = Color.Black
+        }else{
+            colorLetras = Color.White
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -82,13 +94,14 @@ fun menu(userMenuViewModel: UserMenuViewModel, navHostController: NavHostControl
                     .size(100.dp)
                     .clip(CircleShape)
                     .border(2.dp, White, CircleShape)
+                    .clickable(onClick = {cambioDireccion(user?.team.toString(),navHostController)})
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
 
             Text(user?.name ?: "Sin nombre", style = MaterialTheme.typography.headlineSmall, color = Color.Black, fontWeight = FontWeight.Bold)
-            Text(user?.email ?: "", style = MaterialTheme.typography.bodyMedium, color = Color.DarkGray, fontWeight = FontWeight.Bold)
+            Text(user?.email ?: "", style = MaterialTheme.typography.bodyMedium, color = colorLetras, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -162,6 +175,9 @@ fun cambioDireccion(team: String,navHostController: NavHostController){
     if(team=="Azulense"){
         navHostController.navigate(Routes.MenuImagenAzu.routes)
 
+    }
+    if(team == "Secreto"){
+        navHostController.navigate(Routes.menuImagenDark.routes)
     }
 }
 

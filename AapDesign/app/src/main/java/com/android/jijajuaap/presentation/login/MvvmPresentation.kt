@@ -111,6 +111,15 @@ class MvvmPresentation @Inject constructor(private val authService: AuthService)
     }
 
 
+    fun deleteCuentas(uid: String){
+        viewModelScope.launch {
+            authService.deleteCuenta(uid)
+        }
+    }
+
+
+
+
 
 
 

@@ -60,6 +60,7 @@ class AuthService @SuppressLint("RestrictedApi")
         firebaseAuth.signOut()
     }
 
+
     fun getGoogleClient(): GoogleSignInClient {
         val gso = GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -172,6 +173,11 @@ class AuthService @SuppressLint("RestrictedApi")
         userRef.set(updateImg, SetOptions.merge()).await()
     }
 
+    suspend fun updateName(uid: String,avatarId:String){
+        val userRef = firestore.collection("users").document(uid)
+        val  updateImg = mapOf("name" to avatarId)
+        userRef.set(updateImg, SetOptions.merge()).await()
+    }
 
 
     suspend fun updateTema(uid: String,tema:String){
@@ -210,6 +216,15 @@ class AuthService @SuppressLint("RestrictedApi")
             Log.e("Firestore", "Error al obtener documento", e)
             return null
         }
+    }
+
+    suspend fun deleteCuenta(uid: String){
+        val userRef = firestore.collection("users").document(uid)
+        userRef.delete().await()
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser?.delete()?.await()
+
     }
 
 }

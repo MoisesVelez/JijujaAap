@@ -7,12 +7,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.jijajuaap.SplashScreen
+import com.android.jijajuaap.ajustes.ajustes
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.menu.menu
 import com.android.jijajuaap.menu.menuInitial
 import com.android.jijajuaap.menu.menuviewModel
 import com.android.jijajuaap.menu.selecImagen
 import com.android.jijajuaap.menu.selecImagenAzu
+import com.android.jijajuaap.menu.selecImagenDark
 import com.android.jijajuaap.menu.selecImagenVer
 import com.android.jijajuaap.partidaPublica.QuizScreen
 import com.android.jijajuaap.partidaPublica.QuizViewModel
@@ -76,6 +78,12 @@ fun NavigationWrapper() {
         }
         composable(Routes.menuPartidaBasica.routes) {
             QuizScreen(gameBasic,userViewModel,navHostController,gameRoad)
+        }
+        composable(Routes.ajuste.routes) {
+            ajustes(userViewModel,loginViewModel,navHostController)
+        }
+        composable(Routes.menuImagenDark.routes) {
+            selecImagenDark(userViewModel)
         }
 
     }

@@ -79,6 +79,8 @@ class UserMenuViewModel @Inject constructor(
             return rojoUser
         }else if(color==verdeJu){
             return verdeUser
+        }else if(color == Color.DarkGray){
+            return Color.DarkGray
         }
         return White
     }
@@ -220,6 +222,7 @@ class UserMenuViewModel @Inject constructor(
             "Rojin" -> rojoJa
             "Azulense" -> azulJi
             "Verdiano" -> verdeJu
+            "Secreto" -> Color.DarkGray
             else -> White
         }
         return colorElegido
@@ -311,6 +314,23 @@ class UserMenuViewModel @Inject constructor(
             user = authService.getUserData(uid)
         }
     }
+
+
+    fun updateName(tema:String){
+
+        viewModelScope.launch {
+            try {
+                user?.uid?.let { uid ->
+                    authService.updateName(uid, tema)
+                    val newUser = authService.getUserData(uid)
+                    user = newUser
+                }
+            } catch (e: Exception) {
+                Log.e("UserMenuViewModel", "Error al actualizar name", e)
+            }
+        }
+    }
+
 }
 
 
