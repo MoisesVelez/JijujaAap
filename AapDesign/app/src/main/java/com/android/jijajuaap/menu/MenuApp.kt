@@ -237,11 +237,11 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
                 )
                 1 -> SimpleCardPantallaCompleta(
                     titulo = "Comunidad",
-                    contenido = "Contenido de la tarjeta número ${page + 1}",
+                    contenido = "Participa con la comunidad superando sus Quiz y forma parte de ella creando los tuyos propios.",
                     height = 500.dp,
                     painter = painterResource(
-                        R.drawable.ilustracion_sin_titulo_3),
-                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
+                        R.drawable.ilustracionpublica),
+                    onClick = {navHostController.navigate(Routes.menuInicioComunidad.routes)}
                 )
                 2 -> SimpleCardPantallaCompleta(
                     titulo = "Creador",

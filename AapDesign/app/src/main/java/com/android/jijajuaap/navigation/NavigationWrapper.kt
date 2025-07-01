@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.jijajuaap.SplashScreen
 import com.android.jijajuaap.ajustes.ajustes
+import com.android.jijajuaap.comunidad.menuInicialComunidad
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.menu.menu
 import com.android.jijajuaap.menu.menuInitial
@@ -84,6 +85,9 @@ fun NavigationWrapper() {
         }
         composable(Routes.menuImagenDark.routes) {
             selecImagenDark(userViewModel)
+        }
+        composable(Routes.menuInicioComunidad.routes) {
+            menuInicialComunidad(userViewModel,navHostController)
         }
 
     }
