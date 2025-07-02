@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.jijajuaap.SplashScreen
 import com.android.jijajuaap.ajustes.ajustes
+import com.android.jijajuaap.comunidad.comunidadView
 import com.android.jijajuaap.comunidad.menuInicialComunidad
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.menu.menu
@@ -41,6 +42,7 @@ fun NavigationWrapper() {
     val userViewModel: UserMenuViewModel = hiltViewModel()
     val gameRoad: gmaplayViewModel = hiltViewModel()
     val gameBasic: QuizViewModel = hiltViewModel()
+    val comView: comunidadView = hiltViewModel()
 
 
     NavHost(navController = navHostController, startDestination = Routes.SplashScreen.routes) {
@@ -87,7 +89,7 @@ fun NavigationWrapper() {
             selecImagenDark(userViewModel)
         }
         composable(Routes.menuInicioComunidad.routes) {
-            menuInicialComunidad(userViewModel,navHostController)
+            menuInicialComunidad(userViewModel,navHostController,comView)
         }
 
     }

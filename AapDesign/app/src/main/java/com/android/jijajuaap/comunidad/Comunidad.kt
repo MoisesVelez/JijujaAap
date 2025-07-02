@@ -1,7 +1,6 @@
 package com.android.jijajuaap.comunidad
 
-import android.R.attr.label
-import android.R.attr.value
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,10 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -34,6 +32,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,9 +52,16 @@ import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import com.android.jijajuaap.R
+
 
 @Composable
-fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController: NavHostController){
+fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController: NavHostController,comunidadView: comunidadView){
 
 
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
@@ -65,16 +71,21 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
             userMenuViewModel.loadUserData(it)
         }
     }
-
-
-
     val user = userMenuViewModel.user
+    LaunchedEffect(user) {
+        comunidadView.obtenerQuiz()
+    }
+
+
+
+
     val imag = userMenuViewModel.imagenUsuario(user)
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
     val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
-
+    val lista by comunidadView.listaTest.collectAsState()
     Scaffold(
-        topBar = {barraTop(user,imag,navHostController,colorEscogido)}
+        topBar = {barraTop(user,imag,navHostController,colorEscogido)},
+        bottomBar = {barraBottom(navHostController,colorEscogido)}
     ) { innerPadding ->
 
         Column(modifier = Modifier.padding(innerPadding).background(fondo)) {
@@ -106,38 +117,24 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
                     colors = ButtonDefaults.buttonColors(colorEscogido),
                     shape = RoundedCornerShape(12.dp))
                 {
-                Text("Buscar", color =Color.Black, fontWeight = FontWeight.Bold)
+                Image(painterResource(R.drawable.lupa), contentDescription = "Buscar",
+                    modifier = Modifier.size(35.dp))
             }
         }
             Card(modifier = Modifier.padding(20.dp)
                 .fillMaxSize().clip(RoundedCornerShape(16.dp))
-                .verticalScroll(rememberScrollState())
                 .background(BLANCOeSP)
                 .padding(10.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                shape = RoundedCornerShape(16.dp)) {
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(White)) {
 
-                Column(horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(15.dp)) {
 
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("dinosaurios","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("dinosaurios","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("dinosaurios","Moises")
-                    cardsComunidad("Futbol","Moises")
-                    cardsComunidad("Futbol","Moises")
+                    LazyColumn( modifier = Modifier.fillMaxSize().padding(15.dp),horizontalAlignment = Alignment.CenterHorizontally) {
+                        items(lista) { test ->
+                           cardsComunidad(test.titulo,test.autor)
+
+                    }
                 }
 
             }
@@ -198,6 +195,61 @@ fun barraTop(
 }
 
 @Composable
+fun barraBottom(navHostController: NavHostController, colorEscogido: Color) {
+
+
+    var colorLetras by remember { mutableStateOf(Color.Black) }
+    if(colorEscogido != Color.DarkGray){
+        colorLetras = Color.Black
+    }else{
+        colorLetras = Color.White
+    }
+    NavigationBar(containerColor = White, modifier = Modifier.height(110.dp)
+    ){
+        NavigationBarItem(selected = true,
+            modifier = Modifier,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.DarkGray,
+                unselectedIconColor = Color.DarkGray,
+                selectedTextColor = Color(0xFFFFC107),
+                unselectedTextColor = Color.DarkGray,
+                indicatorColor = Color.Transparent
+            ),
+            onClick = {navHostController.navigate(Routes.Menu1.routes)},
+            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
+
+        NavigationBarItem(selected = true,
+            modifier = Modifier,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.DarkGray,
+                unselectedIconColor = Color.DarkGray,
+                selectedTextColor = Color(0xFFFFC107),
+                unselectedTextColor = Color.DarkGray,
+                indicatorColor = Color.Transparent
+            ),
+            onClick = {},
+            icon = {Icon(painter = painterResource(R.drawable.crear),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Crear Quiz", fontWeight = FontWeight.Bold, color = colorLetras) })
+
+        NavigationBarItem(selected = true,
+            modifier = Modifier,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.DarkGray,
+                unselectedIconColor = Color.DarkGray,
+                selectedTextColor = Color(0xFFFFC107),
+                unselectedTextColor = Color.DarkGray,
+                indicatorColor = Color.Transparent
+            ),
+            onClick = {},
+            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = colorLetras) }
+        )
+
+    }
+}
+
+@Composable
 fun cardsComunidad(nombre: String, Usuario:String){
     Card(
         modifier = Modifier
@@ -209,9 +261,9 @@ fun cardsComunidad(nombre: String, Usuario:String){
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Row(
+        Column(
             modifier = Modifier.padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Quiz: ${nombre}", fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.width(50.dp))
@@ -219,3 +271,22 @@ fun cardsComunidad(nombre: String, Usuario:String){
         }
     }
 }
+
+
+
+
+//val nuevaPregunta = PreguntaComunidad(
+  //  titulo = "Test de Cultura General",
+  //  autor = "usuario456",
+ //   preguntas = listOf(
+     //   test(
+       //     pregunta = "¿Cuál es la capital de Japón?",
+       //     opciones = listOf("Tokio", "Osaka", "Kioto"),
+        //    correctAnswerIndex = 0
+      //  )
+  //  )
+//)
+
+//FirebaseFirestore.getInstance().collection("comunidad")
+//.add(nuevaPregunta)
+
