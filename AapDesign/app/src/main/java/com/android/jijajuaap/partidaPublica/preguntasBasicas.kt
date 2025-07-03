@@ -137,6 +137,7 @@ fun QuizScreen(
         ) {
         val totalTema = puntosH + score
         val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + score
+      //  userMenuViewModel.updateQuizTotales(1)
         if (currentIndex == questions.size) {
             val visible = remember { mutableStateOf(false) }
 
@@ -192,6 +193,7 @@ fun QuizScreen(
 
                     Button(
                         onClick = {
+                            userMenuViewModel.updateQuizTotales(1)
                             navHostController.popBackStack()
                             navHostController.navigate(Routes.menuRoadMap.routes)
                         },

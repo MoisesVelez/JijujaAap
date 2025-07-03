@@ -123,11 +123,11 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
         }
             Card(modifier = Modifier.padding(20.dp)
                 .fillMaxSize().clip(RoundedCornerShape(16.dp))
-                .background(BLANCOeSP)
+                .background(White)
                 .padding(10.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(White)) {
+                colors = CardDefaults.cardColors(BLANCOeSP)) {
 
 
                     LazyColumn( modifier = Modifier.fillMaxSize().padding(15.dp),horizontalAlignment = Alignment.CenterHorizontally) {
@@ -228,7 +228,7 @@ fun barraBottom(navHostController: NavHostController, colorEscogido: Color) {
                 unselectedTextColor = Color.DarkGray,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {},
+            onClick = {navHostController.navigate(Routes.menuCrearQuiz.routes)},
             icon = {Icon(painter = painterResource(R.drawable.crear),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
             ,label = { Text("Crear Quiz", fontWeight = FontWeight.Bold, color = colorLetras) })
 

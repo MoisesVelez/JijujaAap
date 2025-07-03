@@ -249,7 +249,7 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
                     height = 500.dp,
                     painter = painterResource(
                         R.drawable.ilustracion_sin_titulo_6),
-                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
+                    onClick = {navHostController.navigate(Routes.menuCrearQuiz.routes)}
                 )
                 3 -> SimpleCardPantallaCompleta(
                     titulo = "Lore...",

@@ -331,6 +331,22 @@ class UserMenuViewModel @Inject constructor(
         }
     }
 
+
+    fun updateQuizTotales(num: Int){
+
+        viewModelScope.launch {
+            try {
+                user?.uid?.let { uid ->
+                    authService.updateQuizTotales(uid,num)
+                    val newUser = authService.getUserData(uid)
+                    user = newUser
+                }
+            } catch (e: Exception) {
+                Log.e("UserMenuViewModel", "Error al actualizar Quiz", e)
+            }
+        }
+    }
+
 }
 
 

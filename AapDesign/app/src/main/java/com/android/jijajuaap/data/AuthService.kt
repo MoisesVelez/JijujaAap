@@ -227,6 +227,15 @@ class AuthService @SuppressLint("RestrictedApi")
 
     }
 
+    suspend fun updateQuizTotales(uid: String,int: Int){
+        val userRef = firestore.collection("users").document(uid)
+        val user = getUserData(uid)
+        val currentTotal = user?.totalQuiz ?: 0
+        val updatedTotal = currentTotal + int
+        val  updateQuiz = mapOf("totalQuiz" to updatedTotal)
+        userRef.set(updateQuiz, SetOptions.merge()).await()
+    }
+
 }
 
 

@@ -8,4 +8,4 @@ data class PreguntaComunidad (
     val autor: String = "",
     val timestamp: Timestamp = Timestamp.now(),
     val preguntas: List<test> = emptyList()
-){}
+)
