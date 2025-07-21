@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,10 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,6 +32,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,11 +50,13 @@ import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.objects.test
 import com.android.jijajuaap.ui.theme.BLANCOeSP
+import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostController) {
+fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostController,crearQuizView: crearQuizView) {
 
 
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
@@ -62,6 +71,16 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
     val imag = userViewModel.imagenUsuario(user)
     val colorEscogido = userViewModel.cambioColor(user?.team)
     val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
+    val focusManager = LocalFocusManager.current
+    val blanco50 = Color.White.copy(alpha = 0.5f)
+
+
+    var title = crearQuizView.titulO
+    crearQuizView.autOr = user?.name.toString()
+
+
+
+
 
     Scaffold(
         topBar = {barraTop(user,imag,navHostController,colorEscogido)}
@@ -72,19 +91,25 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
             .padding(innerPadding)
 
             .fillMaxSize()
-            .background(fondo),
+            .background(fondo)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ) {
+            focusManager.clearFocus()
+        },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.size(75.dp))
+            Spacer(modifier = Modifier.size(5.dp))
             Text("Creación de Quiz", fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.size(15.dp))
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
-                    .padding(vertical = 4.dp)
+                    .height(75.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                 ,
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = RoundedCornerShape(16.dp),
@@ -93,11 +118,12 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
                 Row(verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                    Image(painterResource(R.drawable.crear), contentDescription = "Titulo")
+                    Image(painterResource(R.drawable.firma), contentDescription = "Titulo")
                     TextField(
-                        value = "",
-                        onValueChange = {},
-                        label = { Text("Nuevo nombre", color = Color.Black) },
+                        value = title,
+                        onValueChange = {title=it
+                                        crearQuizView.titulO=it},
+                        label = { Text("Titulo Quiz", color = Color.Black) },
 
                         singleLine = true,
                         modifier = Modifier.weight(1f),
@@ -116,17 +142,60 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
             }
 
+            Spacer(modifier = Modifier.size(7.dp))
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
-                    .padding(vertical = 4.dp)
+                    .height(105.dp)
+                    .padding(16.dp)
                 ,
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)) {
 
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Image(painterResource(R.drawable.mencionar), contentDescription = "Titulo")
+                    TextField(
+                        value = "Autor: ${user?.name ?: ""}",
+                        onValueChange = {},
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            cursorColor = Color.Black,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            unfocusedContainerColor = BLANCOeSP,
+                            focusedContainerColor = BLANCOeSP
+                        ),
+                        readOnly = true,
+                        singleLine = true
+                    )
+
+
+                }
+
             }
+            Spacer(modifier = Modifier.size(10.dp))
+            Card(modifier = Modifier.fillMaxWidth().height(700.dp).padding(16.dp)
+            , elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = colorEscogido)) {
+
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())
+                    .padding(10.dp)
+                    .fillMaxSize()) {
+                    crearPreguntas(colorEscogido,crearQuizView)
+
+                }
+
+            }
+            Spacer(modifier = Modifier.size(5.dp))
+
 
         }
 
@@ -178,3 +247,247 @@ fun barraTop(
         })
 
 }
+
+
+@Composable
+fun crearPreguntas(
+    color: Color,
+    crearQuizView: crearQuizView,
+
+    ){
+    var pregunta:String by remember { mutableStateOf("") }
+
+    var opcion1 by remember { mutableStateOf("") }
+    var opcion2 by remember { mutableStateOf("") }
+    var opcion3 by remember { mutableStateOf("") }
+    var opcion4 by remember { mutableStateOf("") }
+
+
+
+    var opciones = listOf(opcion1, opcion2, opcion3,opcion4)
+    var correcto: Int by remember { mutableIntStateOf(0) }
+
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(75.dp)
+            .padding(start = 16.dp, end = 16.dp)
+        ,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)) {
+
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            TextField(
+                value = pregunta,
+                onValueChange = {pregunta = it},
+                label = { Text("Pregunta", color = Color.Black) },
+
+                singleLine = true,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(10.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    cursorColor = Color.Black,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    unfocusedContainerColor = BLANCOeSP,
+                    focusedContainerColor = BLANCOeSP
+                ))
+        }}
+
+    Spacer(modifier = Modifier.size(15.dp))
+    Divider(
+        color = White,
+        thickness = 3.dp,
+        modifier = Modifier.padding(vertical = 8.dp)
+    )
+
+    Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(75.dp)
+                .padding(start = 16.dp, end = 16.dp)
+            ,
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)) {
+
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                TextField(
+                    value = opcion1,
+                    onValueChange = {opcion1=it},
+                    label = { Text("1.", color = Color.Black) },
+
+                    singleLine = true,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        cursorColor = Color.Black,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        unfocusedContainerColor = BLANCOeSP,
+                        focusedContainerColor = BLANCOeSP
+                    ))
+            }}
+    Spacer(modifier = Modifier.size(10.dp))
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(75.dp)
+                    .padding(start = 16.dp, end = 16.dp)
+                ,
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)) {
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    TextField(
+                        value = opcion2,
+                        onValueChange = {opcion2=it},
+                        label = { Text("2.", color = Color.Black) },
+
+                        singleLine = true,
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            cursorColor = Color.Black,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            unfocusedContainerColor = BLANCOeSP,
+                            focusedContainerColor = BLANCOeSP
+                        )
+                    )
+                }
+            }
+    Spacer(modifier = Modifier.size(10.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(75.dp)
+                        .padding(start = 16.dp, end = 16.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                ) {
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        TextField(
+                            value = opcion3,
+                            onValueChange = {opcion3=it},
+                            label = { Text("3.", color = Color.Black) },
+
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent,
+                                cursorColor = Color.Black,
+                                focusedTextColor = Color.Black,
+                                unfocusedTextColor = Color.Black,
+                                unfocusedContainerColor = BLANCOeSP,
+                                focusedContainerColor = BLANCOeSP
+                            )
+                        )
+                    }
+                }
+    Spacer(modifier = Modifier.size(10.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(75.dp)
+                        .padding(start = 16.dp, end = 16.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                ) {
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        TextField(
+                            value = opcion4,
+                            onValueChange = {opcion4=it},
+                            label = { Text("4.", color = Color.Black) },
+
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent,
+                                cursorColor = Color.Black,
+                                focusedTextColor = Color.Black,
+                                unfocusedTextColor = Color.Black,
+                                unfocusedContainerColor = BLANCOeSP,
+                                focusedContainerColor = BLANCOeSP
+                            )
+                        )
+
+                    }
+                }
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .height(105.dp)
+        .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween) {
+
+        Button(onClick = {crearQuizView.subirQuiz()}) {
+            Text("Subir")
+        }
+
+
+
+
+        Button(onClick = {var preguntaTes:test = test()
+        preguntaTes.pregunta=pregunta
+        preguntaTes.opciones=opciones
+        preguntaTes.correctAnswerIndex=correcto
+
+            crearQuizView.añadirPregunta(preguntaTes)
+
+            pregunta = ""
+            opcion1=""
+            opcion2=""
+            opcion3=""
+            opcion4=""
+            correcto=0
+
+        }) {
+            Text("Otra pregunta")
+        }
+    }
+
+            }
+
+
+
+

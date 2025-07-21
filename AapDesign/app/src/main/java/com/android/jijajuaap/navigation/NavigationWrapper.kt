@@ -11,6 +11,7 @@ import com.android.jijajuaap.ajustes.ajustes
 import com.android.jijajuaap.comunidad.comunidadView
 import com.android.jijajuaap.comunidad.menuInicialComunidad
 import com.android.jijajuaap.crearQuiz.CrearQuiz
+import com.android.jijajuaap.crearQuiz.crearQuizView
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.menu.menu
 import com.android.jijajuaap.menu.menuInitial
@@ -44,6 +45,7 @@ fun NavigationWrapper() {
     val gameRoad: gmaplayViewModel = hiltViewModel()
     val gameBasic: QuizViewModel = hiltViewModel()
     val comView: comunidadView = hiltViewModel()
+    val crearView: crearQuizView = hiltViewModel()
 
 
     NavHost(navController = navHostController, startDestination = Routes.SplashScreen.routes) {
@@ -93,7 +95,7 @@ fun NavigationWrapper() {
             menuInicialComunidad(userViewModel,navHostController,comView)
         }
         composable(Routes.menuCrearQuiz.routes) {
-            CrearQuiz(userViewModel,navHostController)
+            CrearQuiz(userViewModel,navHostController,crearView)
         }
 
     }
