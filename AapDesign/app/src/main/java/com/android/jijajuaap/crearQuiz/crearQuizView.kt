@@ -46,6 +46,10 @@ class crearQuizView @Inject constructor(
                 Log.e("crearQuizView", "Error al subir el quiz", e)
             }
     }
+    fun borrarPreguntas(){
+        listaPreguntas.value = emptyList()
+
+    }
 
 
 }

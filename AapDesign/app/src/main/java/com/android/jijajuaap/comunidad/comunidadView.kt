@@ -12,6 +12,7 @@ import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,6 +48,23 @@ class comunidadView @Inject constructor(
 
 
     }
+
+    suspend fun buscador(quiz: String): List<PreguntaComunidad> {
+        val db = FirebaseFirestore.getInstance()
+        return try {
+            val result = db.collection("comunidad")
+                .whereEqualTo("titulo", quiz)
+                .get()
+                .await()
+
+            result.mapNotNull { it.toObject(PreguntaComunidad::class.java) }
+
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error en búsqueda", e)
+            emptyList()
+        }
+    }
+
 
 
 

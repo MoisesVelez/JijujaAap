@@ -1,5 +1,6 @@
 package com.android.jijajuaap.crearQuiz
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -55,6 +57,7 @@ import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostController,crearQuizView: crearQuizView) {
 
@@ -73,6 +76,7 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
     val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
     val focusManager = LocalFocusManager.current
     val blanco50 = Color.White.copy(alpha = 0.5f)
+
 
 
     var title = crearQuizView.titulO
@@ -266,8 +270,9 @@ fun crearPreguntas(
 
     var opciones = listOf(opcion1, opcion2, opcion3,opcion4)
     var correcto: Int by remember { mutableIntStateOf(0) }
+    var numeroPreguntas by remember { mutableIntStateOf(0) }
 
-
+    Text("Cantidad de preguntas: ${numeroPreguntas}")
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -460,8 +465,36 @@ fun crearPreguntas(
         .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween) {
 
-        Button(onClick = {crearQuizView.subirQuiz()}) {
-            Text("Subir")
+        Button(onClick = {
+
+            if(pregunta.toString().equals("")){
+                crearQuizView.subirQuiz()
+                crearQuizView.borrarPreguntas()
+                crearQuizView.titulO = ""
+                numeroPreguntas =0
+            }else{
+
+            var preguntaTes:test = test()
+            preguntaTes.pregunta=pregunta
+            preguntaTes.opciones=opciones
+            preguntaTes.correctAnswerIndex=correcto
+
+            crearQuizView.añadirPregunta(preguntaTes)
+
+            pregunta = ""
+            opcion1=""
+            opcion2=""
+            opcion3=""
+            opcion4=""
+            correcto=0
+
+            crearQuizView.subirQuiz()
+                crearQuizView.borrarPreguntas()
+                crearQuizView.titulO = ""
+                numeroPreguntas =0}}
+            ,colors = ButtonDefaults.buttonColors(White),
+            shape = RoundedCornerShape(12.dp))  {
+            Text("Subir",fontWeight = FontWeight.Bold, color = Color.Black)
         }
 
 
@@ -480,9 +513,10 @@ fun crearPreguntas(
             opcion3=""
             opcion4=""
             correcto=0
-
-        }) {
-            Text("Otra pregunta")
+        numeroPreguntas +=1
+        },colors = ButtonDefaults.buttonColors(White),
+            shape = RoundedCornerShape(12.dp)) {
+            Text("Otra pregunta", fontWeight = FontWeight.Bold, color = Color.Black)
         }
     }
 

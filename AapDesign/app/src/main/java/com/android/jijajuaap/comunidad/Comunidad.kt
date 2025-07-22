@@ -57,7 +57,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.runtime.rememberCoroutineScope
 import com.android.jijajuaap.R
+import com.android.jijajuaap.objects.PreguntaComunidad
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -83,6 +86,8 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
     val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
     val lista by comunidadView.listaTest.collectAsState()
+    var buscar by remember { mutableStateOf("") }
+    val resultados = remember { mutableStateOf<List<PreguntaComunidad>>(emptyList())}
     Scaffold(
         topBar = {barraTop(user,imag,navHostController,colorEscogido)},
         bottomBar = {barraBottom(navHostController,colorEscogido)}
@@ -94,8 +99,8 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
             , modifier = Modifier.padding(10.dp).padding(bottom = 0.dp)) {
             TextField(
-                value = "",
-                onValueChange = {},
+                value = buscar,
+                onValueChange = {buscar = it},
                 label = { Text("Comunidad", color = Color.Black) },
 
                 singleLine = true,
@@ -113,7 +118,15 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
                 ),
             )
 
-                Button(onClick = {}, modifier = Modifier.weight(0.3f),
+                val coroutineScope = rememberCoroutineScope()
+                Button(onClick = {
+                    coroutineScope.launch {
+                        val listado = comunidadView.buscador(buscar)
+                        resultados.value = listado
+
+                    }
+                },
+                    modifier = Modifier.weight(0.3f),
                     colors = ButtonDefaults.buttonColors(colorEscogido),
                     shape = RoundedCornerShape(12.dp))
                 {
@@ -131,10 +144,16 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
 
 
                     LazyColumn( modifier = Modifier.fillMaxSize().padding(15.dp),horizontalAlignment = Alignment.CenterHorizontally) {
-                        items(lista) { test ->
-                           cardsComunidad(test.titulo,test.autor)
+                        if(resultados.value.isNotEmpty() && buscar.toString() != "") {
+                            items(resultados.value) { test ->
+                                    cardsComunidad(test.titulo, test.autor)
+                            }
+                        }else{
+                            items(lista) { test ->
+                                cardsComunidad(test.titulo, test.autor)
 
-                    }
+                            }
+                        }
                 }
 
             }
