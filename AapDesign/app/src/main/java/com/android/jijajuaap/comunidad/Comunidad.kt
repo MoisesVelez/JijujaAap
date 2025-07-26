@@ -146,11 +146,17 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
                     LazyColumn( modifier = Modifier.fillMaxSize().padding(15.dp),horizontalAlignment = Alignment.CenterHorizontally) {
                         if(resultados.value.isNotEmpty() && buscar.toString() != "") {
                             items(resultados.value) { test ->
-                                    cardsComunidad(test.titulo, test.autor)
+                                    cardsComunidad(test.titulo, test.autor,navHostController,test.id,comunidadView)
                             }
                         }else{
                             items(lista) { test ->
-                                cardsComunidad(test.titulo, test.autor)
+                                cardsComunidad(
+                                    test.titulo,
+                                    test.autor,
+                                    navHostController,
+                                    test.id,
+                                    comunidadView
+                                )
 
                             }
                         }
@@ -269,12 +275,22 @@ fun barraBottom(navHostController: NavHostController, colorEscogido: Color) {
 }
 
 @Composable
-fun cardsComunidad(nombre: String, Usuario:String){
+fun cardsComunidad(
+    nombre: String,
+    Usuario: String,
+    navHostController: NavHostController,
+    id: String?,
+    comunidadView: comunidadView
+){
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 14.dp)
-            .clickable(onClick = {})
+            .clickable(onClick = {
+                comunidadView.iD = id.toString()
+                comunidadView.titulo = nombre
+                comunidadView.creador = Usuario
+                navHostController.navigate(Routes.comQuiz.routes)})
         ,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(16.dp),
@@ -291,21 +307,4 @@ fun cardsComunidad(nombre: String, Usuario:String){
     }
 }
 
-
-
-
-//val nuevaPregunta = PreguntaComunidad(
-  //  titulo = "Test de Cultura General",
-  //  autor = "usuario456",
- //   preguntas = listOf(
-     //   test(
-       //     pregunta = "¿Cuál es la capital de Japón?",
-       //     opciones = listOf("Tokio", "Osaka", "Kioto"),
-        //    correctAnswerIndex = 0
-      //  )
-  //  )
-//)
-
-//FirebaseFirestore.getInstance().collection("comunidad")
-//.add(nuevaPregunta)
 

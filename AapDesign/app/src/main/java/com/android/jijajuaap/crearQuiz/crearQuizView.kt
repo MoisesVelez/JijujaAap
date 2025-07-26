@@ -23,6 +23,7 @@ class crearQuizView @Inject constructor(
     var titulO by mutableStateOf<String>("")
     var autOr by mutableStateOf<String>("")
     var listaPreguntas = MutableStateFlow<List<test>>(emptyList())
+    var iD by mutableStateOf<String>("")
 
     fun añadirPregunta(test: test){
         listaPreguntas.value = listaPreguntas.value + test
@@ -30,22 +31,27 @@ class crearQuizView @Inject constructor(
 
 
     fun subirQuiz() {
+        val db = FirebaseFirestore.getInstance()
+        val idGenerado = db.collection("comunidad").document().id
+        iD = idGenerado
+
         val nuevoQuiz = PreguntaComunidad(
+            id = idGenerado,
             titulo = titulO,
             autor = autOr,
             preguntas = listaPreguntas.value
         )
 
-        FirebaseFirestore.getInstance()
-            .collection("comunidad")
-            .add(nuevoQuiz)
+        db.collection("comunidad").document(idGenerado)
+            .set(nuevoQuiz)
             .addOnSuccessListener {
-                Log.d("crearQuizView", "Quiz subido con éxito")
+                Log.d("crearQuizView", "Quiz subido con éxito. ID: $idGenerado")
             }
             .addOnFailureListener { e ->
                 Log.e("crearQuizView", "Error al subir el quiz", e)
             }
     }
+
     fun borrarPreguntas(){
         listaPreguntas.value = emptyList()
 

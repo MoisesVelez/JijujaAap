@@ -185,7 +185,7 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
             }
             Spacer(modifier = Modifier.size(10.dp))
-            Card(modifier = Modifier.fillMaxWidth().height(700.dp).padding(16.dp)
+            Card(modifier = Modifier.fillMaxWidth().height(680.dp).padding(16.dp)
             , elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = colorEscogido)) {
@@ -198,7 +198,7 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
                 }
 
             }
-            Spacer(modifier = Modifier.size(5.dp))
+            Spacer(modifier = Modifier.size(20.dp))
 
 
         }
@@ -272,7 +272,7 @@ fun crearPreguntas(
     var correcto: Int by remember { mutableIntStateOf(0) }
     var numeroPreguntas by remember { mutableIntStateOf(0) }
 
-    Text("Cantidad de preguntas: ${numeroPreguntas}")
+    Text("Cantidad de preguntas: ${numeroPreguntas}", fontWeight = FontWeight.Bold, color = Color.Black)
     Card(
         modifier = Modifier
             .fillMaxWidth()

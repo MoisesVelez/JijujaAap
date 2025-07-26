@@ -1,8 +1,10 @@
 package com.android.jijajuaap.comunidad
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.android.jijajuaap.data.AuthService
 import com.android.jijajuaap.objects.PreguntaComunidad
@@ -24,6 +26,9 @@ class comunidadView @Inject constructor(
 
 
     val listaTest = MutableStateFlow<List<PreguntaComunidad>>(emptyList())
+    var iD by mutableStateOf<String>("")
+    var titulo by mutableStateOf<String>("")
+    var creador by mutableStateOf<String>("")
 
     fun obtenerQuiz(){
 
@@ -57,7 +62,11 @@ class comunidadView @Inject constructor(
                 .get()
                 .await()
 
-            result.mapNotNull { it.toObject(PreguntaComunidad::class.java) }
+            result.mapNotNull { doc ->
+                val pregunta = doc.toObject(PreguntaComunidad::class.java)
+                pregunta.id = doc.id
+                pregunta
+            }
 
         } catch (e: Exception) {
             Log.e("Firestore", "Error en búsqueda", e)
