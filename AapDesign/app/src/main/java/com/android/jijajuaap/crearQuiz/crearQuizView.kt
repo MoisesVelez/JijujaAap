@@ -7,7 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.android.jijajuaap.data.AuthService
-import com.android.jijajuaap.objects.PreguntaComunidad
+
+import com.android.jijajuaap.objects.preguntaComunidad
 import com.android.jijajuaap.objects.test
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +36,7 @@ class crearQuizView @Inject constructor(
         val idGenerado = db.collection("comunidad").document().id
         iD = idGenerado
 
-        val nuevoQuiz = PreguntaComunidad(
+        val nuevoQuiz = preguntaComunidad(
             id = idGenerado,
             titulo = titulO,
             autor = autOr,

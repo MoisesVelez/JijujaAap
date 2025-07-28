@@ -5,13 +5,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,7 +24,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,10 +56,10 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
     }
     val user = userMenuViewModel.user
     LaunchedEffect(user) {
-
+        comunidadView.preguntasQuiz(comunidadView.iD)
     }
 
-
+    var preguntas = comunidadView.preguntasCom
     val imag = userMenuViewModel.imagenUsuario(user)
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
     val fondo = Brush.verticalGradient(listOf(colorEscogido,Color.White ))
@@ -72,9 +76,24 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
 
             horizontalAlignment = Alignment.CenterHorizontally) {
 
-            Text("${comunidadView.iD}")
-            Text("Creador: ${comunidadView.creador}")
-            Text("Quiz: ${comunidadView.titulo}")
+            Spacer(modifier = Modifier.size(20.dp))
+           // Text("${comunidadView.iD}")
+            Card(modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(20.dp)) {
+                    Text("Creador: ${comunidadView.creador}", fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text("Quiz: ${comunidadView.titulo}", fontWeight = FontWeight.Bold, color = Color.Black)
+                }
+
+            }
+
+
+            Text("Quiz: ${preguntas?.preguntas}")
 
         }
 

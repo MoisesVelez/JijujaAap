@@ -59,8 +59,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.rememberCoroutineScope
 import com.android.jijajuaap.R
-import com.android.jijajuaap.objects.PreguntaComunidad
+import com.android.jijajuaap.objects.preguntaComunidad
+
 import kotlinx.coroutines.launch
+import kotlin.collections.isNotEmpty
 
 
 @Composable
@@ -87,7 +89,7 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
     val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
     val lista by comunidadView.listaTest.collectAsState()
     var buscar by remember { mutableStateOf("") }
-    val resultados = remember { mutableStateOf<List<PreguntaComunidad>>(emptyList())}
+    val resultados = remember { mutableStateOf<List<preguntaComunidad>>(emptyList())}
     Scaffold(
         topBar = {barraTop(user,imag,navHostController,colorEscogido)},
         bottomBar = {barraBottom(navHostController,colorEscogido)}

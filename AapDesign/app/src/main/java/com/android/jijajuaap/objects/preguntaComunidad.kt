@@ -3,7 +3,7 @@ package com.android.jijajuaap.objects
 import com.google.firebase.Timestamp
 
 
-data class PreguntaComunidad (
+data class preguntaComunidad (
     var id: String? = null,
     val titulo: String = "",
     val autor: String = "",

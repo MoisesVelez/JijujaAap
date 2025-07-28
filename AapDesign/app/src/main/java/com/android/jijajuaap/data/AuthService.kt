@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import android.content.Context
 import android.util.Log
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.objects.preguntaComunidad
 import com.android.jijajuaap.objects.test
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -234,6 +235,22 @@ class AuthService @SuppressLint("RestrictedApi")
         val updatedTotal = currentTotal + int
         val  updateQuiz = mapOf("totalQuiz" to updatedTotal)
         userRef.set(updateQuiz, SetOptions.merge()).await()
+    }
+
+    suspend fun obtenerQuizCom(id: String): preguntaComunidad? {
+        try {
+            val doc = firestore.collection("comunidad").document(id).get().await()
+            if (doc.exists()) {
+                val testQuiz = doc.toObject(preguntaComunidad::class.java)
+                return testQuiz
+            } else {
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener documento", e)
+            return null
+
+        }
     }
 
 }

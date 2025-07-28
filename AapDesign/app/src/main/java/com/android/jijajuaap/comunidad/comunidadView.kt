@@ -6,14 +6,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.data.AuthService
-import com.android.jijajuaap.objects.PreguntaComunidad
+import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.objects.preguntaComunidad
 import com.android.jijajuaap.objects.test
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -25,10 +28,11 @@ class comunidadView @Inject constructor(
 
 
 
-    val listaTest = MutableStateFlow<List<PreguntaComunidad>>(emptyList())
+    val listaTest = MutableStateFlow<List<preguntaComunidad>>(emptyList())
     var iD by mutableStateOf<String>("")
     var titulo by mutableStateOf<String>("")
     var creador by mutableStateOf<String>("")
+    var preguntasCom by mutableStateOf<preguntaComunidad?>(null)
 
     fun obtenerQuiz(){
 
@@ -39,7 +43,7 @@ class comunidadView @Inject constructor(
             .limit(15)
             .get()
             .addOnSuccessListener { result ->
-                val listaTests = result.toObjects(PreguntaComunidad::class.java)
+                val listaTests = result.toObjects(preguntaComunidad::class.java)
                 listaTest.value = listaTests
                 for (test in listaTests) {
                     Log.d("Firestore", "Título: ${test.titulo} - Fecha: ${test.timestamp.toDate()}")
@@ -54,7 +58,7 @@ class comunidadView @Inject constructor(
 
     }
 
-    suspend fun buscador(quiz: String): List<PreguntaComunidad> {
+    suspend fun buscador(quiz: String): List<preguntaComunidad> {
         val db = FirebaseFirestore.getInstance()
         return try {
             val result = db.collection("comunidad")
@@ -63,7 +67,7 @@ class comunidadView @Inject constructor(
                 .await()
 
             result.mapNotNull { doc ->
-                val pregunta = doc.toObject(PreguntaComunidad::class.java)
+                val pregunta = doc.toObject(preguntaComunidad::class.java)
                 pregunta.id = doc.id
                 pregunta
             }
@@ -71,6 +75,17 @@ class comunidadView @Inject constructor(
         } catch (e: Exception) {
             Log.e("Firestore", "Error en búsqueda", e)
             emptyList()
+        }
+    }
+
+    fun preguntasQuiz(id: String) {
+        viewModelScope.launch {
+            if(id != null){
+                preguntasCom = authService.obtenerQuizCom(id)
+            }else{
+                preguntasCom = null
+            }
+
         }
     }
 
