@@ -2,20 +2,18 @@ package com.android.jijajuaap.comunidad
 
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.data.AuthService
-import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.objects.preguntaComunidad
 import com.android.jijajuaap.objects.test
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -33,6 +31,8 @@ class comunidadView @Inject constructor(
     var titulo by mutableStateOf<String>("")
     var creador by mutableStateOf<String>("")
     var preguntasCom by mutableStateOf<preguntaComunidad?>(null)
+    var preguntaTest by mutableStateOf<test?>(null)
+    var contador by mutableIntStateOf(0)
 
     fun obtenerQuiz(){
 
@@ -87,6 +87,10 @@ class comunidadView @Inject constructor(
             }
 
         }
+    }
+    fun generadorPreguntas(preguntaComunidad: preguntaComunidad?, num: Int): test? {
+        preguntaTest = preguntaComunidad?.preguntas[num]
+        return preguntaTest
     }
 
 
