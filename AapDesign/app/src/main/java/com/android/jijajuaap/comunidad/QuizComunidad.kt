@@ -1,5 +1,6 @@
 package com.android.jijajuaap.comunidad
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,12 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -44,8 +48,10 @@ import com.android.jijajuaap.navigation.Routes
 
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.objects.test
+import com.android.jijajuaap.ui.theme.White
 
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 import kotlin.collections.get
 import kotlin.collections.plusAssign
 
@@ -61,6 +67,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
     }
     val user = userMenuViewModel.user
     LaunchedEffect(user) {
+        comunidadView.reset()
         comunidadView.preguntasQuiz(comunidadView.iD)
     }
 
@@ -72,6 +79,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
     var numCont by remember { mutableIntStateOf(0) }
     comunidadView.generadorPreguntas(preguntas, numCont)
     var preguntasTest = comunidadView.preguntaTest
+
 
 
     Scaffold(
@@ -94,7 +102,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                     .fillMaxWidth()
                     .padding(14.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(
@@ -117,28 +125,41 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
 
 
             //  Text("Quiz: ${preguntas?.preguntas}")
-            Text("${preguntasTest}")
-            Button(onClick = { numCont += 1 }) { }
+            if(comunidadView.finalizador == true){
+            Column(modifier = Modifier.fillMaxSize())
+            {Text("hola ${comunidadView.contador}") }
+        }
+            Spacer(modifier = Modifier.size(15.dp))
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(14.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Text(preguntasTest?.pregunta ?: "", color = Color.Black)
             }
+            Divider(
+                color = White,
+                thickness = 3.dp,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
             Spacer(modifier = Modifier.size(15.dp))
+
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(15.dp),
+                modifier = Modifier.fillMaxWidth().size(400.dp).padding(15.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(preguntasTest?.opciones ?: emptyList()) { opcion ->
+                itemsIndexed(preguntasTest?.opciones ?: emptyList()) {index, opcion ->
 
                     Card(modifier = Modifier
-                        .clickable(onClick = {numCont +=1})
+                        .clickable(onClick = {numCont +=1
+                        comunidadView.comprobador(
+                            index,
+                            preguntasTest?.correctAnswerIndex ?: -1
+                        )})
                         .fillMaxWidth()
                         .padding(14.dp),
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -149,6 +170,10 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
 
                 }
             }
+            Temporizado(10,
+                colorChosen,
+                preguntasTest?.correctAnswerIndex ?: -1,
+                preguntas?.preguntas ?: emptyList())
 
 
 
@@ -208,6 +233,48 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
             })
 
     }
+
+
+@Composable
+fun Temporizado(
+    tiempo: Int,
+    color: Color,
+    currentIndex: Int,
+    questions: List<test>,
+   // onTimeOut: () -> Unit
+) {
+    var tiempoRestante by remember { mutableStateOf(tiempo) }
+    val progreso = remember { Animatable(0f) }
+
+    LaunchedEffect(currentIndex,questions) {
+        if (questions.isEmpty()  || currentIndex >= questions.size) return@LaunchedEffect
+
+        tiempoRestante = tiempo
+        progreso.snapTo(0f)
+
+        for (i in tiempo downTo 1) {
+            delay(1000L)
+            tiempoRestante--
+            progreso.animateTo((tiempo - tiempoRestante).toFloat() / tiempo)
+        }
+
+      //  onTimeOut()
+    }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Tiempo restante: $tiempoRestante s", color = Color.Black)
+
+        LinearProgressIndicator(
+            progress = progreso.value,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+                .clip(RoundedCornerShape(4.dp)),
+            color = color,
+            trackColor = Color.LightGray
+        )
+    }
+}
 
 
 
