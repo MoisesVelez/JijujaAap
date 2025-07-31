@@ -18,4 +18,5 @@ sealed class Routes(val routes:String) {
     object menuInicioComunidad:Routes("IniCom")
     object menuCrearQuiz:Routes("MenuCrear")
     object comQuiz:Routes("comQuiz")
+    object ranking: Routes("ranking")
 }

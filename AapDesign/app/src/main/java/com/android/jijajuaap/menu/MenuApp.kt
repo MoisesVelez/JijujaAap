@@ -254,12 +254,12 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
                     onClick = {navHostController.navigate(Routes.menuCrearQuiz.routes)}
                 )
                 3 -> SimpleCardPantallaCompleta(
-                    titulo = "Lore...",
+                    titulo = "Ranking",
                     contenido = "Contenido de la tarjeta número ${page + 1}",
                     height = 500.dp,
                     painter = painterResource(
                         R.drawable.ilustracion_sin_titulo__3_),
-                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
+                    onClick = {navHostController.navigate(Routes.ranking.routes)}
                 )
             }
         }

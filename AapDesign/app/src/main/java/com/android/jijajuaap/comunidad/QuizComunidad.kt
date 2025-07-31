@@ -136,6 +136,8 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
 
             if (comunidadView.finalizador == true) {
 
+                var totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + comunidadView.buenPunto
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -143,6 +145,9 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+
+
                     Text(
                         "Terminado Quiz de ${comunidadView.titulo}",
                         fontSize = 25.sp,
@@ -174,16 +179,19 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                             ProfileInfoRow(
                                 R.drawable.elevar_a_mismo_nivel,
                                 label = "    Puntuación: ",
-                                value = " y"
+                                value = "${comunidadView.buenPunto}"
                             )
                             ProfileInfoRow(
                                 R.drawable.puntuacion_mas_alta__1_,
                                 label = "    Puntuación total: ",
-                                value = "${user?.totalPoints}"
+                                value = "${totalGeneral}"
+
                             )
                             ProfileInfoRow(R.drawable.nivel,
                                 label = "    Dificultad: ",
-                                value = "r")
+                                value = "Comunidad")
+
+
                         }
                     }
 
@@ -191,6 +199,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
 
                     Button(
                         onClick = {
+                            userMenuViewModel.updatePuntosTotal(totalGeneral)
                             userMenuViewModel.updateQuizTotales(1)
                             navHostController.popBackStack()
                             navHostController.navigate(Routes.menuInicioComunidad.routes)

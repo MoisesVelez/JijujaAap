@@ -33,6 +33,7 @@ class comunidadView @Inject constructor(
     var preguntasCom by mutableStateOf<preguntaComunidad?>(null)
     var preguntaTest by mutableStateOf<test?>(null)
     var contador by mutableIntStateOf(0)
+    var buenPunto by mutableIntStateOf(0)
     var finalizador : Boolean by mutableStateOf(false)
 
     fun obtenerQuiz(){
@@ -102,13 +103,17 @@ class comunidadView @Inject constructor(
     fun comprobador(num: Int,num2: Int){
         if(num == num2){
             contador += 1
+            buenPunto +=5
         }
     }
 
     fun reset(){
         contador=0
+        buenPunto = 0
         finalizador=false
     }
+
+
 
 
 

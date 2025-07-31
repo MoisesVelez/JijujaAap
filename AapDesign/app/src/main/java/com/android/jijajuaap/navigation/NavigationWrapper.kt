@@ -32,7 +32,7 @@ import com.android.jijajuaap.presentation.initial.InitialScreen
 import com.android.jijajuaap.presentation.initial.InitialViewModel
 import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.presentation.login.MvvmPresentation
-
+import com.android.jijajuaap.ranking.ranking
 
 
 @Composable
@@ -101,6 +101,9 @@ fun NavigationWrapper() {
         }
         composable(Routes.comQuiz.routes) {
             QuizCom(userViewModel,navHostController,comView)
+        }
+        composable(Routes.ranking.routes) {
+            ranking()
         }
 
     }
