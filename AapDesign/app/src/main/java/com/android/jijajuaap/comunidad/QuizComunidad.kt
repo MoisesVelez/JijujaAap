@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -41,13 +46,18 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.objects.test
+import com.android.jijajuaap.partidaPublica.ProfileInfoRow
+import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
 
 import com.google.firebase.auth.FirebaseAuth
@@ -120,71 +130,169 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                         color = Color.Black
                     )
                 }
-
             }
 
 
-            //  Text("Quiz: ${preguntas?.preguntas}")
-            if(comunidadView.finalizador == true){
-            Column(modifier = Modifier.fillMaxSize())
-            {Text("hola ${comunidadView.contador}") }
-        }
+
+            if (comunidadView.finalizador == true) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(BLANCOeSP),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        "Terminado Quiz de ${comunidadView.titulo}",
+                        fontSize = 25.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Card(
+                        modifier = Modifier
+                            .height(350.dp)
+                            .padding(20.dp)
+                            .fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(4.dp),
+                        colors = CardDefaults.cardColors(containerColor = colorEscogido)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(White)
+                                .padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            ProfileInfoRow(
+                                R.drawable.rompecabezas,
+                                label = "    Preguntas correctas: ",
+                                value = "${comunidadView.contador}/${comunidadView.preguntasCom?.preguntas?.size}"
+                            )
+                            ProfileInfoRow(
+                                R.drawable.elevar_a_mismo_nivel,
+                                label = "    Puntuación: ",
+                                value = " y"
+                            )
+                            ProfileInfoRow(
+                                R.drawable.puntuacion_mas_alta__1_,
+                                label = "    Puntuación total: ",
+                                value = "${user?.totalPoints}"
+                            )
+                            ProfileInfoRow(R.drawable.nivel,
+                                label = "    Dificultad: ",
+                                value = "r")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.size(25.dp))
+
+                    Button(
+                        onClick = {
+                            userMenuViewModel.updateQuizTotales(1)
+                            navHostController.popBackStack()
+                            navHostController.navigate(Routes.menuInicioComunidad.routes)
+                        },
+                        colors = ButtonDefaults.buttonColors(colorChosen),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Volver", color = Color.White, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.size(15.dp))
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(14.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Text(preguntasTest?.pregunta ?: "", color = Color.Black)
-            }
             Divider(
                 color = White,
                 thickness = 3.dp,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
+            Card(
+                modifier = Modifier
+                    .height(75.dp)
+                    .padding(6.dp)
+                    .fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(Color.White)
+            ) {
+
+                    Box(
+                        modifier = Modifier.fillMaxSize().background(White),
+                        contentAlignment = Alignment.Center
+                    ){
+                        Text(
+                            preguntasTest?.pregunta ?: "",
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = Color.Black
+                        )
+                }
+
+            }
+
             Spacer(modifier = Modifier.size(15.dp))
 
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth().size(400.dp).padding(15.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                itemsIndexed(preguntasTest?.opciones ?: emptyList()) {index, opcion ->
 
-                    Card(modifier = Modifier
-                        .clickable(onClick = {numCont +=1
-                        comunidadView.comprobador(
-                            index,
-                            preguntasTest?.correctAnswerIndex ?: -1
-                        )})
-                        .fillMaxWidth()
-                        .padding(14.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White)) {
-                        Text(opcion, color = Color.Black)
+
+            Card(
+                modifier = Modifier
+                    .height(350.dp)
+                    .padding(6.dp)
+                    .fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(Color.White)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize().background(White).padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+
+                ) {
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .size(400.dp)
+                            .padding(15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        itemsIndexed(preguntasTest?.opciones ?: emptyList()) { index, opcion ->
+                            Button(
+                                onClick = {
+                                    numCont += 1
+                                    comunidadView.comprobador(
+                                        index,
+                                        preguntasTest?.correctAnswerIndex ?: -1
+                                    )
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(14.dp),
+                                colors = ButtonDefaults.buttonColors(colorEscogido),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Text(opcion, color = Color.Black, fontWeight = FontWeight.Bold)
+                            }
+                        }
                     }
 
                 }
+
             }
-            Temporizado(10,
+
+            Temporizado(
+                10,
                 colorChosen,
-                preguntasTest?.correctAnswerIndex ?: -1,
-                preguntas?.preguntas ?: emptyList())
-
-
-
-            }
-
-
+                numCont,
+                preguntas?.preguntas ?: emptyList(),
+                onTimeOut = { numCont += 1 })
         }
-
-
     }
-
+}
 
 
 
@@ -241,7 +349,7 @@ fun Temporizado(
     color: Color,
     currentIndex: Int,
     questions: List<test>,
-   // onTimeOut: () -> Unit
+    onTimeOut: () -> Unit
 ) {
     var tiempoRestante by remember { mutableStateOf(tiempo) }
     val progreso = remember { Animatable(0f) }
@@ -258,7 +366,7 @@ fun Temporizado(
             progreso.animateTo((tiempo - tiempoRestante).toFloat() / tiempo)
         }
 
-      //  onTimeOut()
+        onTimeOut()
     }
 
     Column(modifier = Modifier.padding(16.dp)) {

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -74,6 +75,7 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
     val user = menuUserMenuViewModel.user
     val colorEscogido = menuUserMenuViewModel.cambioColor(user?.team)
     val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
+    val colorChosen = menuUserMenuViewModel.colorUsuario(colorEscogido)
 
 
     val context = LocalContext.current
@@ -104,7 +106,7 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
         bottomBar = { navigationBar(logingView, navHostController, colorEscogido) },
 
         ) { innerPadding ->
-        PantallaConPager(fondo,innerPadding,colorEscogido,navHostController)
+        PantallaConPager(fondo,innerPadding,colorChosen,navHostController,colorEscogido)
 
 
     }
@@ -211,7 +213,7 @@ fun navigationBar(
 
 
 @Composable
-fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Color,navHostController: NavHostController) {
+fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Color,navHostController: NavHostController,colorEscogid: Color) {
     val pagerState = rememberPagerState(pageCount = { 4 })
 
     Column(
@@ -270,7 +272,9 @@ fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Co
             modifier = Modifier
                 .padding(bottom = 74.dp)
                 .fillMaxWidth()
-            , colorEscogido = colorEscogido
+            , colorEscogido =colorEscogid ,
+            colorEscogid = colorEscogido
+
         )
     }
 }
@@ -311,7 +315,8 @@ fun IndicadorBarraAnimada(
     pagerState: PagerState,
     totalPaginas: Int,
     modifier: Modifier = Modifier,
-    colorEscogido: Color
+    colorEscogido: Color,
+    colorEscogid: Color
 ) {
     val progresoAnimado = remember {
         Animatable(0f)
@@ -341,10 +346,12 @@ fun IndicadorBarraAnimada(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(fraction = progresoAnimado.value)
-                .background(Color.White, shape = RoundedCornerShape(50))
+                .background(colorEscogid, shape = RoundedCornerShape(50))
         )
     }
 }
+
+
 
 
 

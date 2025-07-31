@@ -25,6 +25,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+
+
+
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -76,6 +81,7 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
     val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
     val focusManager = LocalFocusManager.current
     val blanco50 = Color.White.copy(alpha = 0.5f)
+    val colorChosen = userViewModel.colorUsuario(colorEscogido)
 
 
 
@@ -93,7 +99,7 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
         Column(modifier = Modifier
             .padding(innerPadding)
-
+            .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .background(fondo)
             .clickable(
@@ -185,17 +191,15 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
             }
             Spacer(modifier = Modifier.size(10.dp))
-            Card(modifier = Modifier.fillMaxWidth().height(680.dp).padding(16.dp)
+            Card(modifier = Modifier.fillMaxWidth().height(750.dp).padding(16.dp)
             , elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = colorEscogido)) {
 
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())
-                    .padding(10.dp)
-                    .fillMaxSize()) {
-                    crearPreguntas(colorEscogido,crearQuizView)
 
-                }
+                crearPreguntas(colorEscogido,crearQuizView,colorChosen)
+
+
 
             }
             Spacer(modifier = Modifier.size(20.dp))
@@ -257,6 +261,7 @@ fun barraTop(
 fun crearPreguntas(
     color: Color,
     crearQuizView: crearQuizView,
+    colorChosen: Color,
 
     ){
     var pregunta:String by remember { mutableStateOf("") }
@@ -272,7 +277,8 @@ fun crearPreguntas(
     var correcto: Int by remember { mutableIntStateOf(0) }
     var numeroPreguntas by remember { mutableIntStateOf(0) }
 
-    Text("Cantidad de preguntas: ${numeroPreguntas}", fontWeight = FontWeight.Bold, color = Color.Black)
+    Text("          Cantidad de preguntas: ${numeroPreguntas}", fontWeight = FontWeight.Bold, color = Color.Black,
+        modifier = Modifier.padding(15.dp))
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -459,9 +465,40 @@ fun crearPreguntas(
 
                     }
                 }
+
+    val options = listOf(1, 2, 3, 4)
+    var selectedOption by remember { mutableStateOf(options[0]) }
+
+    Text("Respuesta correcta", fontWeight = FontWeight.Bold,color = Color.Black, modifier = Modifier.padding(15.dp))
+
     Row(modifier = Modifier
         .fillMaxWidth()
-        .height(105.dp)
+        .padding(6.dp)){
+
+    options.forEach { text ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = (text == selectedOption),
+                    onClick = {
+                        selectedOption = text
+                        correcto  = text-1 },
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = colorChosen,
+                        unselectedColor = Color.DarkGray,
+                        disabledSelectedColor = Color.LightGray,
+                        disabledUnselectedColor = Color.LightGray
+                    )
+
+                )
+                Text(text = "${text}",color= Color.Black)
+            }
+    }
+    }
+
+
+    Row(modifier = Modifier
+        .fillMaxWidth()
+
         .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween) {
 
@@ -486,7 +523,7 @@ fun crearPreguntas(
             opcion2=""
             opcion3=""
             opcion4=""
-            correcto=0
+            correcto
 
             crearQuizView.subirQuiz()
                 crearQuizView.borrarPreguntas()
@@ -512,7 +549,7 @@ fun crearPreguntas(
             opcion2=""
             opcion3=""
             opcion4=""
-            correcto=0
+            correcto
         numeroPreguntas +=1
         },colors = ButtonDefaults.buttonColors(White),
             shape = RoundedCornerShape(12.dp)) {
@@ -521,6 +558,10 @@ fun crearPreguntas(
     }
 
             }
+
+
+
+
 
 
 
