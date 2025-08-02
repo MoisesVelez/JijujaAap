@@ -43,6 +43,7 @@ import androidx.navigation.NavHostController
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -72,26 +73,34 @@ fun ranking(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
         topBar = { barraTp(user, imag, navHostController, colorEscogido) }
     )
     { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).fillMaxSize().padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Top 15", fontWeight = FontWeight.Bold, color = Color.Black)
-            Spacer(modifier = Modifier.size(15.dp))
-            Column(Modifier
-                .clip(RoundedCornerShape(cornerRadius))
-                .fillMaxSize()
-                .background(fondo)
-                .border(width = 2.dp, Color.White, shape = RoundedCornerShape(cornerRadius))
-                .padding(15.dp)
-                .verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(BLANCOeSP)) {
+
+            Column(
+                modifier = Modifier.padding(15.dp).fillMaxSize().background(
+                    BLANCOeSP
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Top 15", fontWeight = FontWeight.Bold, color = Color.Black)
+                Spacer(modifier = Modifier.size(15.dp))
+                Column(
+                    Modifier
+                        .clip(RoundedCornerShape(cornerRadius))
+                        .fillMaxSize()
+                        .background(fondo)
+                        .border(width = 2.dp, Color.White, shape = RoundedCornerShape(cornerRadius))
+                        .padding(15.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
 
                     usuarios.forEach {
-                        cardsRanking(it.name.toString(),it.totalPoints, it.rango.toString())
+                        cardsRanking(it.name.toString(), it.totalPoints, it.rango.toString())
                     }
 
+                }
+
+
             }
-
-
-
         }
 
     }
