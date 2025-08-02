@@ -33,6 +33,7 @@ import com.android.jijajuaap.presentation.initial.InitialViewModel
 import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.android.jijajuaap.ranking.ranking
+import com.android.jijajuaap.ranking.rankingView
 
 
 @Composable
@@ -47,6 +48,7 @@ fun NavigationWrapper() {
     val gameBasic: QuizViewModel = hiltViewModel()
     val comView: comunidadView = hiltViewModel()
     val crearView: crearQuizView = hiltViewModel()
+    val RankingView: rankingView = hiltViewModel()
 
 
 
@@ -103,7 +105,7 @@ fun NavigationWrapper() {
             QuizCom(userViewModel,navHostController,comView)
         }
         composable(Routes.ranking.routes) {
-            ranking()
+            ranking(userViewModel,navHostController,RankingView)
         }
 
     }

@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlin.coroutines.resume
@@ -253,7 +254,28 @@ class AuthService @SuppressLint("RestrictedApi")
         }
     }
 
+    suspend fun obtenerTop15Usuarios(): List<User>? {
+        return try {
+            val snapshot = FirebaseFirestore.getInstance()
+                .collection("users")
+                .orderBy("totalPoints", Query.Direction.DESCENDING)
+                .limit(15)
+                .get()
+                .await()
+
+            snapshot.documents.mapNotNull { it.toObject(User::class.java) }
+
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener usuarios con más puntos", e)
+            null
+        }
+    }
 }
+
+
+
+
+
 
 
 
