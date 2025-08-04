@@ -1,6 +1,7 @@
 package com.android.jijajuaap.menu
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,9 +44,13 @@ import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.presentation.initial.Colores
 import com.android.jijajuaap.ui.theme.White
+import com.android.jijajuaap.ui.theme.azulJi
 import com.android.jijajuaap.ui.theme.azulUser
+import com.android.jijajuaap.ui.theme.rojoJa
 import com.android.jijajuaap.ui.theme.rojoUser
+import com.android.jijajuaap.ui.theme.verdeJu
 import com.android.jijajuaap.ui.theme.verdeUser
 import com.google.firebase.auth.FirebaseAuth
 
@@ -112,31 +118,49 @@ fun menu(userMenuViewModel: UserMenuViewModel, navHostController: NavHostControl
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(onClick = { cambioDireccion(user?.team.toString(),navHostController)}, colors = ButtonDefaults.buttonColors(White)) {
-                Text("Editar perfil", color =Color.Black, fontWeight = FontWeight.Bold)
+            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { cambioDireccion(user?.team.toString(),navHostController)}, colors = ButtonDefaults.buttonColors(White)) {
+                    Text("Editar perfil", color =Color.Black, fontWeight = FontWeight.Bold)
+                }
+                Card(
+                    modifier = Modifier.width(90.dp).height(90.dp)
+                        .padding(15.dp)
+                        .clickable(onClick = {}),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = CardDefaults.cardColors(containerColor = White)
+                ) {
+                    Image(painterResource(id = R.drawable.mochila),
+                        contentDescription = "",
+                        modifier = Modifier.padding(5.dp))
+
+                }
             }
+
             Spacer(modifier = Modifier.height(32.dp))
 
+            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = {viewModel.updateTeam("Rojin")
+                    viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
+                    rojoJa
+                ),shape = RoundedCornerShape(12.dp), modifier = Modifier.padding(12.dp)) {
+                    Text("Rojo", color =Color.Black, fontWeight = FontWeight.Bold)
+                }
+                Button(onClick = {viewModel.updateTeam("Verdiano")
+                    viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
+                    verdeJu
+                ),shape = RoundedCornerShape(12.dp), modifier = Modifier.padding(12.dp)) {
+                    Text("Verde", color =Color.Black, fontWeight = FontWeight.Bold)
+                }
+                Button(onClick = {viewModel.updateTeam("Azulense")
+                    viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
+                    azulJi
+                ),shape = RoundedCornerShape(12.dp), modifier = Modifier.padding(12.dp)) {
+                    Text("Azul", color =Color.Black, fontWeight = FontWeight.Bold)
+                }
+            }
 
 
-            Button(onClick = {viewModel.updateTeam("Rojin")
-                             viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
-                White
-            ),shape = RoundedCornerShape(12.dp)) {
-                Text("Cambiar origen a Rojo", color =Color.Black, fontWeight = FontWeight.Bold)
-            }
-            Button(onClick = {viewModel.updateTeam("Verdiano")
-                viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
-                White
-            ),shape = RoundedCornerShape(12.dp)) {
-                Text("Cambiar origen a Verde", color =Color.Black, fontWeight = FontWeight.Bold)
-            }
-            Button(onClick = {viewModel.updateTeam("Azulense")
-                viewModel.updateImg(R.drawable.error_de_usuario.toString())}, colors = ButtonDefaults.buttonColors(
-                White
-            ),shape = RoundedCornerShape(12.dp)) {
-                Text("Cambiar origen a Azul", color =Color.Black, fontWeight = FontWeight.Bold)
-            }
         }
     }
 

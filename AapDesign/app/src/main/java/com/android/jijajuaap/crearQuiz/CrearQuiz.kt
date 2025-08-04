@@ -25,6 +25,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 
@@ -93,7 +97,8 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
 
     Scaffold(
-        topBar = {barraTop(user,imag,navHostController,colorEscogido)}
+        topBar = {barraTop(user,imag,navHostController,colorEscogido)},
+        bottomBar = {barraBaj(navHostController,White)}
     )
     {innerPadding ->
 
@@ -557,7 +562,66 @@ fun crearPreguntas(
         }
     }
 
-            }
+}
+
+
+@Composable
+fun barraBaj(
+
+    navHostController: NavHostController,
+    colorEscogido: Color
+) {
+    var colorLetras by remember { mutableStateOf(Color.Black) }
+    if(colorEscogido != Color.DarkGray){
+        colorLetras = Color.Black
+    }else{
+        colorLetras = Color.White
+    }
+
+    NavigationBar(containerColor = colorEscogido, modifier = Modifier.height(110.dp)
+    ){
+        NavigationBarItem(selected = true,
+            modifier = Modifier,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.DarkGray,
+                unselectedIconColor = Color.DarkGray,
+                selectedTextColor = Color(0xFFFFC107),
+                unselectedTextColor = Color.DarkGray,
+                indicatorColor = Color.Transparent
+            ),
+            onClick = {navHostController.navigate(Routes.Menu1.routes)},
+            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
+
+        NavigationBarItem(selected = true,
+            modifier = Modifier,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.DarkGray,
+                unselectedIconColor = Color.DarkGray,
+                selectedTextColor = Color(0xFFFFC107),
+                unselectedTextColor = Color.DarkGray,
+                indicatorColor = Color.Transparent
+            ),
+            onClick = {navHostController.navigate(Routes.menuInicioComunidad.routes)},
+            icon = {Icon(painter = painterResource(R.drawable.pueblo),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Comunidad", fontWeight = FontWeight.Bold, color = colorLetras) })
+
+        NavigationBarItem(selected = true,
+            modifier = Modifier,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.DarkGray,
+                unselectedIconColor = Color.DarkGray,
+                selectedTextColor = Color(0xFFFFC107),
+                unselectedTextColor = Color.DarkGray,
+                indicatorColor = Color.Transparent
+            ),
+            onClick = {},
+            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
+            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = colorLetras) }
+        )
+
+    }
+}
 
 
 

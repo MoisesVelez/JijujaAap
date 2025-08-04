@@ -26,6 +26,7 @@ import com.android.jijajuaap.partidaPublica.QuizViewModel
 import com.android.jijajuaap.partidaPublica.gmaplayViewModel
 import com.android.jijajuaap.partidaPublica.menuPartidaPublica
 import com.android.jijajuaap.partidaPublica.roadMap
+import com.android.jijajuaap.pintor.pintorObjetos
 import com.android.jijajuaap.presentation.SignUp.SignUpScreen
 import com.android.jijajuaap.presentation.SignUp.SignUpViewModel
 import com.android.jijajuaap.presentation.initial.InitialScreen
@@ -105,8 +106,12 @@ fun NavigationWrapper() {
             QuizCom(userViewModel,navHostController,comView)
         }
         composable(Routes.ranking.routes) {
-            ranking(userViewModel,navHostController,RankingView)
+            ranking(userViewModel,navHostController,RankingView,loginViewModel)
         }
+        composable(Routes.pintor.routes) {
+            pintorObjetos(userViewModel,navHostController)
+        }
+
 
     }
 }

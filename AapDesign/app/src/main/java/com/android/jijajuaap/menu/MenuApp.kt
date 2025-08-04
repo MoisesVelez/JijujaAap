@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -25,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,16 +49,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.login.MvvmPresentation
+import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnrememberedMutableState")
@@ -70,6 +75,9 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
             menuUserMenuViewModel.loadUserData(currentUserUid)
         }
     }
+
+
+
     UserProfileScreen(menuUserMenuViewModel, navHostController)
 
     val user = menuUserMenuViewModel.user
@@ -97,7 +105,8 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(Color.Black)){
+    Box(modifier = Modifier.fillMaxSize().background(Color.Black),
+        contentAlignment = Alignment.Center){
 
 
     Scaffold(
@@ -106,12 +115,39 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
         bottomBar = { navigationBar(logingView, navHostController, colorEscogido) },
 
         ) { innerPadding ->
+
+
         PantallaConPager(fondo,innerPadding,colorChosen,navHostController,colorEscogido)
 
+        if (menuUserMenuViewModel.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f))
+                    .zIndex(1f)
+                    .pointerInput(Unit) {
+
+                        awaitPointerEventScope {
+                            while (true) {
+                                awaitPointerEvent()
+
+                            }
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    strokeWidth = 5.dp,
+                    modifier = Modifier.size(60.dp)
+                )
+            }
+        }
 
     }
+    }
 }
-}
+
 
 
 
@@ -190,9 +226,9 @@ fun navigationBar(
                 unselectedTextColor = Color.DarkGray,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {},
+            onClick = {navHostController.navigate(Routes.pintor.routes)},
             icon = {Icon(painter = painterResource(R.drawable.lapiz),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Partida privada", fontWeight = FontWeight.Bold, color = colorLetras) })
+            ,label = { Text("Pintor", fontWeight = FontWeight.Bold, color = colorLetras) })
 
         NavigationBarItem(selected = true,
             modifier = Modifier,
