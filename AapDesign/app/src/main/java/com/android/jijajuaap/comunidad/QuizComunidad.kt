@@ -1,6 +1,11 @@
 package com.android.jijajuaap.comunidad
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -89,6 +95,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
     var numCont by remember { mutableIntStateOf(0) }
     comunidadView.generadorPreguntas(preguntas, numCont)
     var preguntasTest = comunidadView.preguntaTest
+    var incorrectas = comunidadView.incorrecto
 
 
 
@@ -132,11 +139,18 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 }
             }
 
+            if(incorrectas == 3){
+                comunidadView.finalizador()
+            }
 
+            val finalizador = comunidadView.finalizador == true
+            val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + comunidadView.buenPunto
 
-            if (comunidadView.finalizador == true) {
-
-                var totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + comunidadView.buenPunto
+            AnimatedVisibility(
+                visible = finalizador,
+                enter = fadeIn() + slideInVertically(),
+                exit = fadeOut() + slideOutVertically()
+            ) {
 
                 Column(
                     modifier = Modifier
@@ -228,10 +242,37 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 colors = CardDefaults.cardColors(Color.White)
             ) {
 
-                    Box(
-                        modifier = Modifier.fillMaxSize().background(White),
-                        contentAlignment = Alignment.Center
+                    Row(
+                        modifier = Modifier.fillMaxSize().background(White).padding(15.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ){
+
+                        if (incorrectas ==0){
+                            Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                                modifier = Modifier.size(35.dp).padding(5.dp))
+                        }else if (incorrectas >= 1){
+                            Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                                modifier = Modifier.size(35.dp).padding(5.dp))
+                        }
+
+                        if (incorrectas <=1){
+                            Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                                modifier = Modifier.size(35.dp).padding(5.dp))
+                        }else if (incorrectas >= 2){
+                            Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                                modifier = Modifier.size(35.dp).padding(5.dp))
+                        }
+
+
+                        if (incorrectas !=3){
+                            Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                                modifier = Modifier.size(35.dp).padding(5.dp))
+                        }else if (incorrectas == 3){
+                            Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                                modifier = Modifier.size(35.dp).padding(5.dp))
+                        }
+
                         Text(
                             preguntasTest?.pregunta ?: "",
                             fontSize = 20.sp,

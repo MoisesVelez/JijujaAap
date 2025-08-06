@@ -126,7 +126,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
                         modifier = Modifier.size(130.dp).padding(15.dp)
                     )
                     Text(
-                        "Bienvenido al pintor, aqui podrás cambiar tus puntos por objetos" +
+                        "Bienvenido al pintor, aqui podrás cambiar tus puntos por pasivas" +
                                 " que te ayudarán en tus preguntas.",
                         modifier = Modifier.padding(15.dp),
                         color = Color.Black
@@ -154,7 +154,6 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
 
             Spacer(modifier = Modifier.size(15.dp))
 
-            val objetosMostrados = objeto.take(12)
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
@@ -163,7 +162,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1000.dp)
+                    .height(600.dp)
 
 
             ) {
@@ -175,7 +174,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1f)
+                            .aspectRatio(0.9f)
                             .clickable(onClick = { pintorView.obtenerObjeto(objeto.nombre)
                                 comprobante = true})
                     ) {
@@ -197,7 +196,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
                                 color = Color.Black,
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(top = 8.dp)
+                                modifier = Modifier.padding(top = 5.dp)
                             )
 
                             Text(

@@ -242,7 +242,9 @@ fun barraBottom(navHostController: NavHostController, colorEscogido: Color) {
                 unselectedTextColor = Color.DarkGray,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {navHostController.navigate(Routes.Menu1.routes)},
+            onClick = {navHostController.popBackStack()
+                navHostController.navigate(Routes.Menu1.routes)
+                      },
             icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
             ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
 
@@ -255,7 +257,9 @@ fun barraBottom(navHostController: NavHostController, colorEscogido: Color) {
                 unselectedTextColor = Color.DarkGray,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {navHostController.navigate(Routes.menuCrearQuiz.routes)},
+            onClick = {navHostController.popBackStack()
+                navHostController.navigate(Routes.menuCrearQuiz.routes)
+                },
             icon = {Icon(painter = painterResource(R.drawable.crear),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
             ,label = { Text("Crear Quiz", fontWeight = FontWeight.Bold, color = colorLetras) })
 

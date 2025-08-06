@@ -1,5 +1,6 @@
 package com.android.jijajuaap.partidaPublica
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -42,6 +43,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
+
 import androidx.compose.ui.draw.clip
 
 import androidx.compose.ui.graphics.Brush
@@ -59,6 +61,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun QuizScreen(
     viewModel: QuizViewModel,
@@ -67,9 +70,10 @@ fun QuizScreen(
     gameRoad: gmaplayViewModel
 ) {
     val questions by viewModel.questions.collectAsState()
-    val currentIndex by viewModel.currentIndex.collectAsState()
+    var currentIndex: Int = viewModel.currentIndex.value
     val score by viewModel.score.collectAsState()
     val correctas by viewModel.correcto.collectAsState()
+    val incorrectas by viewModel.incorrecto.collectAsState()
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
     var comprobante by remember { mutableStateOf(false) }
 
@@ -77,6 +81,7 @@ fun QuizScreen(
     LaunchedEffect(currentUserUid) {
         currentUserUid?.let {
             userMenuViewModel.loadUserData(it)
+
 
         }
     }
@@ -135,6 +140,12 @@ fun QuizScreen(
                 .background(BLANCOeSP),
             verticalArrangement = Arrangement.spacedBy(20.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+        if(incorrectas == 3){
+            currentIndex = questions.size
+        }
+
+
         val totalTema = puntosH + score
         val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + score
       //  userMenuViewModel.updateQuizTotales(1)
@@ -217,17 +228,44 @@ fun QuizScreen(
             )
         }
         Spacer(modifier = Modifier.size(15.dp))
-            Box(
-                modifier = Modifier,
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "Pregunta ${currentIndex + 1}/${questions.size}     Puntos: ${score}",
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    modifier = Modifier.padding(top = 25.dp)
-                )
-            }
+
+                Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
+                    if (incorrectas ==0){
+                        Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }else if (incorrectas >= 1){
+                        Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }
+
+                    if (incorrectas <=1){
+                        Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }else if (incorrectas >= 2){
+                        Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }
+
+
+                    if (incorrectas !=3){
+                        Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }else if (incorrectas == 3){
+                        Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }
+
+
+
+                    Text(
+                        "Pregunta ${currentIndex + 1}/${questions.size}     Puntos: ${score}",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        modifier = Modifier.padding(15.dp)
+                    )
+                }
+
+
             Card(
                 modifier = Modifier
                     .height(75.dp)

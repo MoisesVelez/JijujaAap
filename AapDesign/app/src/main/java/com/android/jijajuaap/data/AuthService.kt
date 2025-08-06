@@ -272,7 +272,7 @@ class AuthService @SuppressLint("RestrictedApi")
         return try {
             val snapshot = FirebaseFirestore.getInstance()
                 .collection("Objetos")
-                .orderBy("coste", Query.Direction.DESCENDING)
+                .orderBy("coste", Query.Direction.ASCENDING)
                 .get()
                 .await()
             snapshot.documents.mapNotNull { it.toObject(Objetos::class.java) }

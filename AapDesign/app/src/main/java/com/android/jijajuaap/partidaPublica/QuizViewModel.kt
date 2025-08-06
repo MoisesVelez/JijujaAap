@@ -33,6 +33,9 @@ class QuizViewModel  @Inject constructor(
     private val _correcta = MutableStateFlow(0)
     val correcto: StateFlow<Int> = _correcta
 
+    private val _incorrecta = MutableStateFlow(0)
+    val incorrecto: StateFlow<Int> = _incorrecta
+
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -65,6 +68,8 @@ class QuizViewModel  @Inject constructor(
                 _correcta.value += 1
                 _score.value += puntos;
 
+            }else{
+                _incorrecta.value += 1
             }
 
             if (_currentIndex.value <= questions.value.lastIndex) {
@@ -79,6 +84,7 @@ class QuizViewModel  @Inject constructor(
             _currentIndex.value = 0
             _score.value = 0
             _correcta.value = 0
+            _incorrecta.value = 0
         }
 
 
