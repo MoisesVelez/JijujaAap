@@ -175,6 +175,8 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                         modifier = Modifier.size(35.dp).padding(5.dp)
                     )
                 }
+                Text("Pregunta ${numCont} /${comunidadView.preguntasCom?.preguntas?.size}", fontWeight = FontWeight.Bold, color = Color.Black
+                , modifier = Modifier.padding(10.dp))
             }
             Divider(
                 color = White,

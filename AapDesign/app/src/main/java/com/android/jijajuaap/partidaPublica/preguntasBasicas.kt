@@ -250,7 +250,7 @@ fun QuizScreen(
                     if (incorrectas !=3){
                         Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
                             modifier = Modifier.size(35.dp).padding(5.dp))
-                    }else if (incorrectas == 3){
+                    }else if (incorrectas >= 3){
                         Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
                             modifier = Modifier.size(35.dp).padding(5.dp))
                     }
