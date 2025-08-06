@@ -112,7 +112,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.size(20.dp))
+            Spacer(modifier = Modifier.size(5.dp))
             // Text("${comunidadView.iD}")
             Card(
                 modifier = Modifier
@@ -124,7 +124,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(20.dp)
+                    modifier = Modifier.padding(10.dp)
                 ) {
                     Text(
                         "Creador: ${comunidadView.creador}",
@@ -138,6 +138,49 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                     )
                 }
             }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (incorrectas == 0) {
+                    Image(
+                        painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp)
+                    )
+                } else if (incorrectas >= 1) {
+                    Image(
+                        painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp)
+                    )
+                }
+
+                if (incorrectas <= 1) {
+                    Image(
+                        painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp)
+                    )
+                } else if (incorrectas >= 2) {
+                    Image(
+                        painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp)
+                    )
+                }
+
+
+                if (incorrectas != 3) {
+                    Image(
+                        painterResource(R.drawable.me_gusta), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp)
+                    )
+                } else if (incorrectas == 3) {
+                    Image(
+                        painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp)
+                    )
+                }
+            }
+            Divider(
+                color = White,
+                thickness = 3.dp,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
 
             if(incorrectas == 3){
                 comunidadView.finalizador()
@@ -226,13 +269,8 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 }
             }
 
-            Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.size(7.dp))
 
-            Divider(
-                color = White,
-                thickness = 3.dp,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
             Card(
                 modifier = Modifier
                     .height(75.dp)
@@ -247,32 +285,6 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ){
-
-                        if (incorrectas ==0){
-                            Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
-                                modifier = Modifier.size(35.dp).padding(5.dp))
-                        }else if (incorrectas >= 1){
-                            Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
-                                modifier = Modifier.size(35.dp).padding(5.dp))
-                        }
-
-                        if (incorrectas <=1){
-                            Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
-                                modifier = Modifier.size(35.dp).padding(5.dp))
-                        }else if (incorrectas >= 2){
-                            Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
-                                modifier = Modifier.size(35.dp).padding(5.dp))
-                        }
-
-
-                        if (incorrectas !=3){
-                            Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
-                                modifier = Modifier.size(35.dp).padding(5.dp))
-                        }else if (incorrectas == 3){
-                            Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
-                                modifier = Modifier.size(35.dp).padding(5.dp))
-                        }
-
                         Text(
                             preguntasTest?.pregunta ?: "",
                             fontSize = 20.sp,
