@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import android.content.Context
 import android.util.Log
+import com.android.jijajuaap.objects.Objetos
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.objects.preguntaComunidad
 import com.android.jijajuaap.objects.test
@@ -93,11 +94,7 @@ class AuthService @SuppressLint("RestrictedApi")
                                 "uid" to user.uid,
                                 "name" to (user.displayName ?: ""),
                                 "email" to (user.email ?: ""),
-                                "avatarId" to "error_de_usuario",
-                                "totalPoints" to 0,
-                                "totalQuiz" to 0,
-                                "team" to "Sin equipo",
-                                "rango" to "Iniciado"
+
                             )
 
 
@@ -270,6 +267,35 @@ class AuthService @SuppressLint("RestrictedApi")
             null
         }
     }
+
+    suspend fun obtenerObjetos(): List<Objetos>? {
+        return try {
+            val snapshot = FirebaseFirestore.getInstance()
+                .collection("Objetos")
+                .orderBy("coste", Query.Direction.DESCENDING)
+                .get()
+                .await()
+            snapshot.documents.mapNotNull { it.toObject(Objetos::class.java) }
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener usuarios con más puntos", e)
+            null
+        }
+    }
+
+    suspend fun obtenerObjeto(objeto: String): Objetos? {
+        return try {
+            val result = FirebaseFirestore.getInstance()
+                .collection("Objetos")
+                .whereEqualTo("nombre", objeto)
+                .get()
+                .await()
+            result.documents.firstOrNull()?.toObject(Objetos::class.java)
+        }catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener usuarios con más puntos", e)
+            null
+        }
+    }
+
 }
 
 

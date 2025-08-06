@@ -27,6 +27,7 @@ import com.android.jijajuaap.partidaPublica.gmaplayViewModel
 import com.android.jijajuaap.partidaPublica.menuPartidaPublica
 import com.android.jijajuaap.partidaPublica.roadMap
 import com.android.jijajuaap.pintor.pintorObjetos
+import com.android.jijajuaap.pintor.pintorView
 import com.android.jijajuaap.presentation.SignUp.SignUpScreen
 import com.android.jijajuaap.presentation.SignUp.SignUpViewModel
 import com.android.jijajuaap.presentation.initial.InitialScreen
@@ -50,7 +51,7 @@ fun NavigationWrapper() {
     val comView: comunidadView = hiltViewModel()
     val crearView: crearQuizView = hiltViewModel()
     val RankingView: rankingView = hiltViewModel()
-
+    val pintorView: pintorView = hiltViewModel()
 
 
     NavHost(navController = navHostController, startDestination = Routes.SplashScreen.routes) {
@@ -109,7 +110,7 @@ fun NavigationWrapper() {
             ranking(userViewModel,navHostController,RankingView,loginViewModel)
         }
         composable(Routes.pintor.routes) {
-            pintorObjetos(userViewModel,navHostController)
+            pintorObjetos(userViewModel,navHostController,pintorView)
         }
 
 
