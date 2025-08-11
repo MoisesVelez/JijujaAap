@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -62,7 +61,6 @@ import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.Objetos
 import com.android.jijajuaap.objects.User
-import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
 import androidx.compose.foundation.lazy.grid.items
 import com.android.jijajuaap.ui.theme.rojoUser
@@ -92,7 +90,12 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
 
     if (comprobante == true){
         infoObjetos(
-            onDismiss = {comprobante=false},itemPequeño,pintorView,colorEscogido)
+            onDismiss = {comprobante=false},
+            comprar = {pintorView.comprarObjeto(user?.uid.toString(),itemPequeño)
+
+                      }
+            ,itemPequeño,
+            pintorView)
     }
     Scaffold(
         topBar = { barra(user, imag, navHostController, colorEscogido) },
@@ -138,7 +141,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
             Card(
                 modifier = Modifier.width(100.dp).height(100.dp)
                     .padding(15.dp)
-                    .clickable(onClick = {}),
+                    .clickable(onClick = {navHostController.navigate(Routes.mochila.routes)}),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(containerColor = colorEscogido)
@@ -348,9 +351,10 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
 @Composable
 fun infoObjetos(
     onDismiss: () -> Unit,
+    comprar: () -> Unit,
     objetos: Objetos?,
-    pintorView: pintorView,
-    colorEscogido: Color
+    pintorView: pintorView
+
 ) {
     val imagen = pintorView.imagenObjeto(objetos)
 
@@ -428,7 +432,7 @@ fun infoObjetos(
 
 
                     Button(onClick = {
-
+                        comprar()
                         onDismiss()
                     },
                         colors = ButtonDefaults.buttonColors(verdeUser),

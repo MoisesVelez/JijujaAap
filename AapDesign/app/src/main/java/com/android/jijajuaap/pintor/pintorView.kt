@@ -68,4 +68,14 @@ class pintorView @Inject constructor(private val authService: AuthService) : Vie
 
     }
 
+    fun comprarObjeto(uid: String, objetos: Objetos?){
+        viewModelScope.launch {
+            try {
+                authService.comprarItem(uid,objetos)
+            }catch (e: Exception){
+
+            }
+        }
+    }
+
 }

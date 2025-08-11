@@ -18,6 +18,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -186,7 +188,7 @@ class AuthService @SuppressLint("RestrictedApi")
     }
 
 
-    suspend fun updatePuntuacionTotal(uid: String,int: Int){
+    suspend fun updatePuntuacionTotal(uid: String, int: Int?){
         val userRef = firestore.collection("users").document(uid)
         val  updatePoints = mapOf("totalPoints" to int)
         userRef.set(updatePoints, SetOptions.merge()).await()
@@ -295,6 +297,50 @@ class AuthService @SuppressLint("RestrictedApi")
             null
         }
     }
+
+
+    suspend fun obtenerReferenciaObjeto(nombre: String): DocumentReference? {
+        val query = firestore.collection("Objetos")
+            .whereEqualTo("nombre", nombre)
+            .limit(1)
+            .get()
+            .await()
+
+        return if (!query.isEmpty) {
+            query.documents[0].reference
+        } else {
+            null
+        }
+    }
+
+
+
+
+    suspend fun comprarItem(uid: String, objetos: Objetos?){
+
+        val userRef = firestore.collection("users").document(uid)
+        val user = getUserData(uid)
+        try {
+            val puntos = user?.totalPoints ?: 0
+            val costeObjeto = objetos?.coste ?: 1
+
+            if (puntos >= costeObjeto && user?.inventario?.any { it.nombre == objetos?.nombre } == false) {
+                val nuevoTotal = puntos - costeObjeto
+                updatePuntuacionTotal(uid, nuevoTotal)
+
+                val guardarObjeto = mapOf("inventario" to FieldValue.arrayUnion(objetos))
+                userRef.set(guardarObjeto,SetOptions.merge()).await()
+
+            } else {
+                Log.e("no puede comprarlo","no")
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
 
 }
 

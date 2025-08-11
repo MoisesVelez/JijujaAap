@@ -15,5 +15,6 @@ data class User(
     val puntosFilosofia: Int=0,
     val puntosDeportes: Int=0,
     val puntosCPop: Int=0,
-    val puntosNaturaleza: Int=0
+    val puntosNaturaleza: Int=0,
+    var inventario: List<Objetos> = emptyList()
 )

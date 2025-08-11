@@ -125,7 +125,7 @@ fun menu(userMenuViewModel: UserMenuViewModel, navHostController: NavHostControl
                 Card(
                     modifier = Modifier.width(90.dp).height(90.dp)
                         .padding(15.dp)
-                        .clickable(onClick = {}),
+                        .clickable(onClick = {navHostController.navigate(Routes.mochila.routes)}),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = CardDefaults.cardColors(containerColor = White)
