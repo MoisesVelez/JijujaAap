@@ -95,7 +95,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
 
                       }
             ,itemPequeño,
-            pintorView)
+            pintorView,user)
     }
     Scaffold(
         topBar = { barra(user, imag, navHostController, colorEscogido) },
@@ -353,7 +353,8 @@ fun infoObjetos(
     onDismiss: () -> Unit,
     comprar: () -> Unit,
     objetos: Objetos?,
-    pintorView: pintorView
+    pintorView: pintorView,
+    user: User?
 
 ) {
     val imagen = pintorView.imagenObjeto(objetos)
@@ -413,6 +414,10 @@ fun infoObjetos(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                if(user?.inventario?.contains(objetos) == true){
+                    Text("Objeto comprado", fontWeight =  FontWeight.Bold, color = Color.Black)
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
@@ -429,13 +434,18 @@ fun infoObjetos(
                         )
                     }
 
-
-
+                    var colores = rojoUser
+                    if(user?.inventario?.contains(objetos) == true){
+                        colores
+                    }else{
+                        colores = verdeUser
+                    }
                     Button(onClick = {
                         comprar()
                         onDismiss()
+
                     },
-                        colors = ButtonDefaults.buttonColors(verdeUser),
+                        colors = ButtonDefaults.buttonColors(colores),
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(3.dp, Color.Black)
 
