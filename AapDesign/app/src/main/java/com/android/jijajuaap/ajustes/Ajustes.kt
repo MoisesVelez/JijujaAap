@@ -43,6 +43,7 @@ import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.android.jijajuaap.ui.theme.BLANCOeSP
+import com.android.jijajuaap.ui.theme.colorCrema
 import com.android.jijajuaap.ui.theme.rojoUser
 import com.google.firebase.auth.FirebaseAuth
 
@@ -66,7 +67,7 @@ fun ajustes(
 
     val user = menuUserMenuViewModel.user
     val colorEscogido = menuUserMenuViewModel.cambioColor(user?.team)
-    val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
+    val fondo = Brush.verticalGradient(listOf(colorCrema, Color.White))
 
     Column(verticalArrangement = Arrangement.Center,
        horizontalAlignment = Alignment.CenterHorizontally,

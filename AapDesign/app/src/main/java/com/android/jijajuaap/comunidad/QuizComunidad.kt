@@ -393,11 +393,11 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
             actions = {
                 Text(
                     user?.name.toString(), modifier =
-                        Modifier.padding(25.dp), fontWeight = FontWeight.Bold, color = colorLetras
+                        Modifier.padding(25.dp), fontWeight = FontWeight.Normal, color = colorLetras
                 )
 
                 Text(
-                    "Puntos totales: ${user?.totalPoints}", modifier =
+                    "PT: ${user?.totalPoints}", modifier =
                         Modifier.padding(10.dp), fontWeight = FontWeight.Bold, color = colorLetras
                 )
 

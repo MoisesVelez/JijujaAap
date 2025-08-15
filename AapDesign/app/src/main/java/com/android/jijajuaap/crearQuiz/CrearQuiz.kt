@@ -64,6 +64,7 @@ import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.objects.test
 import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
+import com.android.jijajuaap.ui.theme.colorCrema
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -82,7 +83,7 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
     val imag = userViewModel.imagenUsuario(user)
     val colorEscogido = userViewModel.cambioColor(user?.team)
-    val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
+    val fondo = Brush.verticalGradient(listOf(Color.White, colorCrema))
     val focusManager = LocalFocusManager.current
     val blanco50 = Color.White.copy(alpha = 0.5f)
     val colorChosen = userViewModel.colorUsuario(colorEscogido)
@@ -196,17 +197,14 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
             }
             Spacer(modifier = Modifier.size(10.dp))
-            Card(modifier = Modifier.fillMaxWidth().height(750.dp).padding(16.dp)
-            , elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = colorEscogido)) {
-
-
-                crearPreguntas(colorEscogido,crearQuizView,colorChosen)
 
 
 
-            }
+            crearPreguntas(colorEscogido,crearQuizView,colorChosen)
+
+
+
+
             Spacer(modifier = Modifier.size(20.dp))
 
 
@@ -248,11 +246,11 @@ fun barraTop(
         actions = {
             Text(
                 user?.name.toString(), modifier =
-                    Modifier.padding(25.dp), fontWeight = FontWeight.Bold, color = colorLetras
+                    Modifier.padding(25.dp), fontWeight = FontWeight.Normal, color = colorLetras
             )
 
             Text(
-                "Puntos totales: ${user?.totalPoints}", modifier =
+                "PT: ${user?.totalPoints}", modifier =
                     Modifier.padding(10.dp), fontWeight = FontWeight.Bold, color = colorLetras
             )
 
@@ -282,7 +280,7 @@ fun crearPreguntas(
     var correcto: Int by remember { mutableIntStateOf(0) }
     var numeroPreguntas by remember { mutableIntStateOf(0) }
 
-    Text("          Cantidad de preguntas: ${numeroPreguntas}", fontWeight = FontWeight.Bold, color = Color.Black,
+    Text("        Cantidad de preguntas: ${numeroPreguntas}", fontWeight = FontWeight.Bold, color = Color.Black,
         modifier = Modifier.padding(15.dp))
     Card(
         modifier = Modifier
@@ -488,7 +486,7 @@ fun crearPreguntas(
                         selectedOption = text
                         correcto  = text-1 },
                     colors = RadioButtonDefaults.colors(
-                        selectedColor = colorChosen,
+                        selectedColor = Color.White,
                         unselectedColor = Color.DarkGray,
                         disabledSelectedColor = Color.LightGray,
                         disabledUnselectedColor = Color.LightGray
@@ -567,59 +565,73 @@ fun crearPreguntas(
 
 @Composable
 fun barraBaj(
-
     navHostController: NavHostController,
     colorEscogido: Color
 ) {
-    var colorLetras by remember { mutableStateOf(Color.Black) }
-    if(colorEscogido != Color.DarkGray){
-        colorLetras = Color.Black
-    }else{
-        colorLetras = Color.White
-    }
+    val colorLetras = if (colorEscogido != Color.DarkGray) Color.Black else Color.White
 
-    NavigationBar(containerColor = colorEscogido, modifier = Modifier.height(110.dp)
-    ){
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
+    NavigationBar(
+        containerColor = colorEscogido,
+        modifier = Modifier
+            .height(110.dp)
+            .fillMaxWidth()
+    ) {
+        NavigationBarItem(
+            selected = false,
+            onClick = { navHostController.navigate(Routes.Menu1.routes) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.buscar_casa),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {navHostController.navigate(Routes.Menu1.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {navHostController.navigate(Routes.menuInicioComunidad.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.pueblo),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Comunidad", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {},
-            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = colorLetras) }
+            label = null
         )
 
+        NavigationBarItem(
+            selected = false,
+            onClick = { navHostController.navigate(Routes.menuInicioComunidad.routes) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.pueblo),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Acción social */ },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.amistad),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
     }
 }
 

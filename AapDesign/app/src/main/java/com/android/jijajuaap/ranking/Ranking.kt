@@ -50,6 +50,7 @@ import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.android.jijajuaap.ui.theme.BLANCOeSP
+import com.android.jijajuaap.ui.theme.colorCrema
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -78,7 +79,7 @@ fun ranking(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
 
     Scaffold(
         topBar = { barraTp(user, imag, navHostController, colorEscogido) },
-        bottomBar = {navigationBAr(navHostController,BLANCOeSP)}
+        bottomBar = {navigationBAr(navHostController,colorCrema)}
     )
     { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(BLANCOeSP)) {
@@ -149,12 +150,12 @@ fun barraTp(
         actions = {
             Text(
                 user?.name.toString(), modifier =
-                    Modifier.padding(25.dp), fontWeight = FontWeight.Bold, color = colorLetras
+                    Modifier.padding(25.dp), color = colorLetras
             )
 
             Text(
-                "Puntos totales: ${user?.totalPoints}", modifier =
-                    Modifier.padding(10.dp), fontWeight = FontWeight.Bold, color = colorLetras
+                "PT: ${user?.totalPoints}", modifier =
+                    Modifier.padding(10.dp), color = colorLetras,fontWeight = FontWeight.Bold
             )
 
 
@@ -195,60 +196,73 @@ fun cardsRanking(
 
 @Composable
 fun navigationBAr(
-
     navHostController: NavHostController,
     colorEscogido: Color
 ) {
-    var colorLetras by remember { mutableStateOf(Color.Black) }
-    if(colorEscogido != Color.DarkGray){
-        colorLetras = Color.Black
-    }else{
-        colorLetras = Color.White
-    }
+    val colorLetras = if (colorEscogido != Color.DarkGray) Color.Black else Color.White
 
-    NavigationBar(containerColor = colorEscogido, modifier = Modifier.height(110.dp)
-    ){
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
+    NavigationBar(
+        containerColor = colorEscogido,
+        modifier = Modifier
+            .height(110.dp)
+            .fillMaxWidth()
+    ) {
+        NavigationBarItem(
+            selected = false,
+            onClick = { navHostController.navigate(Routes.Menu1.routes) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.buscar_casa),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {navHostController.navigate(Routes.Menu1.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {navHostController.navigate(Routes.pintor.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.lapiz),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Pintor", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {},
-            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = colorLetras) }
+            label = null
         )
 
+        NavigationBarItem(
+            selected = false,
+            onClick = { navHostController.navigate(Routes.pintor.routes) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.lapiz),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Acción social */ },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.amistad),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
     }
 }
-
 

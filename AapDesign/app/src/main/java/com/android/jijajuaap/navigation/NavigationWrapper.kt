@@ -90,7 +90,7 @@ fun NavigationWrapper() {
             roadMap(userViewModel,gameRoad,navHostController)
         }
         composable(Routes.menuPartidaBasica.routes) {
-            QuizScreen(gameBasic,userViewModel,navHostController,gameRoad)
+            QuizScreen(gameBasic,userViewModel,navHostController,gameRoad,pintorView)
         }
         composable(Routes.ajuste.routes) {
             ajustes(userViewModel,loginViewModel,navHostController)

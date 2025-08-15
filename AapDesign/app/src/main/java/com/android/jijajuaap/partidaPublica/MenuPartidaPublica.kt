@@ -41,6 +41,7 @@ import com.android.jijajuaap.menu.navigationBar
 import com.android.jijajuaap.menu.topAppBar
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.login.MvvmPresentation
+import com.android.jijajuaap.ui.theme.colorCrema
 
 
 @Composable
@@ -48,7 +49,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 
     val usuario = userViewModel.user
     val colorEscogido = userViewModel.cambioColor(usuario?.team)
-    val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
+    val fondo = Brush.verticalGradient(listOf(colorCrema, Color.White))
     val imag = userViewModel.imagenUsuario(usuario)
 
 
@@ -56,7 +57,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
     Box(modifier = Modifier.background(Color.Black)) {
         Scaffold(
             topBar = { topAppBar(colorEscogido, navHostController, userViewModel) },
-            modifier = Modifier.fillMaxSize().padding(bottom = 50.dp),
+            modifier = Modifier.fillMaxSize(),
             bottomBar = { navigationBar(logingView, navHostController, colorEscogido) },
 
             ) { innerPadding ->
@@ -74,11 +75,11 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 
 
                 Spacer(modifier = Modifier.height(16.dp))
-                cardPublica(R.drawable.historiapaint,"historia",userViewModel,navHostController)
+                cardPublica(R.drawable.chatgpt_image_14_ago_2025__00_16_40,"historia",userViewModel,navHostController)
 
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
-                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    R.drawable.chatgpt_image_14_ago_2025__00_20_43,
                     "literatura",
                     userViewModel,
                     navHostController
@@ -86,7 +87,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
-                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    R.drawable.chatgpt_image_14_ago_2025__00_24_46,
                     "filosofia",
                     userViewModel,
                     navHostController
@@ -94,7 +95,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
-                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    R.drawable.chatgpt_image_14_ago_2025__23_31_52,
                     "deportes",
                     userViewModel,
                     navHostController
@@ -109,7 +110,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                cardPublica(R.drawable.selva, "naturaleza", userViewModel, navHostController)
+                cardPublica(R.drawable.personajes_cuadrados_en_paisaje_sereno, "naturaleza", userViewModel, navHostController)
 
 
 

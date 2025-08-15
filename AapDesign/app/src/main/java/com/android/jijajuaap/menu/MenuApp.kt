@@ -40,11 +40,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -62,6 +64,7 @@ import com.android.jijajuaap.R
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.android.jijajuaap.ui.theme.BLANCOeSP
+import com.android.jijajuaap.ui.theme.colorCrema
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnrememberedMutableState")
@@ -85,6 +88,10 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
     val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
     val colorChosen = menuUserMenuViewModel.colorUsuario(colorEscogido)
 
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = {4}
+    )
 
     val context = LocalContext.current
 
@@ -111,13 +118,21 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
 
     Scaffold(
         topBar = { topAppBar(colorEscogido,navHostController,menuUserMenuViewModel) },
-        modifier = Modifier.fillMaxSize().padding(bottom = 50.dp),
+        modifier = Modifier.fillMaxSize(),
         bottomBar = { navigationBar(logingView, navHostController, colorEscogido) },
 
         ) { innerPadding ->
 
 
-        PantallaConPager(fondo,innerPadding,colorChosen,navHostController,colorEscogido)
+
+
+        PantallaConFondo(
+            pagerState = pagerState,
+            innerPadding = innerPadding,
+            navHostController = navHostController,
+            colorEscogido = colorEscogido
+        )
+
 
         if (menuUserMenuViewModel.isLoading) {
             Box(
@@ -162,7 +177,8 @@ fun topAppBar(
     menuUserMenuViewModel: UserMenuViewModel,) {
     val usuario = menuUserMenuViewModel.user
     val imagenUser = menuUserMenuViewModel.imagenUsuario(usuario)
-    TopAppBar(title = {Image(
+    TopAppBar(
+        title = {Image(
         painter = painterResource(id = imagenUser),
         contentDescription = "Logo App",
         modifier = Modifier.size(75.dp).padding(5.dp)
@@ -190,130 +206,174 @@ fun topAppBar(
 
 @Composable
 fun navigationBar(
-
     menuviewModel: MvvmPresentation,
     navHostController: NavHostController,
     colorEscogido: Color
 ) {
-    var colorLetras by remember { mutableStateOf(Color.Black) }
-    if(colorEscogido != Color.DarkGray){
-        colorLetras = Color.Black
-    }else{
-        colorLetras = Color.White
-    }
+    val colorLetras = if (colorEscogido != Color.DarkGray) Color.Black else Color.White
 
-    NavigationBar(containerColor = colorEscogido, modifier = Modifier.height(110.dp)
-         ){
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
+    NavigationBar(
+        containerColor = colorCrema,
+        modifier = Modifier
+            .height(110.dp)
+            .fillMaxWidth()
+    ) {
+        NavigationBarItem(
+            selected = false,
+            onClick = { navHostController.navigate(Routes.Menu1.routes) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.buscar_casa),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {navHostController.navigate(Routes.Menu1.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {navHostController.navigate(Routes.pintor.routes)},
-            icon = {Icon(painter = painterResource(R.drawable.lapiz),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Pintor", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {},
-            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = colorLetras) }
+            label = null
         )
 
+        NavigationBarItem(
+            selected = false,
+            onClick = { navHostController.navigate(Routes.pintor.routes) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.lapiz),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Acción */ },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.amistad),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
     }
 }
+
 
 
 @Composable
-fun PantallaConPager(fondo: Brush, innerPadding: PaddingValues,colorEscogido: Color,navHostController: NavHostController,colorEscogid: Color) {
-    val pagerState = rememberPagerState(pageCount = { 4 })
-
-    Column(
+fun PantallaConFondo(
+    pagerState: PagerState,
+    innerPadding: PaddingValues,
+    navHostController: NavHostController,
+    colorEscogido: Color
+) {
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(fondo)
             .padding(innerPadding)
     ) {
 
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.weight(1f)
-        ) { page ->
-            when (page) {
-                0 -> SimpleCardPantallaCompleta(
-                    titulo = "Campaña",
-                    contenido = "Completa los niveles y supera todos los desafios en las diferentes categorías.",
-                    height = 500.dp,
-                    painter = painterResource(
-                        R.drawable.ilustracionpublica),
-                    onClick = {navHostController.navigate(Routes.menuPartidaPublica.routes)}
-
-                )
-                1 -> SimpleCardPantallaCompleta(
-                    titulo = "Comunidad",
-                    contenido = "Participa con la comunidad superando sus Quiz y forma parte de ella creando los tuyos propios.",
-                    height = 500.dp,
-                    painter = painterResource(
-                        R.drawable.ilustracionpublica),
-                    onClick = {navHostController.navigate(Routes.menuInicioComunidad.routes)}
-                )
-                2 -> SimpleCardPantallaCompleta(
-                    titulo = "Creador",
-                    contenido = "Contenido de la tarjeta número ${page + 1}",
-                    height = 500.dp,
-                    painter = painterResource(
-                        R.drawable.ilustracion_sin_titulo_6),
-                    onClick = {navHostController.navigate(Routes.menuCrearQuiz.routes)}
-                )
-                3 -> SimpleCardPantallaCompleta(
-                    titulo = "Ranking",
-                    contenido = "Contenido de la tarjeta número ${page + 1}",
-                    height = 500.dp,
-                    painter = painterResource(
-                        R.drawable.ilustracion_sin_titulo__3_),
-                    onClick = {navHostController.navigate(Routes.ranking.routes)}
-                )
-            }
+        when (pagerState.currentPage) {
+            0 -> Image(
+                painter = painterResource(R.drawable._755078083836),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().alpha(0.5f)
+            )
+            1 -> Image(
+                painter = painterResource(R.drawable._755078083801),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().alpha(0.5f)
+            )
+            2 -> Image(
+                painter = painterResource(R.drawable._755078083764),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().alpha(0.5f)
+            )
+            3 -> Image(
+                painter = painterResource(R.drawable.podio_de_cuadrados_amistosos),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().alpha(0.5f)
+            )
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
 
-        IndicadorBarraAnimada(
-            pagerState = pagerState,
-            totalPaginas = 4,
-            modifier = Modifier
-                .padding(bottom = 74.dp)
-                .fillMaxWidth()
-            , colorEscogido =colorEscogid ,
-            colorEscogid = colorEscogido
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.weight(1f)
+            ) { page ->
+                when (page) {
+                    0 -> SimpleCardPantallaCompleta(
+                        titulo = "Campaña",
+                        contenido = "Completa los niveles y supera todos los desafios en las diferentes categorías.",
+                        height = 500.dp,
+                        painter = painterResource(R.drawable._755078083836),
+                        onClick = { navHostController.navigate(Routes.menuPartidaPublica.routes) }
+                    )
+                    1 -> SimpleCardPantallaCompleta(
+                        titulo = "Comunidad",
+                        contenido = "Participa con la comunidad superando sus Quiz,busca o elige entre los ultimos publicados.",
+                        height = 500.dp,
+                        painter = painterResource(R.drawable._755078083801),
+                        onClick = { navHostController.navigate(Routes.menuInicioComunidad.routes) }
+                    )
+                    2 -> SimpleCardPantallaCompleta(
+                        titulo = "Creador",
+                        contenido = "Contenido de la tarjeta número ${page + 1}",
+                        height = 500.dp,
+                        painter = painterResource(R.drawable._755078083764),
+                        onClick = { navHostController.navigate(Routes.menuCrearQuiz.routes) }
+                    )
+                    3 -> SimpleCardPantallaCompleta(
+                        titulo = "Ranking",
+                        contenido = "Contenido de la tarjeta número ${page + 1}",
+                        height = 500.dp,
+                        painter = painterResource(R.drawable.podio_de_cuadrados_amistosos),
+                        onClick = { navHostController.navigate(Routes.ranking.routes) }
+                    )
+                }
+            }
 
-        )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            IndicadorBarraAnimada(
+                pagerState = pagerState,
+                totalPaginas = 4,
+                modifier = Modifier
+                    .padding(bottom = 74.dp)
+                    .fillMaxWidth(),
+                colorEscogido = Color.White,
+                colorEscogid = colorEscogido
+            )
+        }
     }
 }
+
 
 
 @Composable
@@ -329,7 +389,7 @@ fun SimpleCardPantallaCompleta(
             .padding(30.dp)
             .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(Color.White)
+        colors = CardDefaults.cardColors(BLANCOeSP)
     ) {
         Column(
             modifier = Modifier

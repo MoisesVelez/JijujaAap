@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.comunidad.cardsComunidad
 import com.android.jijajuaap.menu.UserMenuViewModel
@@ -39,6 +40,7 @@ import com.android.jijajuaap.pintor.barra
 import com.android.jijajuaap.pintor.barraBaja
 import com.android.jijajuaap.pintor.pintorView
 import com.android.jijajuaap.ui.theme.White
+import com.android.jijajuaap.ui.theme.colorCrema
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -57,7 +59,7 @@ fun inventario(userMenuViewModel: UserMenuViewModel,navHostController: NavHostCo
     val user = userMenuViewModel.user
     val imag = userMenuViewModel.imagenUsuario(user)
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
-    val fondo = Brush.verticalGradient(listOf(Color.White, colorEscogido))
+    val fondo = Brush.verticalGradient(listOf(Color.White, colorCrema))
     val listaObjetos = user?.inventario
 
     Scaffold(
@@ -93,6 +95,7 @@ fun inventario(userMenuViewModel: UserMenuViewModel,navHostController: NavHostCo
                                 .padding(vertical = 14.dp)
                                 .fillMaxWidth()
                                 .height(130.dp)
+
                         ) {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -108,8 +111,8 @@ fun inventario(userMenuViewModel: UserMenuViewModel,navHostController: NavHostCo
                                         .clip(RoundedCornerShape(8.dp))
                                 )
 
-                                Text(text = objetos.nombre, fontWeight =  FontWeight.Bold, color = Color.Black)
-                                Text(text = objetos.descripcion, color = Color.DarkGray)
+                                Text(text = objetos.nombre, fontWeight =  FontWeight.Bold, color = Color.Black, fontSize = 19.sp)
+                                Text(text = objetos.descripcion, color = Color.DarkGray, fontSize = 16.sp)
                             }
                         }
 

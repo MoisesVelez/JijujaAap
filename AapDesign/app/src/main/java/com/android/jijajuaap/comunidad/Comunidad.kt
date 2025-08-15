@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -58,8 +59,12 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.rememberCoroutineScope
+
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.ContentScale
 import com.android.jijajuaap.R
 import com.android.jijajuaap.objects.preguntaComunidad
+import com.android.jijajuaap.ui.theme.colorCrema
 
 import kotlinx.coroutines.launch
 import kotlin.collections.isNotEmpty
@@ -86,7 +91,7 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
 
     val imag = userMenuViewModel.imagenUsuario(user)
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
-    val fondo = Brush.verticalGradient(listOf(Color.White,colorEscogido ))
+    val fondo = Brush.verticalGradient(listOf(Color.White, colorCrema))
     val lista by comunidadView.listaTest.collectAsState()
     var buscar by remember { mutableStateOf("") }
     val resultados = remember { mutableStateOf<List<preguntaComunidad>>(emptyList())}
@@ -95,7 +100,20 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
         bottomBar = {barraBottom(navHostController,colorEscogido)}
     ) { innerPadding ->
 
-        Column(modifier = Modifier.padding(innerPadding).background(fondo)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+
+        ) {
+            Image(
+                painter = painterResource(R.drawable.chatgpt_image_14_ago_2025__00_24_46),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()  )
+
+        }
+
+        Column(modifier = Modifier.padding(innerPadding)){
 
 
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
@@ -115,7 +133,7 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
                     cursorColor = Color.Black,
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-                    unfocusedContainerColor = colorEscogido,
+                    unfocusedContainerColor = Color.White,
                     focusedContainerColor = BLANCOeSP
                 ),
             )
@@ -136,13 +154,7 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
                     modifier = Modifier.size(35.dp))
             }
         }
-            Card(modifier = Modifier.padding(20.dp)
-                .fillMaxSize().clip(RoundedCornerShape(16.dp))
-                .background(White)
-                .padding(10.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(BLANCOeSP)) {
+
 
 
                     LazyColumn( modifier = Modifier.fillMaxSize().padding(15.dp),horizontalAlignment = Alignment.CenterHorizontally) {
@@ -164,7 +176,7 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
                         }
                 }
 
-            }
+
 
         }
 
@@ -206,13 +218,14 @@ fun barraTop(
         modifier = Modifier.height(125.dp),
         colors = TopAppBarDefaults.topAppBarColors(colorEscogido),
         actions = {
+
             Text(
-                user?.name.toString(), modifier =
-                    Modifier.padding(25.dp), fontWeight = FontWeight.Bold, color = colorLetras
+                "${user?.name}", modifier =
+                    Modifier.padding(10.dp), fontWeight = FontWeight.Normal, color = colorLetras
             )
 
             Text(
-                "Puntos totales: ${user?.totalPoints}", modifier =
+                "PT: ${user?.totalPoints}", modifier =
                     Modifier.padding(10.dp), fontWeight = FontWeight.Bold, color = colorLetras
             )
 
@@ -220,63 +233,79 @@ fun barraTop(
         })
 
 }
-
 @Composable
 fun barraBottom(navHostController: NavHostController, colorEscogido: Color) {
 
+    val colorLetras = if (colorEscogido != Color.DarkGray) Color.Black else Color.White
 
-    var colorLetras by remember { mutableStateOf(Color.Black) }
-    if(colorEscogido != Color.DarkGray){
-        colorLetras = Color.Black
-    }else{
-        colorLetras = Color.White
-    }
-    NavigationBar(containerColor = White, modifier = Modifier.height(110.dp)
-    ){
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {navHostController.popBackStack()
+    NavigationBar(
+        containerColor = colorCrema,
+        modifier = Modifier
+            .height(110.dp)
+            .fillMaxWidth()
+    ) {
+        NavigationBarItem(
+            selected = false,
+            onClick = {
+                navHostController.popBackStack()
                 navHostController.navigate(Routes.Menu1.routes)
-                      },
-            icon = {Icon(painter = painterResource(R.drawable.buscar_casa),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Menu", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.buscar_casa),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
                 indicatorColor = Color.Transparent
             ),
-            onClick = {navHostController.popBackStack()
-                navHostController.navigate(Routes.menuCrearQuiz.routes)
-                },
-            icon = {Icon(painter = painterResource(R.drawable.crear),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Crear Quiz", fontWeight = FontWeight.Bold, color = colorLetras) })
-
-        NavigationBarItem(selected = true,
-            modifier = Modifier,
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.DarkGray,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color(0xFFFFC107),
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent
-            ),
-            onClick = {},
-            icon = {Icon(painter = painterResource(R.drawable.amistad),modifier= Modifier.size(60.dp).padding(top = 20.dp), contentDescription = "", tint = colorLetras)}
-            ,label = { Text("Social", fontWeight = FontWeight.Bold, color = colorLetras) }
+            label = null
         )
 
+        NavigationBarItem(
+            selected = false,
+            onClick = {
+                navHostController.popBackStack()
+                navHostController.navigate(Routes.menuCrearQuiz.routes)
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.crear),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Acción social */ },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.amistad),
+                    modifier = Modifier.size(50.dp),
+                    contentDescription = "",
+                    tint = colorLetras
+                )
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colorLetras,
+                unselectedIconColor = colorLetras,
+                indicatorColor = Color.Transparent
+            ),
+            label = null
+        )
     }
 }
 
@@ -290,6 +319,7 @@ fun cardsComunidad(
 ){
     Card(
         modifier = Modifier
+            .alpha(0.8f)
             .fillMaxWidth()
             .padding(vertical = 14.dp)
             .clickable(onClick = {

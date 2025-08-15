@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -48,12 +50,14 @@ import androidx.compose.ui.draw.clip
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
+import com.android.jijajuaap.pintor.pintorView
 import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
@@ -67,7 +71,8 @@ fun QuizScreen(
     viewModel: QuizViewModel,
     userMenuViewModel: UserMenuViewModel,
     navHostController: NavHostController,
-    gameRoad: gmaplayViewModel
+    gameRoad: gmaplayViewModel,
+    pintorView: pintorView
 ) {
     val questions by viewModel.questions.collectAsState()
     var currentIndex: Int = viewModel.currentIndex.value
@@ -166,7 +171,7 @@ fun QuizScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(BLANCOeSP),
+                        .background(BLANCOeSP).verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -179,7 +184,6 @@ fun QuizScreen(
 
                     Card(
                         modifier = Modifier
-                            .height(350.dp)
                             .padding(20.dp)
                             .fillMaxWidth(),
                         elevation = CardDefaults.cardElevation(4.dp),
@@ -187,7 +191,7 @@ fun QuizScreen(
                     ) {
                         Column(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxWidth()
                                 .background(White)
                                 .padding(8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -197,6 +201,28 @@ fun QuizScreen(
                             ProfileInfoRow(R.drawable.elevar_a_mismo_nivel, label = "    Puntuación: ", value = "+ $score")
                             ProfileInfoRow(R.drawable.puntuacion_mas_alta__1_, label = "    Puntuación total: ", value = "$puntosH")
                             ProfileInfoRow(R.drawable.nivel, label = "    Dificultad: ", value = dificultad)
+                            Spacer(Modifier.size(15.dp))
+                            if(user?.inventario?.isNotEmpty() == true){
+                                Text("pasivas activas",fontWeight =  FontWeight.Bold, color = Color.Black)
+                                user.inventario.forEach{objetos ->
+
+                                    Row( horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.padding(8.dp)) {
+
+                                        Image(painter = painterResource(id = pintorView.imagenObjeto(objetos)),
+                                            contentDescription = objetos.nombre,
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                                .clip(RoundedCornerShape(8.dp)))
+
+                                        Text(text = objetos.nombre, fontWeight =  FontWeight.Bold, color = Color.Black)
+                                    }
+
+
+
+                                }
+                            }
                         }
                     }
 
@@ -258,7 +284,7 @@ fun QuizScreen(
 
 
                     Text(
-                        "Pregunta ${currentIndex + 1}/${questions.size}     Puntos: ${score}",
+                        "Pregunta ${currentIndex + 1}/${questions.size}     PT: ${score}",
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
                         modifier = Modifier.padding(15.dp)
