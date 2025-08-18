@@ -56,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
+import com.android.jijajuaap.mochila.mochilaViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.pintor.pintorView
 import com.android.jijajuaap.presentation.login.LoginScreen
@@ -72,7 +73,8 @@ fun QuizScreen(
     userMenuViewModel: UserMenuViewModel,
     navHostController: NavHostController,
     gameRoad: gmaplayViewModel,
-    pintorView: pintorView
+    pintorView: pintorView,
+    mochilaViewModel: mochilaViewModel
 ) {
     val questions by viewModel.questions.collectAsState()
     var currentIndex: Int = viewModel.currentIndex.value
@@ -204,7 +206,7 @@ fun QuizScreen(
                             Spacer(Modifier.size(15.dp))
                             if(user?.inventario?.isNotEmpty() == true){
                                 Text("pasivas activas",fontWeight =  FontWeight.Bold, color = Color.Black)
-                                user.inventario.forEach{objetos ->
+                                mochilaViewModel.listaObjetos.forEach{objetos ->
 
                                     Row( horizontalArrangement = Arrangement.Start,
                                         modifier = Modifier.padding(8.dp)) {

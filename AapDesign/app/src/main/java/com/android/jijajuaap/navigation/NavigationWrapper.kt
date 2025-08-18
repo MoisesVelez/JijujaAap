@@ -22,6 +22,7 @@ import com.android.jijajuaap.menu.selecImagenAzu
 import com.android.jijajuaap.menu.selecImagenDark
 import com.android.jijajuaap.menu.selecImagenVer
 import com.android.jijajuaap.mochila.inventario
+import com.android.jijajuaap.mochila.mochilaViewModel
 import com.android.jijajuaap.partidaPublica.QuizScreen
 import com.android.jijajuaap.partidaPublica.QuizViewModel
 import com.android.jijajuaap.partidaPublica.gmaplayViewModel
@@ -53,6 +54,7 @@ fun NavigationWrapper() {
     val crearView: crearQuizView = hiltViewModel()
     val RankingView: rankingView = hiltViewModel()
     val pintorView: pintorView = hiltViewModel()
+    val mochilaViewModel:mochilaViewModel = hiltViewModel()
 
 
     NavHost(navController = navHostController, startDestination = Routes.SplashScreen.routes) {
@@ -90,7 +92,7 @@ fun NavigationWrapper() {
             roadMap(userViewModel,gameRoad,navHostController)
         }
         composable(Routes.menuPartidaBasica.routes) {
-            QuizScreen(gameBasic,userViewModel,navHostController,gameRoad,pintorView)
+            QuizScreen(gameBasic,userViewModel,navHostController,gameRoad,pintorView,mochilaViewModel)
         }
         composable(Routes.ajuste.routes) {
             ajustes(userViewModel,loginViewModel,navHostController)
@@ -114,7 +116,7 @@ fun NavigationWrapper() {
             pintorObjetos(userViewModel,navHostController,pintorView)
         }
         composable(Routes.mochila.routes) {
-            inventario(userViewModel,navHostController,pintorView)
+            inventario(userViewModel,navHostController,pintorView,mochilaViewModel)
         }
 
 
