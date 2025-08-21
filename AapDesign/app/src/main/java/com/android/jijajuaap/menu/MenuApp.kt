@@ -344,14 +344,14 @@ fun PantallaConFondo(
                     )
                     2 -> SimpleCardPantallaCompleta(
                         titulo = "Creador",
-                        contenido = "Contenido de la tarjeta número ${page + 1}",
+                        contenido = "Crea tus propios Quiz y compartelos con la comunidad.",
                         height = 500.dp,
                         painter = painterResource(R.drawable._755078083764),
                         onClick = { navHostController.navigate(Routes.menuCrearQuiz.routes) }
                     )
                     3 -> SimpleCardPantallaCompleta(
                         titulo = "Ranking",
-                        contenido = "Contenido de la tarjeta número ${page + 1}",
+                        contenido = "Ranking de jugadores.",
                         height = 500.dp,
                         painter = painterResource(R.drawable.podio_de_cuadrados_amistosos),
                         onClick = { navHostController.navigate(Routes.ranking.routes) }

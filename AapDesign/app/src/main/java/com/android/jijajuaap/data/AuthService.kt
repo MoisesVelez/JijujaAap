@@ -342,6 +342,21 @@ class AuthService @SuppressLint("RestrictedApi")
     }
 
 
+    suspend fun updateMochila(uid: String, objeto: Objetos) {
+        val userRef = firestore.collection("users").document(uid)
+        val updateMochila = mapOf("mochila" to FieldValue.arrayUnion(objeto))
+        userRef.set(updateMochila, SetOptions.merge()).await()
+    }
+
+    suspend fun removeObjeto(uid: String, objeto: Objetos) {
+        val userRef = firestore.collection("users").document(uid)
+        val updateMochila = mapOf("mochila" to FieldValue.arrayRemove(objeto))
+        userRef.set(updateMochila, SetOptions.merge()).await()
+    }
+
+
+
+
 
 
 }

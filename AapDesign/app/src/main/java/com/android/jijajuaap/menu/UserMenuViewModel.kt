@@ -19,8 +19,10 @@ import androidx.compose.material3.Surface
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,6 +36,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.R
 import com.android.jijajuaap.data.AuthService
+import com.android.jijajuaap.objects.Objetos
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.ui.theme.White
 import com.android.jijajuaap.ui.theme.azulJi
@@ -343,6 +346,96 @@ class UserMenuViewModel @Inject constructor(
             }
         }
     }
+    var listaObjetos = mutableStateListOf<Objetos>()
+        private set
+
+
+
+
+    fun añadirLista(objeto: Objetos, uid: String) {
+        viewModelScope.launch {
+            try {
+
+                if (objeto !in listaObjetos && listaObjetos.size < 3) {
+                    authService.updateMochila(uid, objeto)
+                    listaObjetos.add(objeto)
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+
+
+
+
+    fun quitarObjeto(objetos: Objetos, uid: String) {
+        viewModelScope.launch {
+            try {
+              authService.removeObjeto(uid,objetos)
+                listaObjetos.remove(objetos)
+                }catch (e: Exception) {
+
+            }
+        }
+    }
+
+
+    fun cargarMochila(uid: String) {
+        viewModelScope.launch {
+            try {
+                val snapshot = authService.getUserData(uid)
+                snapshot?.let { user ->
+                    listaObjetos.clear()
+                    listaObjetos.addAll(user.mochila)
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    var todosLosPuntos = mutableStateOf<Int>(0)
+        private set
+
+    fun cargarPuntos(uid: String) {
+        viewModelScope.launch {
+            try {
+                val snapshot = authService.getUserData(uid)
+                snapshot?.let { user ->
+                    todosLosPuntos.value = user.totalPoints ?: 0
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+    //-------------------------------Pasivas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

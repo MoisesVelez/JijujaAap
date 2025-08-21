@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -63,6 +64,8 @@ import com.android.jijajuaap.objects.Objetos
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.ui.theme.White
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.ContentScale
 import com.android.jijajuaap.ui.theme.colorCrema
 import com.android.jijajuaap.ui.theme.rojoUser
 import com.android.jijajuaap.ui.theme.verdeUser
@@ -78,8 +81,10 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
             userMenuViewModel.loadUserData(it)
             pintorView.obtenerObjetos()
 
+
         }
     }
+
     val user = userMenuViewModel.user
     val imag = userMenuViewModel.imagenUsuario(user)
     val colorEscogido = userMenuViewModel.cambioColor(user?.team)
@@ -100,11 +105,25 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
     }
     Scaffold(
         topBar = { barra(user, imag, navHostController, colorEscogido) },
-        bottomBar = { barraBaja(navHostController, White) }
+        bottomBar = { barraBaja(navHostController, colorCrema) }
     )
     { innerPadding ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+
+        ) {
+            Image(
+                painter = painterResource(R.drawable.chatgpt_image_19_ago_2025__22_19_24),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()  )
+
+        }
+
         Column(
-            modifier = Modifier.padding(innerPadding).fillMaxSize().background(fondo)
+            modifier = Modifier.padding(innerPadding).fillMaxSize()
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -114,7 +133,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
+                    .padding(15.dp).alpha(0.8f),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -178,7 +197,7 @@ fun pintorObjetos(userMenuViewModel: UserMenuViewModel,navHostController: NavHos
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(0.9f)
+                            .aspectRatio(0.9f).alpha(0.8f)
                             .clickable(onClick = { pintorView.obtenerObjeto(objeto.nombre)
                                 comprobante = true})
                     ) {

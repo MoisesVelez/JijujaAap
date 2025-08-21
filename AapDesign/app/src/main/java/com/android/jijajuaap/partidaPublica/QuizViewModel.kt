@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.jijajuaap.data.AuthService
+import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.objects.test
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -36,9 +37,22 @@ class QuizViewModel  @Inject constructor(
     private val _incorrecta = MutableStateFlow(0)
     val incorrecto: StateFlow<Int> = _incorrecta
 
+    private val _contVidas = MutableStateFlow(0)
+    val contVidas: StateFlow<Int> = _contVidas
+
+
+    private val _escudos = MutableStateFlow(0)
+    val escudos: StateFlow<Int> = _escudos
+
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _segundoLatido = MutableStateFlow(false)
+    val segundoLatido: StateFlow<Boolean> = _segundoLatido.asStateFlow()
+
+    private val _escudo = MutableStateFlow(false)
+    val escudo: StateFlow<Boolean> = _escudo.asStateFlow()
 
 
     fun loadQuestions(tema: String?,tema2: String) {
@@ -68,6 +82,18 @@ class QuizViewModel  @Inject constructor(
                 _correcta.value += 1
                 _score.value += puntos;
 
+            }else if(escudo.value){
+                _escudos.value +=1
+                _escudo.value = false
+
+
+            }else if(segundoLatido.value ){
+                _correcta.value += 1
+                _score.value += puntos;
+                _segundoLatido.value=false
+                _contVidas.value += 1
+
+
             }else{
                 _incorrecta.value += 1
             }
@@ -85,7 +111,31 @@ class QuizViewModel  @Inject constructor(
             _score.value = 0
             _correcta.value = 0
             _incorrecta.value = 0
+            _contVidas.value = 0
+            _escudos.value = 0
         }
+
+    fun setIncorrectas(valor: Int) {
+        _incorrecta.value = valor
+    }
+
+
+    //---------------------------PASIVAS
+
+
+    fun comprobadorPasivas(user: User?){
+
+        if (user?.mochila?.any { it.nombre == "Segundo Latido" } == true) {
+            _segundoLatido.value=true
+        }
+        if (user?.mochila?.any { it.nombre == "Escudo de Error" } == true) {
+            _escudo.value=true
+        }
+
+    }
+
+
+
 
 
 

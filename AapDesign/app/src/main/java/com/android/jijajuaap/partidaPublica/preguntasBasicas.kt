@@ -56,7 +56,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
-import com.android.jijajuaap.mochila.mochilaViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.pintor.pintorView
 import com.android.jijajuaap.presentation.login.LoginScreen
@@ -74,7 +73,7 @@ fun QuizScreen(
     navHostController: NavHostController,
     gameRoad: gmaplayViewModel,
     pintorView: pintorView,
-    mochilaViewModel: mochilaViewModel
+
 ) {
     val questions by viewModel.questions.collectAsState()
     var currentIndex: Int = viewModel.currentIndex.value
@@ -90,6 +89,7 @@ fun QuizScreen(
             userMenuViewModel.loadUserData(it)
 
 
+
         }
     }
     val user = userMenuViewModel.user
@@ -101,6 +101,8 @@ fun QuizScreen(
     var temaPuntos = gameRoad.temas(user)
     val isLoading by viewModel.isLoading.collectAsState()
 
+
+
     val dificultad = gameRoad.dificultad
     var eleccion by remember { mutableStateOf("") }
     eleccion = eleccionTest(dificultad)
@@ -108,8 +110,11 @@ fun QuizScreen(
     LaunchedEffect(user?.tema) {
         viewModel.resetQuiz()
         viewModel.loadQuestions(user?.tema,eleccion)
+        viewModel.comprobadorPasivas(user)
 
     }
+    var segundoLatido = viewModel.segundoLatido
+    var escudo = viewModel.escudo
 
     var colorLetras by remember { mutableStateOf(Color.Black) }
     if(colorEscogido != Color.DarkGray){
@@ -151,6 +156,9 @@ fun QuizScreen(
         if(incorrectas == 3){
             currentIndex = questions.size
         }
+
+        var contVidas = viewModel.contVidas
+        var contEscudos = viewModel.escudos
 
 
         val totalTema = puntosH + score
@@ -204,9 +212,9 @@ fun QuizScreen(
                             ProfileInfoRow(R.drawable.puntuacion_mas_alta__1_, label = "    Puntuación total: ", value = "$puntosH")
                             ProfileInfoRow(R.drawable.nivel, label = "    Dificultad: ", value = dificultad)
                             Spacer(Modifier.size(15.dp))
-                            if(user?.inventario?.isNotEmpty() == true){
+                            if(user?.mochila?.isNotEmpty() == true){
                                 Text("pasivas activas",fontWeight =  FontWeight.Bold, color = Color.Black)
-                                mochilaViewModel.listaObjetos.forEach{objetos ->
+                                userMenuViewModel.listaObjetos.forEach{objetos ->
 
                                     Row( horizontalArrangement = Arrangement.Start,
                                         modifier = Modifier.padding(8.dp)) {
@@ -258,7 +266,30 @@ fun QuizScreen(
         Spacer(modifier = Modifier.size(15.dp))
 
                 Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
-                    if (incorrectas ==0){
+
+
+                    if(escudo.value){
+                        Image(painterResource(R.drawable.blindaje), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+
+                    }else if(escudo.value==false && contEscudos.value == 1){
+                        Image(painterResource(R.drawable.escudo_roto), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }
+
+
+                    if(segundoLatido.value){
+                        Image(painterResource(R.drawable.corazon_herido), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+
+                    }else if(segundoLatido.value==false && contVidas.value == 1){
+                        Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }
+
+
+
+                    if (incorrectas <=0){
                         Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
                             modifier = Modifier.size(35.dp).padding(5.dp))
                     }else if (incorrectas >= 1){

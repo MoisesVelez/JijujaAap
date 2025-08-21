@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,9 +50,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -99,15 +102,29 @@ fun CrearQuiz(userViewModel: UserMenuViewModel, navHostController: NavHostContro
 
     Scaffold(
         topBar = {barraTop(user,imag,navHostController,colorEscogido)},
-        bottomBar = {barraBaj(navHostController,White)}
+        bottomBar = {barraBaj(navHostController,colorCrema)}
     )
     {innerPadding ->
+
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+
+        ) {
+            Image(
+                painter = painterResource(R.drawable.escultura_en_proceso_en_taller_c_lido),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()  )
+
+        }
 
         Column(modifier = Modifier
             .padding(innerPadding)
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .background(fondo)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
             indication = null
@@ -302,7 +319,7 @@ fun crearPreguntas(
                 label = { Text("Pregunta", color = Color.Black) },
 
                 singleLine = true,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).alpha(0.8f),
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
@@ -343,7 +360,7 @@ fun crearPreguntas(
                     label = { Text("1.", color = Color.Black) },
 
                     singleLine = true,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).alpha(0.8f),
                     shape = RoundedCornerShape(10.dp),
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
@@ -378,7 +395,7 @@ fun crearPreguntas(
                         label = { Text("2.", color = Color.Black) },
 
                         singleLine = true,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f).alpha(0.8f),
                         shape = RoundedCornerShape(10.dp),
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
@@ -415,7 +432,7 @@ fun crearPreguntas(
                             label = { Text("3.", color = Color.Black) },
 
                             singleLine = true,
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(1f).alpha(0.8f),
                             shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.colors(
                                 focusedIndicatorColor = Color.Transparent,
@@ -452,7 +469,7 @@ fun crearPreguntas(
                             label = { Text("4.", color = Color.Black) },
 
                             singleLine = true,
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(1f).alpha(0.8f),
                             shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.colors(
                                 focusedIndicatorColor = Color.Transparent,
