@@ -103,7 +103,7 @@ fun menuPartidaPublica(userViewModel: UserMenuViewModel,navHostController: NavHo
 
                 Spacer(modifier = Modifier.height(12.dp))
                 cardPublica(
-                    R.drawable.get_free_vectors__images__pictures___clips___vecteezy,
+                    R.drawable.chatgpt_image_21_ago_2025__20_57_38,
                     "culturaPopular",
                     userViewModel,
                     navHostController

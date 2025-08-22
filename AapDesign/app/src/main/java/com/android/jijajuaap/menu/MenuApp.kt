@@ -2,6 +2,7 @@ package com.android.jijajuaap.menu
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -367,8 +368,8 @@ fun PantallaConFondo(
                 modifier = Modifier
                     .padding(bottom = 74.dp)
                     .fillMaxWidth(),
-                colorEscogido = Color.White,
-                colorEscogid = colorEscogido
+                colorActivo = Color.White,
+                colorInactivo = colorCrema
             )
         }
     }
@@ -408,44 +409,41 @@ fun SimpleCardPantallaCompleta(
 
 @Composable
 fun IndicadorBarraAnimada(
-    pagerState: PagerState,
-    totalPaginas: Int,
-    modifier: Modifier = Modifier,
-    colorEscogido: Color,
-    colorEscogid: Color
+pagerState: PagerState,
+totalPaginas: Int,
+modifier: Modifier = Modifier,
+colorInactivo: Color,
+colorActivo: Color
 ) {
-    val progresoAnimado = remember {
-        Animatable(0f)
-    }
-
-
-    LaunchedEffect(pagerState.currentPage, pagerState.currentPageOffsetFraction) {
-        val offset = pagerState.currentPage + pagerState.currentPageOffsetFraction
-        progresoAnimado.animateTo(offset / (totalPaginas - 1).coerceAtLeast(1))
-    }
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(8.dp)
-            .padding(horizontal = 32.dp)
-
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        repeat(totalPaginas) { index ->
+            val isSelected = pagerState.currentPage == index
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorEscogido, shape = RoundedCornerShape(50))
-        )
 
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(fraction = progresoAnimado.value)
-                .background(colorEscogid, shape = RoundedCornerShape(50))
-        )
+            val size by animateDpAsState(
+                targetValue = if (isSelected) 12.dp else 8.dp,
+                label = "dotSize"
+            )
+
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .size(size)
+                    .background(
+                        color = if (isSelected) colorActivo else colorInactivo,
+                        shape = CircleShape
+                    )
+            )
+        }
     }
 }
+
+
+
 
 
 

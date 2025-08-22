@@ -266,7 +266,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                         colors = ButtonDefaults.buttonColors(colorChosen),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Volver", color = Color.White, fontWeight = FontWeight.Bold)
+                        Text("Volver", color = Color.Black, fontWeight = FontWeight.Bold)
                     }
                 }
             }

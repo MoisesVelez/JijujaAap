@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -44,10 +46,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
-
 import androidx.compose.ui.draw.clip
-
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -58,11 +57,11 @@ import com.android.jijajuaap.R
 import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.pintor.pintorView
-import com.android.jijajuaap.presentation.login.LoginScreen
 import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -93,7 +92,7 @@ fun QuizScreen(
         }
     }
     val user = userMenuViewModel.user
-    val colorEscogido = userMenuViewModel.cambioColor(user?.team)
+    var colorEscogido = userMenuViewModel.cambioColor(user?.team)
     val colorChosen = userMenuViewModel.colorUsuario(colorEscogido)
     val fondo = Brush.verticalGradient(listOf(colorEscogido, Color.White))
     var puntosH = gameRoad.puntosFinal
@@ -124,6 +123,14 @@ fun QuizScreen(
     }
 
     val question: test? = questions.getOrNull(currentIndex)
+
+    val monedero = viewModel.Monedero
+
+    var concentracion = viewModel.CTotal
+
+    var estudianteR = viewModel.ERapido
+
+    var salto = viewModel.SPregunta
 
 
     var puntuacion by remember { mutableIntStateOf(0) }
@@ -160,15 +167,23 @@ fun QuizScreen(
         var contVidas = viewModel.contVidas
         var contEscudos = viewModel.escudos
 
+        var pista = viewModel.PRapida
+        var activarPista by remember { mutableStateOf(false) }
 
         val totalTema = puntosH + score
-        val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + score
+
       //  userMenuViewModel.updateQuizTotales(1)
         if (currentIndex == questions.size) {
             val visible = remember { mutableStateOf(false) }
 
             LaunchedEffect(currentIndex) {
+
+                if(monedero.value){
+                    viewModel.sumadorScore()
+                }
+                val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + score
                 userMenuViewModel.updatePuntos(temaPuntos, totalTema)
+
                 userMenuViewModel.updatePuntosTotal(totalGeneral)
                 delay(200)
                 visible.value = true
@@ -268,14 +283,6 @@ fun QuizScreen(
                 Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
 
 
-                    if(escudo.value){
-                        Image(painterResource(R.drawable.blindaje), contentDescription = "vidas",
-                            modifier = Modifier.size(35.dp).padding(5.dp))
-
-                    }else if(escudo.value==false && contEscudos.value == 1){
-                        Image(painterResource(R.drawable.escudo_roto), contentDescription = "vidas",
-                            modifier = Modifier.size(35.dp).padding(5.dp))
-                    }
 
 
                     if(segundoLatido.value){
@@ -288,6 +295,14 @@ fun QuizScreen(
                     }
 
 
+                    if(escudo.value){
+                        Image(painterResource(R.drawable.blindaje), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+
+                    }else if(escudo.value==false && contEscudos.value == 1){
+                        Image(painterResource(R.drawable.escudo_roto), contentDescription = "vidas",
+                            modifier = Modifier.size(35.dp).padding(5.dp))
+                    }
 
                     if (incorrectas <=0){
                         Image(painterResource(R.drawable.me_gusta), contentDescription = "vidas",
@@ -358,16 +373,41 @@ fun QuizScreen(
 
                 ) {
                     dificultadPuntos()
+
+                    val numero = remember(currentIndex, activarPista) {
+                        question?.let { q ->
+                            val indicesDisponibles = (q.opciones.indices).filter { it != q.correctAnswerIndex }
+                            if (indicesDisponibles.isNotEmpty()) {
+                                indicesDisponibles.random()
+                            } else {
+                                -1
+                            }
+                        } ?: -1
+                    }
+
+
                     question?.opciones?.forEachIndexed { index, option ->
+
+                        val colorEscogido = if (activarPista &&
+                            (index == question.correctAnswerIndex || index == numero)) {
+                            Color.Yellow
+                        } else {
+                            colorEscogido
+                        }
+
                         Button(
+
                             onClick = { comprobante = viewModel.answerQuestion(index,puntuacion)
-                                      gameRoad.cantPulsado()},
+                                      gameRoad.cantPulsado()
+                                      activarPista = false},
                             modifier = Modifier.fillMaxWidth().padding(10.dp),
                             colors = ButtonDefaults.buttonColors(colorEscogido),
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Text(option, color = colorLetras, fontWeight = FontWeight.Bold)
                         }
+
+
                     }
                 }
             }
@@ -376,32 +416,103 @@ fun QuizScreen(
                 colorChosen,
                 currentIndex,
                 questions,
-                onTimeOut = { viewModel.answerQuestion(-1,puntuacion) })
+                onTimeOut = { viewModel.answerQuestion(-1,puntuacion) },
+                concentracion.value,
+                estudianteR.value)
+
+
+        Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+            if(salto.value){
+
+                Card(
+                    modifier = Modifier.width(100.dp).height(100.dp)
+                        .padding(15.dp)
+                        .clickable(onClick = { viewModel.answerQuestion(question?.correctAnswerIndex ?: 0,puntuacion)
+                            viewModel.saltoFalse()
+                            activarPista = false}),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = CardDefaults.cardColors(containerColor = BLANCOeSP)
+                ) {
+                    Image(
+                        painterResource(id = R.drawable.dificultades),
+                        contentDescription = "",
+                        modifier = Modifier.padding(5.dp)
+                    )
+
+                }
+
+
+            }
+
+            if(pista.value){
+
+                Card(
+                    modifier = Modifier.width(100.dp).height(100.dp)
+                        .padding(15.dp)
+                        .clickable(onClick = { activarPista = true
+                            viewModel.pistaFalse()}),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = CardDefaults.cardColors(containerColor = BLANCOeSP)
+                ) {
+                    Image(
+                        painterResource(id = R.drawable.paso),
+                        contentDescription = "",
+                        modifier = Modifier.padding(5.dp)
+                    )
+
+                }
+
+
+            }
+        }
+
+
+
 
 
         }
     }
+
+
+
 @Composable
 fun Temporizador(
     tiempo: Int,
     color: Color,
     currentIndex: Int,
     questions: List<test>,
-    onTimeOut: () -> Unit
+    onTimeOut: () -> Unit,
+    value: Boolean,
+    value1: Boolean
 ) {
-    var tiempoRestante by remember { mutableStateOf(tiempo) }
+    var tiemp0= tiempo
+    if(value1){
+        tiemp0 -= 2
+    }
+
+    if(value){
+       tiemp0 += 2
+    }
+
+
+
+    var tiempoRestante by remember { mutableStateOf(tiemp0) }
     val progreso = remember { Animatable(0f) }
 
     LaunchedEffect(currentIndex,questions) {
+
+
         if (questions.isEmpty()  || currentIndex >= questions.size) return@LaunchedEffect
 
-        tiempoRestante = tiempo
+        tiempoRestante = tiemp0
         progreso.snapTo(0f)
 
-        for (i in tiempo downTo 1) {
+        for (i in tiemp0 downTo 1) {
             delay(1000L)
             tiempoRestante--
-            progreso.animateTo((tiempo - tiempoRestante).toFloat() / tiempo)
+            progreso.animateTo((tiemp0 - tiempoRestante).toFloat() / tiemp0)
         }
 
         onTimeOut()

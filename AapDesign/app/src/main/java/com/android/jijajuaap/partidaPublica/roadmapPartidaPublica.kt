@@ -1,6 +1,5 @@
 package com.android.jijajuaap.partidaPublica
 
-import android.widget.HorizontalScrollView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -91,7 +90,7 @@ fun roadMap(userMenuViewModel: UserMenuViewModel,gmaplayViewModel: gmaplayViewMo
 
         Column(modifier = Modifier.padding(innerPadding).fillMaxSize().background(Color.White)) {
 
-            ProgressWithCardsSideBySide(puntosH,500,colorChosen,user,navHostController,gmaplayViewModel)
+            ProgressWithCardsSideBySide(puntosH,500,colorEscogido,user,navHostController,gmaplayViewModel,colorChosen)
 
         }
 
@@ -156,6 +155,7 @@ fun ProgressWithCardsSideBySide(
     user: User?,
     navHostController: NavHostController,
     gmaplayViewModel: gmaplayViewModel,
+    colorChosen: Color,
 
     ) {
     val safeScore = score ?: 0
@@ -387,6 +387,7 @@ fun ProgressWithCardsSideBySide(
                     .fillMaxHeight().padding(10.dp),
                 contentAlignment = Alignment.Center
             ) {
+                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
 
                 Box(
                     modifier = Modifier
@@ -404,7 +405,27 @@ fun ProgressWithCardsSideBySide(
 
                     )
                 }
+
+                    Card(
+                        modifier = Modifier.width(100.dp).height(100.dp)
+                            .padding(15.dp)
+                            .clickable(onClick = {navHostController.popBackStack()
+                                navHostController.navigate(Routes.mochila.routes)
+                            }),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = CardDefaults.cardColors(containerColor = colorChosen)
+                    ) {
+                        Image(
+                            painterResource(id = R.drawable.mochila),
+                            contentDescription = "",
+                            modifier = Modifier.padding(5.dp)
+                        )
+
+                    }
             }
+            }
+
         }
     }
 
