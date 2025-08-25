@@ -1,5 +1,6 @@
 package com.android.jijajuaap.comunidad
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.fadeIn
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -50,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -63,6 +66,7 @@ import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.objects.test
 import com.android.jijajuaap.partidaPublica.ProfileInfoRow
+import com.android.jijajuaap.pintor.pintorView
 import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.White
 
@@ -71,8 +75,9 @@ import kotlinx.coroutines.delay
 import kotlin.collections.get
 import kotlin.collections.plusAssign
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostController,comunidadView: comunidadView) {
+fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostController,comunidadView: comunidadView,pintorView: pintorView) {
 
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -85,6 +90,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
     LaunchedEffect(user) {
         comunidadView.reset()
         comunidadView.preguntasQuiz(comunidadView.iD)
+        comunidadView.comprobarPasivas(user)
     }
 
     var preguntas = comunidadView.preguntasCom
@@ -97,6 +103,19 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
     var preguntasTest = comunidadView.preguntaTest
     var incorrectas = comunidadView.incorrecto
 
+
+
+    var segundoLatido = comunidadView.segundoLatid
+    var contVidas = comunidadView.contVida
+    var escudo = comunidadView.escudo
+    var contEscudos = comunidadView.escudos
+
+    var pista = comunidadView.PRapida
+    var activarPista by remember { mutableStateOf(false) }
+
+    var salto = comunidadView.SPregunta
+
+    val monedero = comunidadView.Monedero
 
 
     Scaffold(
@@ -139,6 +158,29 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
+
+
+                if(segundoLatido.value){
+                    Image(painterResource(R.drawable.corazon_herido), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp))
+
+                }else if(segundoLatido.value==false && contVidas.value == 1){
+                    Image(painterResource(R.drawable.corazon_roto), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp))
+                }
+
+
+                if(escudo.value){
+                    Image(painterResource(R.drawable.blindaje), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp))
+
+                }else if(escudo.value==false && contEscudos.value == 1){
+                    Image(painterResource(R.drawable.escudo_roto), contentDescription = "vidas",
+                        modifier = Modifier.size(35.dp).padding(5.dp))
+                }
+
+
+
                 if (incorrectas == 0) {
                     Image(
                         painterResource(R.drawable.me_gusta), contentDescription = "vidas",
@@ -188,6 +230,10 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 comunidadView.finalizador()
             }
 
+            if(monedero.value){
+                comunidadView.sumadorScore()
+
+            }
             val finalizador = comunidadView.finalizador == true
             val totalGeneral = (userMenuViewModel.user?.totalPoints ?: 0) + comunidadView.buenPunto
 
@@ -251,7 +297,24 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                                 value = "Comunidad")
 
 
+
+
                         }
+                    }
+                    Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+
+                        user?.mochila?.forEach { objetos ->
+
+                            Image(painter = painterResource(id = pintorView.imagenObjeto(objetos)),
+                                contentDescription = objetos.nombre,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .clip(RoundedCornerShape(8.dp)))
+
+                        }
+
+
                     }
 
                     Spacer(modifier = Modifier.size(25.dp))
@@ -317,6 +380,21 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
 
                 ) {
 
+                    val numero by remember(preguntasTest) {
+                        mutableStateOf(
+                            preguntasTest?.let { q ->
+                                val indicesDisponibles = (q.opciones.indices).filter { it != q.correctAnswerIndex }
+                                if (indicesDisponibles.isNotEmpty()) {
+                                    indicesDisponibles.random()
+                                } else {
+                                    -1
+                                }
+                            } ?: -1
+                        )
+                    }
+
+
+
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -324,7 +402,22 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                             .padding(15.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
+
+
+
                         itemsIndexed(preguntasTest?.opciones ?: emptyList()) { index, opcion ->
+
+
+                            val colorEscogido = if (activarPista &&
+                                (index == preguntasTest?.correctAnswerIndex || index == numero)) {
+                                Color.Yellow
+                            } else {
+                                colorEscogido
+                            }
+
+
+
                             Button(
                                 onClick = {
                                     numCont += 1
@@ -332,6 +425,7 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                                         index,
                                         preguntasTest?.correctAnswerIndex ?: -1
                                     )
+                                    activarPista = false
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -353,7 +447,59 @@ fun QuizCom(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 colorChosen,
                 numCont,
                 preguntas?.preguntas ?: emptyList(),
-                onTimeOut = { numCont += 1 })
+                onTimeOut = { numCont += 1
+                comunidadView.fueraTiempo()})
+
+
+            Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                if(salto.value){
+
+                    Card(
+                        modifier = Modifier.width(100.dp).height(100.dp)
+                            .padding(15.dp)
+                            .clickable(onClick = {
+                                numCont += 1
+                                comunidadView.comprobador(0,0)
+                                comunidadView.saltoFalse()
+                                activarPista = false}),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = CardDefaults.cardColors(containerColor = BLANCOeSP)
+                    ) {
+                        Image(
+                            painterResource(id = R.drawable.dificultades),
+                            contentDescription = "",
+                            modifier = Modifier.padding(5.dp)
+                        )
+
+                    }
+
+
+                }
+
+                if(pista.value){
+
+                    Card(
+                        modifier = Modifier.width(100.dp).height(100.dp)
+                            .padding(15.dp)
+                            .clickable(onClick = { activarPista = true
+                                comunidadView.pistaFalse()}),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = CardDefaults.cardColors(containerColor = BLANCOeSP)
+                    ) {
+                        Image(
+                            painterResource(id = R.drawable.paso),
+                            contentDescription = "",
+                            modifier = Modifier.padding(5.dp)
+                        )
+
+                    }
+
+
+                }
+            }
+
         }
     }
 }

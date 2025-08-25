@@ -342,7 +342,7 @@ fun QuizScreen(
 
             Card(
                 modifier = Modifier
-                    .height(75.dp)
+                    .height(100.dp)
                     .padding(6.dp)
                     .fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(4.dp),

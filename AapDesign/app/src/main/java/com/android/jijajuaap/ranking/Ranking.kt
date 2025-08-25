@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,7 +54,6 @@ import com.android.jijajuaap.menu.UserMenuViewModel
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.objects.User
 import com.android.jijajuaap.presentation.login.MvvmPresentation
-import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.colorCrema
 import com.google.firebase.auth.FirebaseAuth
 
@@ -118,7 +119,7 @@ fun ranking(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 ) {
 
                     usuarios.forEach {
-                        cardsRanking(it.name.toString(), it.totalPoints, it.rango.toString())
+                        cardsRanking(it.name.toString(), it.totalPoints, it.rango.toString(),it,userMenuViewModel)
                     }
 
                 }
@@ -182,9 +183,13 @@ fun barraTp(
 fun cardsRanking(
     Usuario: String,
     puntos: Int?,
-    rango: String
+    rango: String,
+    user: User,
+    userMenuViewModel: UserMenuViewModel,
 
 ){
+    val imag = userMenuViewModel.imagenUsuario(user)
+    val colorEscogido = userMenuViewModel.cambioColor(user.team)
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -194,6 +199,7 @@ fun cardsRanking(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
+        Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -205,6 +211,18 @@ fun cardsRanking(
             Text("Rango: ${rango}", style = MaterialTheme.typography.bodyMedium, color = Color.Black)
 
         }
+
+            Image(
+                painter = painterResource(id = imag),
+                contentDescription = "Logo App",
+                modifier = Modifier.size(70.dp).padding(5.dp)
+                    .clip(CircleShape)
+                    .border(2.dp, color = colorEscogido, CircleShape)
+                    .background(color = Color.White),
+
+                )
+
+    }
     }
 }
 

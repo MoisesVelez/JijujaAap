@@ -106,7 +106,7 @@ fun NavigationWrapper() {
             CrearQuiz(userViewModel,navHostController,crearView)
         }
         composable(Routes.comQuiz.routes) {
-            QuizCom(userViewModel,navHostController,comView)
+            QuizCom(userViewModel,navHostController,comView,pintorView)
         }
         composable(Routes.ranking.routes) {
             ranking(userViewModel,navHostController,RankingView,loginViewModel)

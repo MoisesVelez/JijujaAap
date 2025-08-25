@@ -40,16 +40,18 @@ class QuizViewModel  @Inject constructor(
     private val _incorrecta = MutableStateFlow(0)
     val incorrecto: StateFlow<Int> = _incorrecta
 
-    private val _contVidas = MutableStateFlow(0)
-    val contVidas: StateFlow<Int> = _contVidas
 
-
-    private val _escudos = MutableStateFlow(0)
-    val escudos: StateFlow<Int> = _escudos
 
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+
+    private val _contVidas = MutableStateFlow(0)
+    val contVidas: StateFlow<Int> = _contVidas
+
+    private val _escudos = MutableStateFlow(0)
+    val escudos: StateFlow<Int> = _escudos
 
     private val _segundoLatido = MutableStateFlow(false)
     val segundoLatido: StateFlow<Boolean> = _segundoLatido.asStateFlow()

@@ -113,7 +113,7 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
 
         }
 
-        Column(modifier = Modifier.padding(innerPadding)){
+        Column(modifier = Modifier.padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
 
 
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
@@ -153,8 +153,26 @@ fun menuInicialComunidad(userMenuViewModel: UserMenuViewModel,navHostController:
                 Image(painterResource(R.drawable.lupa), contentDescription = "Buscar",
                     modifier = Modifier.size(35.dp))
             }
+
+
+
         }
 
+            Card(
+                modifier = Modifier.width(100.dp).height(100.dp)
+                    .padding(15.dp)
+                    .clickable(onClick = {navHostController.navigate(Routes.mochila.routes)}),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                shape = RoundedCornerShape(10.dp),
+                colors = CardDefaults.cardColors(containerColor = colorEscogido)
+            ) {
+                Image(
+                    painterResource(id = R.drawable.mochila),
+                    contentDescription = "",
+                    modifier = Modifier.padding(5.dp)
+                )
+
+            }
 
 
                     LazyColumn( modifier = Modifier.fillMaxSize().padding(15.dp),horizontalAlignment = Alignment.CenterHorizontally) {
