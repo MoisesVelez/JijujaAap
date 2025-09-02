@@ -38,6 +38,7 @@ import com.android.jijajuaap.R
 import com.android.jijajuaap.data.AuthService
 import com.android.jijajuaap.objects.Objetos
 import com.android.jijajuaap.objects.User
+import com.android.jijajuaap.objects.preguntaComunidad
 import com.android.jijajuaap.ui.theme.White
 import com.android.jijajuaap.ui.theme.azulJi
 import com.android.jijajuaap.ui.theme.azulUser
@@ -45,8 +46,12 @@ import com.android.jijajuaap.ui.theme.rojoJa
 import com.android.jijajuaap.ui.theme.rojoUser
 import com.android.jijajuaap.ui.theme.verdeJu
 import com.android.jijajuaap.ui.theme.verdeUser
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -417,9 +422,47 @@ class UserMenuViewModel @Inject constructor(
 
     //-------------------------------Pasivas
 
+    var listaAmigos = mutableStateListOf<User>()
+        private set
 
 
+    private var _listaAmigos = MutableStateFlow<List<User>>(emptyList())
+    var listaAmigo: StateFlow<List<User>> = _listaAmigos
 
+
+    fun quitarAmigo(user: User, uid: String) {
+        viewModelScope.launch {
+            try {
+                authService.removeAmigo(uid,user)
+                listaAmigos.remove(user)
+            }catch (e: Exception) {
+
+            }
+        }
+    }
+
+
+    fun añadirAmigo(user: User, uid: String) {
+        viewModelScope.launch {
+            try {
+
+                authService.updateListaAmigos(uid,user)
+                listaAmigos.add(user)
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    fun buscarAmigos(nombre: String) {
+        viewModelScope.launch {
+            val amigos = authService.buscadorAmigos(nombre)
+            _listaAmigos.value = amigos
+        }
+    }
+    fun vaciarLista(){
+        _listaAmigos.value = emptyList()
+    }
 
 
 

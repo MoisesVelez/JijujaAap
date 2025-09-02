@@ -21,4 +21,5 @@ sealed class Routes(val routes:String) {
     object ranking: Routes("ranking")
     object pintor: Routes("pintor")
     object mochila: Routes("mochila")
+    object amistad: Routes("amistad")
 }

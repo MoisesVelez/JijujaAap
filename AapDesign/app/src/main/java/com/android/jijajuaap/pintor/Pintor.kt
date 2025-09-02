@@ -341,7 +341,7 @@ fun barraBaja(
 
         NavigationBarItem(
             selected = false,
-            onClick = { /* Acción social */ },
+            onClick = {navHostController.navigate(Routes.amistad.routes)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.amistad),

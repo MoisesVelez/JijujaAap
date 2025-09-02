@@ -1,7 +1,7 @@
 package com.android.jijajuaap.objects
 
 data class User(
-    val uid: String? = null,
+    var uid: String? = null,
     var name: String? = null,
     val email: String? = null,
     val avatarId: String? = "error_de_usuario",
@@ -17,5 +17,6 @@ data class User(
     val puntosCPop: Int=0,
     val puntosNaturaleza: Int=0,
     var inventario: List<Objetos> = emptyList(),
-    var mochila: List<Objetos> = emptyList()
+    var mochila: List<Objetos> = emptyList(),
+    var amigos: List<User> = emptyList()
 )

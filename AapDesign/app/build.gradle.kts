@@ -66,6 +66,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation("com.google.firebase:firebase-messaging-ktx")
 
 
     implementation(libs.play.services.auth)

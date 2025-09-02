@@ -357,6 +357,57 @@ class AuthService @SuppressLint("RestrictedApi")
 
 
 
+    suspend fun obtenerUsuarios(usuario: String): User? {
+        return try {
+            val result = FirebaseFirestore.getInstance()
+                .collection("users")
+                .whereEqualTo("name", usuario)
+                .get()
+                .await()
+            result.documents.firstOrNull()?.toObject(User::class.java)
+        }catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener usuarios con más puntos", e)
+            null
+        }
+    }
+
+
+    suspend fun updateListaAmigos(uid: String, user: User) {
+        val userRef = firestore.collection("users").document(uid)
+        val updateAmigos = mapOf("amigos" to FieldValue.arrayUnion(user))
+        userRef.set(updateAmigos, SetOptions.merge()).await()
+    }
+
+
+    suspend fun removeAmigo(uid: String, user: User) {
+        val userRef = firestore.collection("users").document(uid)
+        val updateAmigos = mapOf("amigos" to FieldValue.arrayRemove(user))
+        userRef.set(updateAmigos, SetOptions.merge()).await()
+    }
+
+
+    suspend fun buscadorAmigos(nombre: String): List<User> {
+        val db = FirebaseFirestore.getInstance()
+        return try {
+            val result = db.collection("users")
+                .whereEqualTo("name", nombre)
+                .get()
+                .await()
+
+            result.mapNotNull { doc ->
+                val user = doc.toObject(User::class.java)
+                user.uid = doc.id
+                user
+            }
+
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error en búsqueda", e)
+            emptyList()
+        }
+    }
+
+
+
 
 
 }

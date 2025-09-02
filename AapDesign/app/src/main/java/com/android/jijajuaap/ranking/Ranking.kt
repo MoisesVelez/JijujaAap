@@ -19,6 +19,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -119,7 +122,7 @@ fun ranking(userMenuViewModel: UserMenuViewModel,navHostController: NavHostContr
                 ) {
 
                     usuarios.forEach {
-                        cardsRanking(it.name.toString(), it.totalPoints, it.rango.toString(),it,userMenuViewModel)
+                        cardsRanking(it.name.toString(), it.totalPoints, it.rango.toString(),it,userMenuViewModel,user)
                     }
 
                 }
@@ -186,8 +189,9 @@ fun cardsRanking(
     rango: String,
     user: User,
     userMenuViewModel: UserMenuViewModel,
+    user1: User?,
 
-){
+    ){
     val imag = userMenuViewModel.imagenUsuario(user)
     val colorEscogido = userMenuViewModel.cambioColor(user.team)
     Card(
@@ -204,7 +208,7 @@ fun cardsRanking(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Jugador: ${Usuario}", fontWeight = FontWeight.Bold, color = Color.Black)
+            Text("${Usuario}", fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.width(50.dp))
             Text("Puntos: ${puntos}", style = MaterialTheme.typography.bodyMedium, color = Color.Black)
             Spacer(modifier = Modifier.width(50.dp))
@@ -221,6 +225,29 @@ fun cardsRanking(
                     .background(color = Color.White),
 
                 )
+
+            if(user != user1){
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Añadir",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .background(Color.Green, shape = CircleShape)
+                        .clickable {userMenuViewModel.añadirAmigo(user, user1?.uid.toString()) }
+                )
+                Spacer(Modifier.size(15.dp))
+                Icon(
+                    imageVector = Icons.Default.Cancel,
+                    contentDescription = "Borrar",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .background(Color.Red, shape = CircleShape)
+                        .clickable {userMenuViewModel.quitarAmigo(user, user1?.uid.toString()) }
+                )
+            }
+
 
     }
     }
@@ -280,7 +307,7 @@ fun navigationBAr(
 
         NavigationBarItem(
             selected = false,
-            onClick = { /* Acción social */ },
+            onClick = {navHostController.navigate(Routes.amistad.routes)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.amistad),

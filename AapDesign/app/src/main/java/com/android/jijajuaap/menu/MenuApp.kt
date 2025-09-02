@@ -1,6 +1,12 @@
 package com.android.jijajuaap.menu
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.os.Build
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
@@ -77,6 +83,13 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
     LaunchedEffect(currentUserUid) {
         if (currentUserUid != null) {
             menuUserMenuViewModel.loadUserData(currentUserUid)
+        }
+    }
+
+    val notificationPermissionLauncher = notificationPermissionLauncher()
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 
@@ -259,7 +272,7 @@ fun navigationBar(
 
         NavigationBarItem(
             selected = false,
-            onClick = { /* Acción */ },
+            onClick = { navHostController.navigate(Routes.amistad.routes) },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.amistad),
@@ -441,6 +454,24 @@ colorActivo: Color
         }
     }
 }
+
+@Composable
+fun notificationPermissionLauncher(): ManagedActivityResultLauncher<String, Boolean> {
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            Log.d("NotificationPermission", "Permission granted")
+        } else {
+            Log.d("NotificationPermission", "Permission denied")
+        }
+    }
+
+    return launcher
+}
+
+
+
 
 
 

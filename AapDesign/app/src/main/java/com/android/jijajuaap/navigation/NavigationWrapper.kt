@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.android.jijajuaap.Amistades.amistades
 import com.android.jijajuaap.SplashScreen
 import com.android.jijajuaap.ajustes.ajustes
 import com.android.jijajuaap.comunidad.QuizCom
@@ -115,10 +116,10 @@ fun NavigationWrapper() {
             pintorObjetos(userViewModel,navHostController,pintorView)
         }
         composable(Routes.mochila.routes) {
-            inventario(
-                userViewModel, navHostController, pintorView,
-
-            )
+            inventario(userViewModel, navHostController, pintorView,)
+        }
+        composable(Routes.amistad.routes) {
+            amistades(navHostController,userViewModel)
         }
 
 
