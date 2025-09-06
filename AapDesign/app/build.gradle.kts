@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.release
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -23,9 +25,20 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        maybeCreate("release").apply {
+            storeFile = file(project.properties["MY_KEYSTORE_FILE"] as String)
+            storePassword = project.properties["MY_KEYSTORE_PASSWORD"] as String
+            keyAlias = project.properties["MY_KEY_ALIAS"] as String
+            keyPassword = project.properties["MY_KEY_PASSWORD"] as String
+        }
+    }
+
+
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -86,6 +99,8 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.compose)
 
 
+
+    implementation ("com.google.android.gms:play-services-ads:23.2.0")
 
 
     implementation("com.google.firebase:firebase-firestore-ktx")

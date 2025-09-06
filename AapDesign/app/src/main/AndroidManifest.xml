@@ -38,8 +38,12 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/jijajuicono"/>
-        
-        
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4692714526122755~3674351540"/>
+
+
         <service android:name=".MessagingService"
             android:exported="false">
             <intent-filter>

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,9 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -171,7 +168,9 @@ fun amistades(navHostController: NavHostController,userMenuViewModel: UserMenuVi
                     if(it != user){
                         cardsForm(
                             userMenuViewModel, it, user,
-                            onAddFriend = { amigos.add(it) },
+                            onAddFriend = {if(!amigos.contains(it)){
+                                amigos.add(it)
+                            } },
                             ondeleteFiends = {amigos.remove(it)},
                         )
                     }
@@ -188,7 +187,7 @@ fun amistades(navHostController: NavHostController,userMenuViewModel: UserMenuVi
             Text("Lista de amigos", color = Color.Black, fontWeight = FontWeight.Bold)
 
             amigos.forEach {
-                cardsForm2(userMenuViewModel,it,user)
+                cardsForm2(userMenuViewModel,it,user,ondeleteFiends = {amigos.remove(it)})
             }
 
         }
@@ -330,6 +329,7 @@ fun cardsForm(userMenuViewModel: UserMenuViewModel, lista: User, user: User?,onA
 
                 )
 
+
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Añadir",
@@ -368,7 +368,12 @@ fun cardsForm(userMenuViewModel: UserMenuViewModel, lista: User, user: User?,onA
 }
 
 @Composable
-fun cardsForm2(userMenuViewModel: UserMenuViewModel, lista: User, user: User?) {
+fun cardsForm2(
+    userMenuViewModel: UserMenuViewModel,
+    lista: User,
+    user: User?,
+    ondeleteFiends: () -> Unit
+) {
 
     val imag = userMenuViewModel.imagenUsuario(lista)
     val colorEscogido = userMenuViewModel.cambioColor(lista.team)
@@ -433,6 +438,7 @@ fun cardsForm2(userMenuViewModel: UserMenuViewModel, lista: User, user: User?) {
                             lista,
                             user?.uid.toString()
                         )
+                        ondeleteFiends()
 
 
                     })

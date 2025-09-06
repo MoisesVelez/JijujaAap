@@ -66,19 +66,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.app.ComponentActivity
 import androidx.navigation.NavHostController
 import com.android.jijajuaap.R
+import com.android.jijajuaap.ads.AdsManager
+
 import com.android.jijajuaap.navigation.Routes
 import com.android.jijajuaap.presentation.login.MvvmPresentation
 import com.android.jijajuaap.ui.theme.BLANCOeSP
 import com.android.jijajuaap.ui.theme.colorCrema
 import com.google.firebase.auth.FirebaseAuth
 
+
+
+
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostController,menuUserMenuViewModel: UserMenuViewModel) {
 
+
+    val context = LocalContext.current
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+    val notificationPermissionLauncher = notificationPermissionLauncher()
+
+
+    LaunchedEffect(Unit) {
+        AdsManager.initialize(context)
+        AdsManager.showInterstitialWhenLoaded(context )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     LaunchedEffect(currentUserUid) {
         if (currentUserUid != null) {
@@ -86,12 +104,8 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
         }
     }
 
-    val notificationPermissionLauncher = notificationPermissionLauncher()
-    LaunchedEffect(Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
+
+
 
 
 
@@ -107,7 +121,7 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
         pageCount = {4}
     )
 
-    val context = LocalContext.current
+
 
     val showColorDialog = remember(currentUserUid) {
         mutableStateOf(
@@ -172,6 +186,8 @@ fun menuInitial(logingView: MvvmPresentation, navHostController: NavHostControll
                 )
             }
         }
+
+
 
     }
     }

@@ -95,18 +95,6 @@ fun ajustes(
 
             )
         }
-        Box(modifier = Modifier.padding(20.dp)) {
-            ProfileInfoRow(
-                R.drawable.dia_y_noche,
-                "Modo Oscuro",
-                Color.DarkGray,
-                3,
-                memuView,
-                navHostController,
-                currentUserUid,
-                menuUserMenuViewModel,
-            )
-        }
 
         Box(modifier = Modifier.padding(20.dp)){
             ProfileInfoRow(

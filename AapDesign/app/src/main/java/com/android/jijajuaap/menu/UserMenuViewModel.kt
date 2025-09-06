@@ -444,6 +444,7 @@ class UserMenuViewModel @Inject constructor(
 
     fun añadirAmigo(user: User, uid: String) {
         viewModelScope.launch {
+            if(!listaAmigos.contains(user)){
             try {
 
                 authService.updateListaAmigos(uid,user)
@@ -451,6 +452,7 @@ class UserMenuViewModel @Inject constructor(
             } catch (e: Exception) {
 
             }
+        }
         }
     }
 
