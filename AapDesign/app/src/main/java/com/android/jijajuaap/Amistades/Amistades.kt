@@ -238,7 +238,7 @@ fun barraBtom(navHostController: NavHostController, colorEscogido: Color) {
             selected = false,
             onClick = {
                 navHostController.popBackStack()
-                navHostController.navigate(Routes.comQuiz.routes)
+                navHostController.navigate(Routes.menuInicioComunidad.routes)
             },
             icon = {
                 Icon(

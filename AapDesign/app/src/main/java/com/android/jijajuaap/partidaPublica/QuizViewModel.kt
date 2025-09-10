@@ -98,6 +98,7 @@ class QuizViewModel  @Inject constructor(
                             .take(10)
                     }
             } catch (e: Exception) {
+                Log.e("no coge","nada")
 
             } finally {
                 _isLoading.value = false
